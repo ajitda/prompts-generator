@@ -22,6 +22,11 @@ const mainNavItems: NavItem[] = [
         href: dashboard(),
         icon: LayoutGrid,
     },
+    {
+        title: 'Manage Prompts',
+        href: '/prompts',
+        icon: LayoutGrid,
+    },
 ];
 
 const footerNavItems: NavItem[] = [

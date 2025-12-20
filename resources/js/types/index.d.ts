@@ -73,3 +73,11 @@ export interface WelcomeProps {
     prompts?: { data: Prompt[] } | null;
     isAuthenticated?: boolean;
 };
+
+type SortDirection = 'asc' | 'desc';
+type SortField = 'name' | 'description' | 'price' | 'created_at' | 'tag';
+
+export interface SortProps {
+    field: SortField;
+    direction: SortDirection;
+}

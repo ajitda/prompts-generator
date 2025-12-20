@@ -11,15 +11,14 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
+Route::post('/prompts/generate', [PromptController::class, 'generatePrompt'])->name('prompts.generate');
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
-    })->name('dashboard');
+    })->name('dashboard');    
     
-    Route::post('/prompts/generate', [PromptController::class, 'generatePrompt'])->name('prompts.generate');
-    Route::post('prompts', [PromptController::class, 'store'])->name('prompts.store');
+    Route::resource('prompts', PromptController::class);    
 });
-
-Route::get('/prompts', [PromptController::class, 'index'])->name('prompts.index');
 
 require __DIR__.'/settings.php';
