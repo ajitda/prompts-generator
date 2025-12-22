@@ -28,6 +28,10 @@ export interface SharedData {
     auth: Auth;
     sidebarOpen: boolean;
     [key: string]: unknown;
+    
+    env?: {
+        geminiKey?: string;
+    };
 }
 
 export interface User {

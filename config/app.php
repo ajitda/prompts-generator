@@ -14,6 +14,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
+    
 
     /*
     |--------------------------------------------------------------------------
@@ -122,5 +123,9 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
+
+    'gemini' => [
+        'api_key' => env('GEMINI_API_KEY'),
+    ]
 
 ];

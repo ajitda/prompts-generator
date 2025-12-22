@@ -47,18 +47,15 @@ class PromptController extends Controller
     public function create(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'type' => 'required|in:image,text,video',
             'keyword' => 'required|string|max:255|min:2',
         ], [
-            'type.required' => 'Please select a prompt type.',
-            'type.in' => 'Invalid prompt type selected.',
             'keyword.required' => 'Please enter a keyword or topic.',
             'keyword.min' => 'Keyword must be at least 2 characters.',
             'keyword.max' => 'Keyword must not exceed 255 characters.',
         ]);
 
         try {
-            $prompt = $this->generatePrompt($validated['type'], $validated['keyword']);
+            $prompt = $this->generatePrompt( $validated['keyword']);
 
             return response()->json([
                 'success' => true,
@@ -114,7 +111,7 @@ class PromptController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Prompt $prompt)
     {
         //
     }
@@ -160,23 +157,15 @@ class PromptController extends Controller
 
     public function generatePrompt(Request $request): JsonResponse
     {
+        
+        
         $validated = $request->validate([
-            'type' => 'required|in:image,text,video',
             'keyword' => 'required|string|max:255',
         ]);
 
-        $type = $validated['type'];
         $keyword = $validated['keyword'];
 
-        $templates = [
-            'image' => "Create a highly detailed, photorealistic image of {$keyword}. Use vibrant colors, dramatic lighting, and professional composition. Incorporate depth of field, dynamic angles, and rich textures. Style: 4K ultra HD, cinematic quality, award-winning photography. Render with meticulous attention to detail and atmosphere.",
-            
-            'text' => "Write compelling, engaging content about {$keyword}. Include key benefits, unique features, and actionable insights that provide real value to readers. Use clear headings, bullet points for readability, and incorporate relevant examples. Tone: Professional yet conversational, informative, and SEO-optimized. Structure with strong opening hook, detailed body, and clear call-to-action.",
-            
-            'video' => "Produce a captivating video showcasing {$keyword}. Include dynamic transitions, engaging visual effects, and professional background music. Structure: Attention-grabbing opening (5s), main content with clear messaging (20-45s), strong call-to-action (5s). Duration: 30-60 seconds, optimized for social media platforms. Use text overlays, smooth animations, and maintain consistent branding throughout.",
-        ];
-
-        $prompt = $templates[$type] ?? "Generate high-quality content for {$keyword} with professional standards and attention to detail.";
+        $prompt = new Prompt();
 
         return response()->json([
             'success' => true,
