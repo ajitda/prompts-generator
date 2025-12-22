@@ -28,10 +28,10 @@ export default function Welcome({
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <header className="text-center mb-8">
                     <h1 className="text-4xl font-bold tracking-tight sm:text-5xl mb-4 text-gray-900 dark:text-white">
-                        AI Prompt Generator
+                        Prompt Generator
                     </h1>
                     <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-                        Create professional AI prompts for images, text, and video content in seconds
+                        Create professional prompts for images, text, and video content in seconds
                     </p>
                 </header>
                 
@@ -76,11 +76,11 @@ export default function Welcome({
 
                 <Card>
                     <CardHeader>
-                        <CardTitle>What is an AI Prompt Generator?</CardTitle>
+                        <CardTitle>What is a Prompt Generator?</CardTitle>
                     </CardHeader>
                     <CardContent className="prose dark:prose-invert max-w-none">
                         <p>
-                            An AI prompt generator is a powerful tool designed to help content creators, marketers, and AI enthusiasts 
+                            A prompt generator is a powerful tool designed to help content creators, marketers, and AI enthusiasts 
                             craft effective prompts for various artificial intelligence applications. Our generator specializes in creating 
                             optimized prompts for image generation (like DALL-E, Midjourney), text content (ChatGPT, GPT-4), and video 
                             creation tools.
@@ -95,7 +95,7 @@ export default function Welcome({
                             <li><strong>Free to Use:</strong> No credit card required, start generating prompts immediately</li>
                         </ul>
 
-                        <h3 className="text-xl font-semibold mt-6 mb-3">How to Use the AI Prompt Generator</h3>
+                        <h3 className="text-xl font-semibold mt-6 mb-3">How to Use the Prompt Generator</h3>
                         <ol className="space-y-2">
                             <li>Select your desired content type: Image, Text, or Video</li>
                             <li>Enter a keyword or topic that describes what you want to create</li>
@@ -104,7 +104,7 @@ export default function Welcome({
                             <li>Optionally save it to your account for future reference</li>
                         </ol>
 
-                        <h3 className="text-xl font-semibold mt-6 mb-3">Tips for Better AI Prompts</h3>
+                        <h3 className="text-xl font-semibold mt-6 mb-3">Tips for Better Prompts</h3>
                         <p>
                             While our generator provides excellent starting points, here are some tips to further enhance your prompts:
                             Be specific with details, include style preferences, specify desired mood or tone, and mention technical 
