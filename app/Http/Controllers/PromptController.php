@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Js;
@@ -157,19 +158,49 @@ class PromptController extends Controller
 
     public function generatePrompt(Request $request): JsonResponse
     {
-        
-        
         $validated = $request->validate([
             'keyword' => 'required|string|max:255',
         ]);
 
-        $keyword = $validated['keyword'];
+        $apiKey = config('services.geminiKey.api_key');
+        // dump($apiKey);
 
-        $prompt = new Prompt();
+        $model = 'gemini-2.0-flash-001';
 
-        return response()->json([
-            'success' => true,
-            'prompt' => $prompt,
-        ]);
+        $apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key={$apiKey}";
+
+        try {
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+            ])->post($apiUrl, [
+                        'contents' => [
+                            [
+                                'parts' => [
+                                    ['text' => "Generate a creative prompt for: " . $validated['keyword']]
+                                ]
+                            ]
+                        ]
+                    ]);
+
+            if ($response->successful()) {
+                return response()->json([
+                    'success' => true,
+                    'data' => $response->json(),
+                ]);
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => 'API request failed.',
+                'error' => $response->json(),
+            ], $response->status());
+
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Exception: ' . $e->getMessage(),
+            ], 500);
+        }
     }
+
 }
