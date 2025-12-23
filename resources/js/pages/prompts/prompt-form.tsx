@@ -11,9 +11,9 @@ export default function PromptForm() {
 
     const { auth, env = {} } = usePage<SharedData>().props;
 
-    const { geminiKey } = env?.geminiKey || '';
+    // const { geminiKey } = env?.geminiKey || '';
 
-    console.log('Gemeni key available:', !!geminiKey);
+    // console.log('Gemeni key available:', !!geminiKey);
 
     const promptsCanonical = '/prompts';
     const promptsStore = () => ({ url: promptsCanonical });
