@@ -3,7 +3,7 @@ import {
     // destroy as productsDestroy,
     // edit as productsEdit,
     index as promptsIndex,
-    // show as promptsShow
+    show as promptsShow
 } from '@/actions/App/Http/Controllers/PromptController';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -191,7 +191,7 @@ export default function Index() {
                     <div className='ml-auto'>
                         <Link
                             className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors"
-                            href='/'
+                            href='/prompts-generator'
                             // href={promptsCreate().url}
                         >
                             Add Prompt
@@ -208,8 +208,7 @@ export default function Index() {
                     <table className='w-full table-auto'>
                         <thead className="bg-gray-100 dark:bg-gray-800">
                             <tr className='text-left text-sm font-medium text-gray-500 dark:text-gray-300'>
-                                <th className='p-4 border-b'>#</th>
-                                <SortableHeader field="type" currentSort={sortConfig} onSort={handleSort} className='p-4 border-b'>Type</SortableHeader>
+                                <th className='p-4 border-b'>#</th>                                
                                 <SortableHeader field="keyword" currentSort={sortConfig} onSort={handleSort} className='p-4 border-b'>Keyword</SortableHeader>
                                 <SortableHeader field="prompt" currentSort={sortConfig} onSort={handleSort} className='p-4 border-b'>Prompt</SortableHeader>
                                 <SortableHeader field="created_at" currentSort={sortConfig} onSort={handleSort} className='p-4 border-b'>Created Date</SortableHeader>
@@ -227,10 +226,9 @@ export default function Index() {
                             ) : (
                                 prompts?.data?.map((prompt, index) => (
                                     <tr key={prompt.id} className="hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors">
-                                        <td className='border-b px-4 py-2'>{index + 1}</td>
-                                        <td className='border-b px-4 py-2 font-medium'>{prompt.type}</td>
+                                        <td className='border-b px-4 py-2'>{index + 1}</td>                                        
                                         <td className='border-b px-4 py-2 text-gray-500 truncate max-w-xs'>{prompt.keyword}</td>
-                                        <td className='border-b px-4 py-2'>${prompt.prompt}</td>
+                                        <td className='break-words truncate border-b px-4 py-2'>${prompt.prompt.slice(0, 50)}...</td>
                                         <td className='border-b px-4 py-2 text-sm'>{prompt.created_at}</td>
 
                                         <td className='border-b px-4 py-2 text-right'>
@@ -242,11 +240,11 @@ export default function Index() {
                                                     </Button>
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent align="end" className="w-48">
-                                                    {/* <DropdownMenuItem asChild>
+                                                    <DropdownMenuItem asChild>
                                                         <Link href={promptsShow(prompt.id).url} className="w-full flex items-center cursor-pointer">
                                                             <Eye className="mr-2 h-4 w-4" /> View Details
                                                         </Link>
-                                                    </DropdownMenuItem> */}
+                                                    </DropdownMenuItem>
                                                     {/* <DropdownMenuItem asChild>
                                                         <Link href={productsEdit(product.id).url} className="w-full flex items-center cursor-pointer">
                                                             <Pencil className="mr-2 h-4 w-4" /> Edit
