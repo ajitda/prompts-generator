@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Prompt;
+use App\Services\AIService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -10,10 +11,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
-use Js;
 
 class PromptController extends Controller
 {
+    public function __construct(protected AIService $aiService){}
+
     /**
      * Display a listing of the resource.
      */
@@ -56,7 +58,7 @@ class PromptController extends Controller
         ]);
 
         try {
-            $prompt = $this->generatePrompt( $validated['keyword']);
+            $prompt = $this->generate( $validated['keyword']);
 
             return response()->json([
                 'success' => true,
@@ -79,22 +81,17 @@ class PromptController extends Controller
     {
         // dump($request->all());
         $validated = $request->validate([
-            'type' => 'required|in:image,text,video',
             'keyword' => 'required|string|max:255',
-            'prompt' => 'required|string|max:2000',
+            'prompt' => 'required|string',
         ], [
-            'type.required' => 'Prompt type is required.',
-            'type.in' => 'Invalid prompt type.',
             'keyword.required' => 'Keyword is required.',
             'keyword.max' => 'Keyword must not exceed 255 characters.',
             'prompt.required' => 'Prompt content is required.',
-            'prompt.max' => 'Prompt must not exceed 2000 characters.',
         ]);
 
         try {
             $prompt = Prompt::create([
                 'user_id' => Auth::id(),
-                'type' => $validated['type'],
                 'keyword' => $validated['keyword'],
                 'prompt' => $validated['prompt'],
             ]);
@@ -156,106 +153,76 @@ class PromptController extends Controller
         }
     }
 
-    public function generatePrompt(Request $request): JsonResponse
+    public function generate(Request $request): JsonResponse
     {
-        $validated = $request->validate([
-            'keyword' => 'required|string|max:255',
-        ]);
-
-        $apiKey = config('services.aiKey.api_key');
-        // Ensure the full model path for OpenRouter is used
-        $model = 'google/gemini-2.0-flash-001';
-        $apiUrl = "https://openrouter.ai/api/v1/chat/completions";
+        $request->validate(['keyword' => 'required|string|max:255']);
 
         try {
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $apiKey,
-                'Content-Type' => 'application/json',
-                // Optional but recommended for OpenRouter tracking
-                'HTTP-Referer' => config('app.url'),
-            ])->post($apiUrl, [
-                        'model' => $model,
-                        'messages' => [
-                            [
-                                'role' => 'user',
-                                'content' => "Generate a creative prompt for: " . $validated['keyword']
-                            ]
-                        ]
-                    ]);
-
-            if ($response->successful()) {
-                $responseData = $response->json();
-
-                // Extract the generated text from the response
-                $generatedText = $responseData['choices'][0]['message']['content'] ?? null;
-
-                return response()->json([
-                    'success' => true,
-                    'prompt' => $generatedText, // Return the clean text
-                    'raw' => $responseData,  // Useful for debugging
-                ]);
-            }
-
+            $content = $this->aiService->generatePrompt($request->keyword);
+            
             return response()->json([
-                'success' => false,
-                'message' => 'API request failed.',
-                'error' => $response->json(),
-            ], $response->status());
-
+                'success' => true,
+                'prompt' => $content
+            ]);
         } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Exception: ' . $e->getMessage(),
-            ], 500);
+            report($e); // Logs the error automatically
+            return response()->json(['message' => 'AI Generation failed'], 500);
         }
+        // $validated = $request->validate([
+        //     'keyword' => 'required|string|max:255',
+        // ]);
+
+        // $apiKey = config('services.aiKey.api_key');
+        // // Ensure the full model path for OpenRouter is used
+        // $model = 'google/gemini-2.0-flash-001';
+        // $apiUrl = "https://openrouter.ai/api/v1/chat/completions";
+
+        // try {
+        //     $response = Http::withHeaders([
+        //         'Authorization' => 'Bearer ' . $apiKey,
+        //         'Content-Type' => 'application/json',
+        //         // Optional but recommended for OpenRouter tracking
+        //         'HTTP-Referer' => config('app.url'),
+        //     ])->post($apiUrl, [
+        //                 'model' => $model,
+        //                 'messages' => [
+        //                     [
+        //                         'role' => 'user',
+        //                         'content' => "Generate a creative prompt for: " . $validated['keyword']
+        //                     ]
+        //                 ]
+        //             ]);
+
+        //     if ($response->successful()) {
+        //         $responseData = $response->json();
+
+        //         // Extract the generated text from the response
+        //         $generatedText = $responseData['choices'][0]['message']['content'] ?? null;
+
+        //         session([
+        //             'keyword' => $validated['keyword'],
+        //             'ai_response' => $generatedText
+        //         ]);
+                
+        //         return response()->json([
+        //             'success' => true,
+        //             'prompt' => $generatedText, // Return the clean text
+        //             'raw' => $responseData,  // Useful for debugging
+        //         ]);
+        //     }
+
+        //     return response()->json([
+        //         'success' => false,
+        //         'message' => 'API request failed.',
+        //         'error' => $response->json(),
+        //     ], $response->status());
+
+        // } catch (Exception $e) {
+        //     return response()->json([
+        //         'success' => false,
+        //         'message' => 'Exception: ' . $e->getMessage(),
+        //     ], 500);
+        // }
     }
-
-    //Google AI
-    // public function generatePrompt(Request $request): JsonResponse
-    // {
-    //     $validated = $request->validate([
-    //         'keyword' => 'required|string|max:255',
-    //     ]);
-
-    //     $apiKey = config('services.aiKey.api_key');
-    //     // dump($apiKey);
-
-    //     $model = 'gemini-2.0-flash-001';
-
-    //     $apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key={$apiKey}";
-
-    //     try {
-    //         $response = Http::withHeaders([
-    //             'Content-Type' => 'application/json',
-    //         ])->post($apiUrl, [
-    //                     'contents' => [
-    //                         [
-    //                             'parts' => [
-    //                                 ['text' => "Generate a creative prompt for: " . $validated['keyword']]
-    //                             ]
-    //                         ]
-    //                     ]
-    //                 ]);
-
-    //         if ($response->successful()) {
-    //             return response()->json([
-    //                 'success' => true,
-    //                 'data' => $response->json(),
-    //             ]);
-    //         }
-
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'API request failed.',
-    //             'error' => $response->json(),
-    //         ], $response->status());
-
-    //     } catch (Exception $e) {
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'Exception: ' . $e->getMessage(),
-    //         ], 500);
-    //     }
-    // }
 
 }
