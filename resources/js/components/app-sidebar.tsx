@@ -15,6 +15,7 @@ import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 import { BookOpen, Folder, LayoutGrid } from 'lucide-react';
 import AppLogo from './app-logo';
+import prompts from '@/routes/prompts';
 
 const mainNavItems: NavItem[] = [
     {
@@ -24,7 +25,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Manage Prompts',
-        href: '/prompts',
+        href: prompts.index(),
         icon: LayoutGrid,
     },
 ];

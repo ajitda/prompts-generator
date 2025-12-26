@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 
-Route::get('/', function () {
+Route::get('/prompts-generator', function () {
     return Inertia::render('welcome', [
         'canRegister' => Features::enabled(Features::registration()),
     ]);
@@ -14,14 +14,14 @@ Route::get('/', function () {
 Route::post('/prompts/generate', [PromptController::class, 'generate'])->name('prompts.generate');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    
-    Route::get('/prompts-generator', [PromptController::class,'index'])->name('promts.index');
 
-    Route::get('dashboard', function () {
+    Route::get('/prompts-generator/dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');    
     
-    Route::resource('prompts', PromptController::class)->except(['index']);    
+    Route::resource('prompts-generator/prompts', PromptController::class)
+    ->names('prompts')
+    ->parameters(['prompts' => 'prompt']);    
 });
 
 require __DIR__.'/settings.php';
