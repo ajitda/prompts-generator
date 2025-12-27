@@ -11,7 +11,7 @@ export default function PromptForm() {
 
     const { auth, session_data } = usePage<SharedData>().props;
 
-    const promptsCanonical = '/prompts';
+    const promptsCanonical = '/prompts-generator/prompts';
     const promptsStore = () => ({ url: promptsCanonical });
 
     const { data, setData, post, errors, processing, reset } = useForm({
@@ -42,7 +42,7 @@ export default function PromptForm() {
             const result = await response.json();
             if (result.success) {
                 setGeneratedPrompt(result.prompt);
-                setData('prompt', result.prompt);
+                // setData('prompt', result.prompt);
                 toast.success('Prompt generated successfully!');
             } else {
                 toast.error(result.message || 'Failed to generate prompt');
@@ -76,12 +76,11 @@ export default function PromptForm() {
             return;
         }
 
-        // Explicitly send the latest values to avoid state sync issues
         post(promptsStore().url, {
-            data: {
-                keyword: data.keyword,
-                prompt: generatedPrompt, // Use the local state directly as a backup
-            },
+            // data: {
+            //     keyword: session_data?.savedKeyword,
+            //     prompt: session_data?.savedPrompt, 
+            // },
             onSuccess: () => {
                 reset();
                 setGeneratedPrompt('');
