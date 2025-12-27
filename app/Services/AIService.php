@@ -19,7 +19,6 @@ class AIService
             $providerName = class_basename($providerClass);
 
             try {
-                // Log::info("AI_FALLBACK: Attempting generation with {$providerName}...");
                 
                 $provider = app($providerClass); 
                 

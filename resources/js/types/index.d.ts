@@ -28,9 +28,9 @@ export interface SharedData {
     auth: Auth;
     sidebarOpen: boolean;
     [key: string]: unknown;
-    
-    env?: {
-        geminiKey?: string;
+    session_data?: {
+        savedKeyword: string;
+        savedPrompt: string;
     };
 }
 

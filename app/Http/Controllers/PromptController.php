@@ -81,11 +81,10 @@ class PromptController extends Controller
     {
         // dump($request->all());
         $validated = $request->validate([
-            'keyword' => 'required|string|max:255',
+            'keyword' => 'required|string|max:1000',
             'prompt' => 'required|string',
         ], [
             'keyword.required' => 'Keyword is required.',
-            'keyword.max' => 'Keyword must not exceed 255 characters.',
             'prompt.required' => 'Prompt content is required.',
         ]);
 
@@ -156,9 +155,15 @@ class PromptController extends Controller
     public function generate(Request $request): JsonResponse
     {
         $request->validate(['keyword' => 'required|string|max:255']);
-
+        
+        
         try {
             $content = $this->aiService->generatePrompt($request->keyword);
+            
+            session([
+                'last_keyword' => $request->keyword,
+                'ai_response' => $content
+            ]);
             
             return response()->json([
                 'success' => true,
@@ -168,61 +173,6 @@ class PromptController extends Controller
             report($e); // Logs the error automatically
             return response()->json(['message' => 'AI Generation failed'], 500);
         }
-        // $validated = $request->validate([
-        //     'keyword' => 'required|string|max:255',
-        // ]);
-
-        // $apiKey = config('services.aiKey.api_key');
-        // // Ensure the full model path for OpenRouter is used
-        // $model = 'google/gemini-2.0-flash-001';
-        // $apiUrl = "https://openrouter.ai/api/v1/chat/completions";
-
-        // try {
-        //     $response = Http::withHeaders([
-        //         'Authorization' => 'Bearer ' . $apiKey,
-        //         'Content-Type' => 'application/json',
-        //         // Optional but recommended for OpenRouter tracking
-        //         'HTTP-Referer' => config('app.url'),
-        //     ])->post($apiUrl, [
-        //                 'model' => $model,
-        //                 'messages' => [
-        //                     [
-        //                         'role' => 'user',
-        //                         'content' => "Generate a creative prompt for: " . $validated['keyword']
-        //                     ]
-        //                 ]
-        //             ]);
-
-        //     if ($response->successful()) {
-        //         $responseData = $response->json();
-
-        //         // Extract the generated text from the response
-        //         $generatedText = $responseData['choices'][0]['message']['content'] ?? null;
-
-        //         session([
-        //             'keyword' => $validated['keyword'],
-        //             'ai_response' => $generatedText
-        //         ]);
-                
-        //         return response()->json([
-        //             'success' => true,
-        //             'prompt' => $generatedText, // Return the clean text
-        //             'raw' => $responseData,  // Useful for debugging
-        //         ]);
-        //     }
-
-        //     return response()->json([
-        //         'success' => false,
-        //         'message' => 'API request failed.',
-        //         'error' => $response->json(),
-        //     ], $response->status());
-
-        // } catch (Exception $e) {
-        //     return response()->json([
-        //         'success' => false,
-        //         'message' => 'Exception: ' . $e->getMessage(),
-        //     ], 500);
-        // }
     }
 
 }

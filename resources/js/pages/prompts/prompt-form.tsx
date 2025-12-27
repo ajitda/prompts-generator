@@ -4,23 +4,19 @@ import { Label } from "@/components/ui/label";
 import { SharedData } from "@/types";
 import { router, useForm, usePage } from "@inertiajs/react";
 import { Check, Copy, Save, Sparkles } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export default function PromptForm() {
 
-    const { auth, env = {} } = usePage<SharedData>().props;
-
-    // const { geminiKey } = env?.geminiKey || '';
-
-    // console.log('Gemeni key available:', !!geminiKey);
+    const { auth, session_data } = usePage<SharedData>().props;
 
     const promptsCanonical = '/prompts';
     const promptsStore = () => ({ url: promptsCanonical });
 
     const { data, setData, post, errors, processing, reset } = useForm({
-        keyword: '',
-        prompt: '',
+        keyword: session_data?.savedKeyword || '',
+        prompt: session_data?.savedPrompt || '',
     });
 
     const [generatedPrompt, setGeneratedPrompt] = useState('');
@@ -80,18 +76,32 @@ export default function PromptForm() {
             return;
         }
 
+        // Explicitly send the latest values to avoid state sync issues
         post(promptsStore().url, {
+            data: {
+                keyword: data.keyword,
+                prompt: generatedPrompt, // Use the local state directly as a backup
+            },
             onSuccess: () => {
                 reset();
                 setGeneratedPrompt('');
-            },
-            onError: (error) => console.error('Error saving prompt:', error),
-            onFinish: () => {
                 toast.success('Prompt saved successfully!');
+            },
+            onError: (errors) => {
+                // Check your console to see exactly which field is failing validation
+                console.error('Validation Errors:', errors);
+                toast.error('Failed to save. Check requirements.');
             },
         });
     };
 
+    useEffect(() => {
+        if (session_data?.savedPrompt) {
+            const savedPrompt = session_data.savedPrompt;
+            setGeneratedPrompt(savedPrompt);
+        }
+    }, [session_data?.savedPrompt]);
+    
     return (
         <>
             <Card>
