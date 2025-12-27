@@ -1,241 +1,148 @@
-import InputError from "@/components/input-error";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
+import { useForm, usePage, router } from "@inertiajs/react";
 import { SharedData } from "@/types";
-import { router, useForm, usePage } from "@inertiajs/react";
-import { Check, Copy, Save, Sparkles } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Label } from "@/components/ui/label";
+import { Sparkles, Copy, Save, Check, Loader2 } from "lucide-react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 export default function PromptForm() {
-
     const { auth, session_data } = usePage<SharedData>().props;
+    const [copied, setCopied] = useState(false);
 
-    const promptsCanonical = '/prompts-generator/prompts';
-    const promptsStore = () => ({ url: promptsCanonical });
-
-    const { data, setData, post, errors, processing, reset } = useForm({
+    const { data, setData, processing, errors } = useForm({
         keyword: session_data?.savedKeyword || '',
-        prompt: session_data?.savedPrompt || '',
+        audience: session_data?.savedAudience || 'Working Professionals',
+        duration: session_data?.savedDuration || '60-90 seconds',
     });
 
-    const [generatedPrompt, setGeneratedPrompt] = useState('');
-    const [isGenerating, setIsGenerating] = useState(false);
-    const [copied, setCopied] = useState(false);    
+    const fullPrompt = session_data?.savedPrompt || '';
+    // Splits the prompt into Step 2, 3, and 4 sections
+    const steps = fullPrompt.split(/## STEP \d:/).filter(Boolean);
 
-    const handleGenerate = async () => {
-        if (!data.keyword.trim()) return;
-        
-        setIsGenerating(true);
-        try {
-            const response = await fetch('/prompts/generate', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content || '',
-                },
-                body: JSON.stringify({
-                    keyword: data.keyword 
-                }),
-            });
-
-            const result = await response.json();
-            if (result.success) {
-                setGeneratedPrompt(result.prompt);
-                // setData('prompt', result.prompt);
-                toast.success('Prompt generated successfully!');
-            } else {
-                toast.error(result.message || 'Failed to generate prompt');
-            }
-        } catch (error) {
-            console.error('Error generating prompt:', error);
-            toast.error('Failed to generate prompt');
-        } finally {
-            setIsGenerating(false);
-        }
+    const handleGenerate = () => {
+        router.post('/prompts/generate', data, {
+            preserveState: true,
+            preserveScroll: true,
+        });
     };
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            handleGenerate();
-        }
+    const handleSave = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!auth?.user) return router.visit('/login');
+
+        router.post('/prompts-generator/prompts', {
+            keyword: data.keyword,
+            prompt: fullPrompt
+        }, {
+            onSuccess: () => toast.success('Script saved to profile!')
+        });
     };
 
-    const handleCopy = async () => {
-        await navigator.clipboard.writeText(generatedPrompt);
+    const handleCopy = () => {
+        navigator.clipboard.writeText(fullPrompt);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        if (!auth?.user) {
-            router.visit('/login');
-            return;
-        }
-
-        post(promptsStore().url, {
+    const handleReset = () => {
+        router.post(route('prompts.reset'), {}, {
             onSuccess: () => {
-                reset();
-                setGeneratedPrompt('');
-                toast.success('Prompt saved successfully!');
-            },
-            onError: (errors) => {
-                console.error('Validation Errors:', errors);
-                toast.error('Failed to save. Check requirements.');
-            },
+                // Manually reset local form data
+                setData({
+                    keyword: '',
+                    audience: 'Working Professionals',
+                    duration: '60-90 seconds'
+                });
+            }
         });
     };
 
-    useEffect(() => {
-        if (session_data?.savedPrompt) {
-            const savedPrompt = session_data.savedPrompt;
-            setGeneratedPrompt(savedPrompt);
-        }
-    }, [session_data?.savedPrompt]);
-    
+
     return (
-        <>
-            <Card>
-                <CardHeader>
-                    <CardTitle>Generate Your Prompt</CardTitle>
-                </CardHeader>
+        <div className="space-y-8">
+            {/* INPUT SECTION */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                <div className="md:col-span-2">
+                    <Label htmlFor="keyword">What is your video topic?</Label>
+                    <textarea
+                        id="keyword"
+                        value={data.keyword}
+                        onChange={e => setData('keyword', e.target.value)}
+                        placeholder="e.g. 5 AI tools for productivity..."
+                        className="w-full mt-2 p-3 rounded-lg border border-gray-200 dark:bg-gray-900 focus:ring-2 focus:ring-purple-500 outline-none min-h-[100px]"
+                    />
+                    {errors.keyword && <p className="text-red-500 text-sm mt-1">{errors.keyword}</p>}
+                </div>
 
-                <CardContent>
-                    <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6" autoComplete="off">
+                <div>
+                    <Label>Target Audience</Label>
+                    <select 
+                        value={data.audience} 
+                        onChange={e => setData('audience', e.target.value)}
+                        className="w-full mt-2 p-3 rounded-lg border border-gray-200 dark:bg-gray-900"
+                    >
+                        <option>Working Professionals</option>
+                        <option>Content Creators</option>
+                        <option>Students</option>
+                        <option>Business Owners</option>
+                    </select>
+                </div>
 
-                        {/* Keyword Input */}
-                        <div>
-                            <Label htmlFor="keyword" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                What do you want the AI to do?
-                            </Label>
-                            <textarea
-                                value={data.keyword}
-                                onChange={(e) => setData('keyword', e.target.value)}
-                                onKeyDown={handleKeyDown}
-                                name="keyword"
-                                id="keyword"
-                                disabled={processing || isGenerating}
-                                placeholder="Example: Write a blog post about sustainable living for beginners"
-                                className="w-full p-4 border-2 border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:border-purple-500 focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-800 focus:outline-none transition-colors min-h-[120px] resize-y"
-                            />
-                            <InputError message={errors.keyword} />
-                        </div>
+                <div>
+                    <Label>Desired Duration</Label>
+                    <select 
+                        value={data.duration} 
+                        onChange={e => setData('duration', e.target.value)}
+                        className="w-full mt-2 p-3 rounded-lg border border-gray-200 dark:bg-gray-900"
+                    >
+                        <option>30-60 seconds</option>
+                        <option>60-90 seconds</option>
+                        <option>2-3 minutes</option>
+                    </select>
+                </div>
 
-                        {/* Examples Section */}
-                        <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-5">
-                            <h3 className="text-lg font-semibold text-blue-800 dark:text-blue-300 mb-3">
-                                Quick Examples (Click to use):
-                            </h3>
-                            <div className="space-y-3">
-                                {['Write an email to a client about project delay',
-                                    'Create a study plan for learning Python',
-                                    'Generate a social media post for a coffee shop',
-                                    'Write a product description for a smartwatch'].map((example, index) => (
-                                        <div
-                                            key={index}
-                                            onClick={() => setData('keyword', example)}
-                                            className="bg-white dark:bg-gray-800 p-4 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors border border-gray-200 dark:border-gray-700"
-                                        >
-                                            <div className="flex items-start gap-3">
-                                                <span className="text-lg">
-                                                    {['📧', '📚', '☕', '💻'][index]}
-                                                </span>
-                                                <span className="text-gray-700 dark:text-gray-300">{example}</span>
-                                            </div>
-                                        </div>
-                                    ))}
+                <button
+                    onClick={handleGenerate}
+                    disabled={processing || !data.keyword}
+                    className="md:col-span-2 w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 rounded-lg flex items-center justify-center gap-2 transition-all"
+                >
+                    {processing ? <Loader2 className="animate-spin" /> : <Sparkles size={20} />}
+                    Generate Script
+                </button>
+
+                <button
+                    type="button"
+                    onClick={handleReset}
+                    className="cursor-pointer text-gray-500 hover:text-red-500 text-sm font-medium transition-colors"
+                >
+                    Clear and Start Over
+                </button>
+            </div>
+
+            {/* OUTPUT SECTION */}
+            {steps.length > 0 && (
+                <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
+                    {['Idea Generation', 'Story Structure', 'Spoken Script'].map((title, i) => (
+                        <div key={i} className="bg-white dark:bg-gray-900 border-l-4 border-purple-500 p-6 rounded-r-xl shadow-md">
+                            <h4 className="text-xs font-black text-purple-600 uppercase tracking-widest mb-2">Step {i+2}: {title}</h4>
+                            <div className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-sans leading-relaxed">
+                                {steps[i]}
                             </div>
                         </div>
+                    ))}
 
-                        {/* Generate Button */}
-                        <div>
-                            <button
-                                onClick={handleGenerate}
-                                disabled={!data.keyword.trim() || isGenerating || processing}
-                                className="w-full bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white font-semibold py-4 px-10 rounded-lg transition-all duration-200 transform hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                            >
-                                {isGenerating ? (
-                                    <>
-                                        <div className="inline-block w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                                        Generating...
-                                    </>
-                                ) : (
-                                    <>
-                                        <Sparkles className="inline-block mr-2 h-5 w-5" />
-                                        Generate Optimized Prompt
-                                    </>
-                                )}
-                            </button>
-                        </div>
-
-                        {/* Loading Spinner */}
-                        {isGenerating && (
-                            <div className="text-center py-8">
-                                <div className="inline-block w-10 h-10 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin mb-4"></div>
-                                <p className="text-purple-600 dark:text-purple-400">Generating your optimized prompt...</p>
-                            </div>
-                        )}
-
-                        {/* Generated Prompt */}
-                        {generatedPrompt && (
-                            <>
-                                <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-6">
-                                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                                        ✅ Your Optimized Prompt:
-                                    </h2>
-                                    <div className="bg-white dark:bg-gray-900 p-5 rounded-lg border-l-4 border-purple-500 whitespace-pre-wrap text-gray-700 dark:text-gray-300 leading-relaxed min-h-[120px]">
-                                        {generatedPrompt}
-                                    </div>
-                                    <div className="flex justify-between items-center mt-4">
-                                        <button
-                                            type='button'
-                                            onClick={handleCopy}
-                                            disabled={processing}
-                                            className="bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-8 rounded-lg transition-colors"
-                                        >
-                                            {copied ? (
-                                                <>
-                                                    <Check className="inline-block mr-2 h-4 w-4" />
-                                                    Copied!
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <Copy className="inline-block mr-2 h-4 w-4" />
-                                                    Copy to Clipboard
-                                                </>
-                                            )}
-                                        </button>
-                                    </div>
-                                </div>
-
-                                {/* Save Button */}
-                                <div>
-                                    <button
-                                        type="submit"
-                                        disabled={processing}
-                                        className="w-full bg-gradient-to-r from-indigo-600 to-indigo-800 hover:from-indigo-700 hover:to-indigo-900 text-white font-semibold py-4 px-10 rounded-lg transition-all duration-200 transform hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                                    >
-                                        {processing ? (
-                                            <>
-                                                <div className="inline-block w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                                                Saving...
-                                            </>
-                                        ) : (
-                                            <>
-                                                <Save className="inline-block mr-2 h-5 w-5" />
-                                                {auth?.user ? 'Save Prompt' : 'Login to Save Prompt'}
-                                            </>
-                                        )}
-                                    </button>
-                                </div>
-                            </>
-                        )}
-                    </form>
-                </CardContent>
-            </Card>
-        </>
+                    <div className="flex flex-col sm:flex-row gap-4">
+                        <button onClick={handleCopy} className="flex-1 flex items-center justify-center gap-2 bg-gray-100 dark:bg-gray-800 py-4 rounded-xl font-semibold">
+                            {copied ? <Check className="text-green-500" /> : <Copy size={18} />}
+                            {copied ? 'Copied to Clipboard' : 'Copy Full Script'}
+                        </button>
+                        <button onClick={handleSave} className="flex-1 flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-xl font-semibold shadow-lg shadow-indigo-200 dark:shadow-none">
+                            <Save size={18} />
+                            {auth?.user ? 'Save to Profile' : 'Login to Save'}
+                        </button>
+                    </div>
+                </div>
+            )}
+        </div>
     );
 }

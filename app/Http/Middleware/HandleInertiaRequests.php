@@ -38,6 +38,8 @@ class HandleInertiaRequests extends Middleware
     {
         [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
 
+        // dd($request->session()->get('session_data'));
+        
         return [
             ...parent::share($request),
             'name' => config('app.name'),
@@ -46,10 +48,7 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
-            'session_data' => [
-                'savedKeyword' => $request->session()->get('last_keyword'),
-                'savedPrompt' => $request->session()->get('ai_response'),
-            ]
+            'session_data' => $request->session()->get('session_data'),
         ];
     }
 }

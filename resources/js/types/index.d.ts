@@ -30,6 +30,8 @@ export interface SharedData {
     [key: string]: unknown;
     session_data?: {
         savedKeyword: string;
+        savedAudience: string;
+        savedDuration: string;
         savedPrompt: string;
     };
 }

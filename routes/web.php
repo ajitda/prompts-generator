@@ -13,6 +13,11 @@ Route::get('/prompts-generator', function () {
 
 Route::post('/prompts/generate', [PromptController::class, 'generate'])->name('prompts.generate');
 
+Route::post('/prompts/reset', function () {
+    session()->forget('session_data');
+    return back();
+})->name('prompts.reset');
+
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/prompts-generator/dashboard', function () {
