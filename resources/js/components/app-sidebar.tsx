@@ -12,9 +12,15 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { BookOpen, Folder, LayoutGrid } from 'lucide-react';
 import AppLogo from './app-logo';
+import prompts from '@/routes/prompts';
+import {
+    // destroy as productsDestroy,
+    index as promptsIndex,
+    show as promptsShow
+} from '@/actions/App/Http/Controllers/PromptController';
 
 const mainNavItems: NavItem[] = [
     {
@@ -24,9 +30,9 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Manage Prompts',
-        href: '/prompts',
+        href: prompts.index(),
         icon: LayoutGrid,
-    },
+    }
 ];
 
 const footerNavItems: NavItem[] = [
@@ -43,6 +49,11 @@ const footerNavItems: NavItem[] = [
 ];
 
 export function AppSidebar() {
+    
+    const { props } = usePage<any>();
+
+    const { prompts } = props;
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -59,6 +70,17 @@ export function AppSidebar() {
 
             <SidebarContent>
                 <NavMain items={mainNavItems} />
+                {prompts?.data?.map((prompt, index) => (
+                    <SidebarMenuItem key={prompt.id}>
+                        <Link href={promptsIndex(prompt.id).url} prefetch>
+                            <SidebarMenuButton
+                                data-test="sidebar-menu-button"
+                            >
+                                <span className="pl-8 truncate">{prompt.keyword}</span>
+                            </SidebarMenuButton>
+                        </Link>
+                    </SidebarMenuItem>
+                ))}
             </SidebarContent>
 
             <SidebarFooter>

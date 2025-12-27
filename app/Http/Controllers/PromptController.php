@@ -3,16 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Prompt;
+use App\Services\AIService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
-use Js;
 
 class PromptController extends Controller
 {
+    public function __construct(protected AIService $aiService){}
+
     /**
      * Display a listing of the resource.
      */
@@ -47,18 +50,15 @@ class PromptController extends Controller
     public function create(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'type' => 'required|in:image,text,video',
             'keyword' => 'required|string|max:255|min:2',
         ], [
-            'type.required' => 'Please select a prompt type.',
-            'type.in' => 'Invalid prompt type selected.',
             'keyword.required' => 'Please enter a keyword or topic.',
             'keyword.min' => 'Keyword must be at least 2 characters.',
             'keyword.max' => 'Keyword must not exceed 255 characters.',
         ]);
 
         try {
-            $prompt = $this->generatePrompt($validated['type'], $validated['keyword']);
+            $prompt = $this->generate( $validated['keyword']);
 
             return response()->json([
                 'success' => true,
@@ -81,22 +81,16 @@ class PromptController extends Controller
     {
         // dump($request->all());
         $validated = $request->validate([
-            'type' => 'required|in:image,text,video',
-            'keyword' => 'required|string|max:255',
-            'prompt' => 'required|string|max:2000',
+            'keyword' => 'required|string|max:1000',
+            'prompt' => 'required|string',
         ], [
-            'type.required' => 'Prompt type is required.',
-            'type.in' => 'Invalid prompt type.',
             'keyword.required' => 'Keyword is required.',
-            'keyword.max' => 'Keyword must not exceed 255 characters.',
             'prompt.required' => 'Prompt content is required.',
-            'prompt.max' => 'Prompt must not exceed 2000 characters.',
         ]);
 
         try {
             $prompt = Prompt::create([
                 'user_id' => Auth::id(),
-                'type' => $validated['type'],
                 'keyword' => $validated['keyword'],
                 'prompt' => $validated['prompt'],
             ]);
@@ -114,7 +108,7 @@ class PromptController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Prompt $prompt)
     {
         //
     }
@@ -158,29 +152,27 @@ class PromptController extends Controller
         }
     }
 
-    public function generatePrompt(Request $request): JsonResponse
+    public function generate(Request $request): JsonResponse
     {
-        $validated = $request->validate([
-            'type' => 'required|in:image,text,video',
-            'keyword' => 'required|string|max:255',
-        ]);
-
-        $type = $validated['type'];
-        $keyword = $validated['keyword'];
-
-        $templates = [
-            'image' => "Create a highly detailed, photorealistic image of {$keyword}. Use vibrant colors, dramatic lighting, and professional composition. Incorporate depth of field, dynamic angles, and rich textures. Style: 4K ultra HD, cinematic quality, award-winning photography. Render with meticulous attention to detail and atmosphere.",
+        $request->validate(['keyword' => 'required|string|max:255']);
+        
+        
+        try {
+            $content = $this->aiService->generatePrompt($request->keyword);
             
-            'text' => "Write compelling, engaging content about {$keyword}. Include key benefits, unique features, and actionable insights that provide real value to readers. Use clear headings, bullet points for readability, and incorporate relevant examples. Tone: Professional yet conversational, informative, and SEO-optimized. Structure with strong opening hook, detailed body, and clear call-to-action.",
+            session([
+                'last_keyword' => $request->keyword,
+                'ai_response' => $content
+            ]);
             
-            'video' => "Produce a captivating video showcasing {$keyword}. Include dynamic transitions, engaging visual effects, and professional background music. Structure: Attention-grabbing opening (5s), main content with clear messaging (20-45s), strong call-to-action (5s). Duration: 30-60 seconds, optimized for social media platforms. Use text overlays, smooth animations, and maintain consistent branding throughout.",
-        ];
-
-        $prompt = $templates[$type] ?? "Generate high-quality content for {$keyword} with professional standards and attention to detail.";
-
-        return response()->json([
-            'success' => true,
-            'prompt' => $prompt,
-        ]);
+            return response()->json([
+                'success' => true,
+                'prompt' => $content
+            ]);
+        } catch (Exception $e) {
+            report($e); // Logs the error automatically
+            return response()->json(['message' => 'AI Generation failed'], 500);
+        }
     }
+
 }

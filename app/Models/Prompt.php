@@ -9,7 +9,6 @@ class Prompt extends Model
 {
     protected $fillable = [
         'user_id',
-        'type',
         'keyword',
         'prompt',
     ];

@@ -28,6 +28,10 @@ export interface SharedData {
     auth: Auth;
     sidebarOpen: boolean;
     [key: string]: unknown;
+    session_data?: {
+        savedKeyword: string;
+        savedPrompt: string;
+    };
 }
 
 export interface User {

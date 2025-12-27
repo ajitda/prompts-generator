@@ -1,7 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { WelcomeProps, type SharedData } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
+import { useState } from 'react';
 import PromptForm from './prompts/prompt-form';
+import AppLayout from '@/layouts/app-layout';
 
 const promptsCanonical = '/prompts';
 
@@ -11,108 +13,130 @@ export default function Welcome({
     isAuthenticated
 }: WelcomeProps) {
     const { auth } = usePage<SharedData>().props;
+    const [apiProvider, setApiProvider] = useState('groq');
+    const [apiKey, setApiKey] = useState('');
+    const [userInput, setUserInput] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [generatedPrompt, setGeneratedPrompt] = useState('');
+    const [copied, setCopied] = useState(false);
+
+    const examples = [
+        'Write a marketing email for a new eco-friendly water bottle',
+        'Create a lesson plan for teaching photosynthesis to 7th graders',
+        'Generate creative names for a coffee shop with a vintage theme',
+        'Write Python code to scrape product prices from an e-commerce site'
+    ];
+
+    const handleApiProviderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setApiProvider(e.target.value);
+    };
+
+    const handleExampleClick = (example: string) => {
+        setUserInput(example);
+    };
+
+    const copyPrompt = () => {
+        navigator.clipboard.writeText(generatedPrompt).then(() => {
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        });
+    };
+
+    const generatePrompt = async () => {
+        if (!userInput.trim()) {
+            alert('Please enter what you want the AI to do');
+            return;
+        }
+
+        setLoading(true);
+
+        // Simulate API call - replace with actual implementation
+        setTimeout(() => {
+            const optimizedPrompt = `You are an expert content creator specializing in ${userInput}. 
+
+Create a comprehensive and engaging piece that includes:
+1. Clear structure with introduction, body, and conclusion
+2. Actionable insights and practical tips
+3. Engaging tone suitable for general audience
+4. Specific examples and real-world applications
+5. SEO-friendly formatting with proper headings
+
+Ensure the content is original, valuable, and provides concrete value to readers. Focus on quality over quantity, and maintain a professional yet approachable tone throughout.
+
+Topic: ${userInput}`;
+
+            setGeneratedPrompt(optimizedPrompt);
+            setLoading(false);
+        }, 1500);
+    };
 
     return (
         <>
+            <AppLayout>
             <Head>
-                <title>Prompt Generator - Create Professional Prompts for Image, Text & Video</title>
-                <meta name="description" content="Generate high-quality AI prompts for images, text, and video content. Free prompt generator tool with instant results and save your favorites." />
-                <meta name="keywords" content="AI prompt generator, image prompts, text prompts, video prompts, AI content creation, free prompt tool" />
-                <meta property="og:title" content="AI Prompt Generator - Free Tool for Content Creation" />
-                <meta property="og:description" content="Create professional AI prompts instantly for any content type. Generate, save, and reuse your best prompts." />
+                <title>Prompt Generator - Transform Ideas into Powerful AI Prompts</title>
+                <meta name="description" content="Transform simple ideas into detailed, optimized AI prompts for better results. Free prompt generation tool with support for multiple AI providers." />
+                <meta name="keywords" content="AI prompt generator, optimized prompts, Groq, Gemini, prompt engineering, AI content creation" />
+                <meta property="og:title" content="AI Prompt Generator - Create Powerful AI Prompts" />
+                <meta property="og:description" content="Transform your basic ideas into detailed, structured prompts that get better results from AI models." />
                 <meta property="og:type" content="website" />
                 <meta name="robots" content="index, follow" />
                 <link rel="canonical" href={promptsCanonical} />
             </Head>
 
-            <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                <header className="text-center mb-8">
-                    <h1 className="text-4xl font-bold tracking-tight sm:text-5xl mb-4 text-gray-900 dark:text-white">
-                        Prompt Generator
-                    </h1>
-                    <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-                        Create professional prompts for images, text, and video content in seconds
-                    </p>
-                </header>
-                
-                <PromptForm />
-
-                {isAuthenticated && prompts?.data && prompts.data.length > 0 && (
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Your Saved Prompts</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="grid gap-4">
-                                {prompts.data.map((prompt) => (
-                                    <article
-                                        key={prompt.id}
-                                        className="bg-gray-50 dark:bg-gray-900 rounded-lg p-6 border border-gray-200 dark:border-gray-700"
-                                    >
-                                        <div className="flex items-start justify-between mb-3">
-                                            <div className="flex items-center gap-2">
-                                                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 capitalize">
-                                                    {prompt.type}
-                                                </span>
-                                                <span className="text-sm font-medium">{prompt.keyword}</span>
-                                            </div>
-                                            <time className="text-xs text-gray-500" dateTime={prompt.created_at}>
-                                                {new Date(prompt.created_at).toLocaleDateString('en-US', { 
-                                                    day: 'numeric',
-                                                    month: 'short',
-                                                    year: 'numeric'
-                                                })}
-                                            </time>
-                                        </div>
-                                        <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
-                                            {prompt.prompt}
-                                        </p>
-                                    </article>
-                                ))}
-                            </div>
-                        </CardContent>
-                    </Card>
-                )}
-
-                <Card>
-                    <CardHeader>
-                        <CardTitle>What is a Prompt Generator?</CardTitle>
-                    </CardHeader>
-                    <CardContent className="prose dark:prose-invert max-w-none">
-                        <p>
-                            A prompt generator is a powerful tool designed to help content creators, marketers, and AI enthusiasts 
-                            craft effective prompts for various artificial intelligence applications. Our generator specializes in creating 
-                            optimized prompts for image generation (like DALL-E, Midjourney), text content (ChatGPT, GPT-4), and video 
-                            creation tools.
+            <div className="min-h-screen bg-gradient-to-br from-purple-600 to-purple-800 p-4 md:p-8">
+                <div className="max-w-4xl mx-auto bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-6 md:p-10">
+                    <header className="text-center mb-8">
+                        <h1 className="text-3xl md:text-4xl font-bold mb-3 text-gray-900 dark:text-white flex items-center justify-center gap-2">
+                            <span className="text-2xl">🤖</span>Prompt Generator
+                        </h1>
+                        <p className="text-gray-600 dark:text-gray-300 text-lg">
+                            Transform simple ideas into powerful, optimized AI prompts
                         </p>
-                        
-                        <h3 className="text-xl font-semibold mt-6 mb-3">Why Use Our Prompt Generator?</h3>
-                        <ul className="space-y-2">
-                            <li><strong>Save Time:</strong> Generate professional prompts in seconds instead of spending hours crafting them</li>
-                            <li><strong>Improve Quality:</strong> Our templates are optimized for better AI output quality and consistency</li>
-                            <li><strong>Learn Best Practices:</strong> Understand how to structure prompts effectively for different content types</li>
-                            <li><strong>Build Your Library:</strong> Save and organize your favorite prompts for future use</li>
-                            <li><strong>Free to Use:</strong> No credit card required, start generating prompts immediately</li>
-                        </ul>
+                    </header>
 
-                        <h3 className="text-xl font-semibold mt-6 mb-3">How to Use the Prompt Generator</h3>
-                        <ol className="space-y-2">
-                            <li>Select your desired content type: Image, Text, or Video</li>
-                            <li>Enter a keyword or topic that describes what you want to create</li>
-                            <li>Click "Generate Prompt" to receive an optimized AI prompt</li>
-                            <li>Copy the prompt to use in your favorite AI tool</li>
-                            <li>Optionally save it to your account for future reference</li>
-                        </ol>
-
-                        <h3 className="text-xl font-semibold mt-6 mb-3">Tips for Better Prompts</h3>
-                        <p>
-                            While our generator provides excellent starting points, here are some tips to further enhance your prompts:
-                            Be specific with details, include style preferences, specify desired mood or tone, and mention technical 
-                            requirements like resolution or format when relevant.
+                    <div className="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-400 dark:border-yellow-500 rounded-lg p-4 mb-6">
+                        <p className="font-medium text-gray-800 dark:text-yellow-200">
+                            <span className="text-lg mr-1">💡</span>
+                            <strong>How it works:</strong> Enter your basic idea and select an AI model. The generator will create a detailed, structured prompt that gets better results from AI tools.
                         </p>
-                    </CardContent>
-                </Card>
+                    </div>
+
+                    <div className="space-y-6">
+
+                        <PromptForm />
+
+                        {/* Info Card */}
+                        <Card className="mt-8">
+                            <CardHeader>
+                                <CardTitle>About Prompt Engineering</CardTitle>
+                            </CardHeader>
+                            <CardContent className="prose dark:prose-invert max-w-none">
+                                <p>
+                                    Prompt engineering is the art and science of crafting inputs that get the best possible outputs from AI models.
+                                    A well-structured prompt can dramatically improve the quality, relevance, and usefulness of AI-generated content.
+                                </p>
+
+                                <h3 className="text-xl font-semibold mt-6 mb-3">Key Elements of Effective Prompts</h3>
+                                <ul className="space-y-2">
+                                    <li><strong>Clear Instructions:</strong> Be specific about what you want the AI to do</li>
+                                    <li><strong>Context Setting:</strong> Provide background information when necessary</li>
+                                    <li><strong>Role Assignment:</strong> Tell the AI what persona or expert to embody</li>
+                                    <li><strong>Format Requirements:</strong> Specify the desired output structure and style</li>
+                                    <li><strong>Constraints:</strong> Set boundaries for length, tone, and content limitations</li>
+                                </ul>
+
+                                <h3 className="text-xl font-semibold mt-6 mb-3">Why Optimize Your Prompts?</h3>
+                                <p>
+                                    Optimized prompts lead to better AI responses, reduced need for revisions, and more consistent results
+                                    across different AI models. Our generator helps you include all the necessary elements automatically.
+                                </p>
+                            </CardContent>
+                        </Card>
+                    </div>
+                </div>
             </div>
+            </AppLayout>
         </>
     );
 }
