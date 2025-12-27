@@ -77,17 +77,12 @@ export default function PromptForm() {
         }
 
         post(promptsStore().url, {
-            // data: {
-            //     keyword: session_data?.savedKeyword,
-            //     prompt: session_data?.savedPrompt, 
-            // },
             onSuccess: () => {
                 reset();
                 setGeneratedPrompt('');
                 toast.success('Prompt saved successfully!');
             },
             onError: (errors) => {
-                // Check your console to see exactly which field is failing validation
                 console.error('Validation Errors:', errors);
                 toast.error('Failed to save. Check requirements.');
             },

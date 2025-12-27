@@ -158,7 +158,7 @@ export default function Index() {
     // }, [currentPerPage, filters, products]);
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Products Management" />
+            <Head title="Prompts Generator" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-lg-xl p-4">
 
                 {/* Filters Toolbar */}

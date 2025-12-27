@@ -3,6 +3,7 @@ import { WelcomeProps, type SharedData } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import PromptForm from './prompts/prompt-form';
+import AppLayout from '@/layouts/app-layout';
 
 const promptsCanonical = '/prompts';
 
@@ -17,7 +18,7 @@ export default function Welcome({
     const [userInput, setUserInput] = useState('');
     const [loading, setLoading] = useState(false);
     const [generatedPrompt, setGeneratedPrompt] = useState('');
-    const [copied, setCopied] = useState(false);    
+    const [copied, setCopied] = useState(false);
 
     const examples = [
         'Write a marketing email for a new eco-friendly water bottle',
@@ -71,6 +72,7 @@ Topic: ${userInput}`;
 
     return (
         <>
+            <AppLayout>
             <Head>
                 <title>Prompt Generator - Transform Ideas into Powerful AI Prompts</title>
                 <meta name="description" content="Transform simple ideas into detailed, optimized AI prompts for better results. Free prompt generation tool with support for multiple AI providers." />
@@ -100,7 +102,7 @@ Topic: ${userInput}`;
                         </p>
                     </div>
 
-                    <div className="space-y-6">                       
+                    <div className="space-y-6">
 
                         <PromptForm />
 
@@ -134,6 +136,7 @@ Topic: ${userInput}`;
                     </div>
                 </div>
             </div>
+            </AppLayout>
         </>
     );
 }
