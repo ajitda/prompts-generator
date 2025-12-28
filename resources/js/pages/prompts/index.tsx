@@ -21,21 +21,13 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Manage Prompts',
+        title: 'AI Prompts',
         href: promptsIndex().url,
     },
 ];
 
 export default function Index() {
     const { props } = usePage<any>();
-    // console.log('📦 FULL Inertia Response:', {
-    //     props: JSON.parse(JSON.stringify(props)),
-    //     keys: Object.keys(props),
-    //     hasCurrentPerPage: 'currentPerPage' in props,
-    //     currentPerPageValue: props.currentPerPage,
-    //     filtersValue: props.filters,
-    //     productsPerPage: props.products?.per_page
-    // });
 
     const { prompts, filters = {}, perPageOptions } = props;
 
@@ -50,7 +42,7 @@ export default function Index() {
         direction: filters?.direction as SortProps['direction'],
     });
 
-    const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    // const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     const fetchData = useCallback((        
         overrideParams: Partial<{
@@ -89,8 +81,8 @@ export default function Index() {
         });
     }, [sortConfig]);
 
-    const [importErrors, setImportErrors] = useState<any[]>([]);
-    const [showImportPreview, setShowImportPreview] = useState(false);
+    // const [importErrors, setImportErrors] = useState<any[]>([]);
+    // const [showImportPreview, setShowImportPreview] = useState(false);
     
     // const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     //     const value = e.target.value;
@@ -121,41 +113,32 @@ export default function Index() {
         fetchData({ sort: field, direction: newDirection });
     };
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-            fetchData();
-        }
-    };
+    // const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    //     if (e.key === 'Enter') {
+    //         e.preventDefault();
+    //         if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
+    //         fetchData();
+    //     }
+    // };
 
-    const handleResetFilters = () => {
-        // setLocalSearch('');
-        // setLocalMinPrice('');
-        // setLocalMaxPrice('');
-        setSortConfig({ field: 'created_at', direction: 'desc' });
+    // const handleResetFilters = () => {
+    //     // setLocalSearch('');
+    //     // setLocalMinPrice('');
+    //     // setLocalMaxPrice('');
+    //     setSortConfig({ field: 'created_at', direction: 'desc' });
 
-        router.get(promptsIndex().url, {
-            preserveScroll: true,
-            preserveState: true,
-        });
-    };
-
-    useEffect(() => {
-        return () => {
-            if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-        };
-    }, []);
-
-    // console.log('📦 Products:', products);
-    // useEffect(() => {
-    //     console.log('📊 Current props:', {
-    //         currentPerPage,
-    //         type: typeof currentPerPage,
-    //         filters,
-    //         productsPerPage: products?.per_page
+    //     router.get(promptsIndex().url, {
+    //         preserveScroll: true,
+    //         preserveState: true,
     //     });
-    // }, [currentPerPage, filters, products]);
+    // };
+
+    // useEffect(() => {
+    //     return () => {
+    //         if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
+    //     };
+    // }, []);
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Prompts Generator" />
