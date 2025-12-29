@@ -75,16 +75,6 @@ class AIService
 
             try {
                 $provider = app($providerClass);
-<<<<<<< HEAD
-                $result = $provider->generate($fullPrompt);
-
-                Log::info("AI_SERVICE: Success using {$providerName}.");
-                return $result;
-
-            } catch (Exception $e) {
-                Log::warning("AI_SERVICE: {$providerName} failed: " . $e->getMessage());
-                continue;
-=======
 
                 // Execute the AI call
                 $result = $provider->$method($payload);
@@ -97,7 +87,6 @@ class AIService
             } catch (Exception $e) {
                 Log::warning("AI_FALLBACK: {$providerName} failed ({$method}). Error: " . $e->getMessage());
                 continue; // Move to the next provider in the array
->>>>>>> c99164434da5308d80bfd7cbf0730967bc567b8e
             }
         }
 
