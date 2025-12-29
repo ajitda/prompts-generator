@@ -114,7 +114,7 @@ class ScriptController extends Controller
     }
 
     /**
-     * STEP 2 – Generate ideas
+     * STEP 2 – Generate ideas from keyword
      */
     public function generateIdeas(Request $request): JsonResponse
     {
@@ -123,42 +123,39 @@ class ScriptController extends Controller
         ]);
 
         try {
-            $ideas = $this->aiService->generateIdeas($validated['keyword']);
+            // Assume AI returns raw JSON string: ["Idea 1", "Idea 2"]
+            $rawIdeas = $this->aiService->generateIdeas($validated['keyword']);
+            $decodedIdeas = json_decode($rawIdeas, true);
 
-            session([
-                'last_keyword' => $request->keyword,
-                'ideas' => $ideas
-            ]);
-            
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new Exception('Invalid JSON format from AI Service');
+            }
+
             $script = Script::create([
                 'user_id' => Auth::id(),
                 'keyword' => $validated['keyword'],
-                'idea' => $ideas,
+                'idea'    => $decodedIdeas, // Pass array, Laravel casts to JSON
             ]);
 
             return response()->json([
-                'success' => true,
+                'success'   => true,
                 'script_id' => $script->id,
-                'ideas' => $ideas,
+                'ideas'     => $decodedIdeas,
             ]);
         } catch (Exception $e) {
             Log::error('Idea generation failed: '.$e->getMessage());
-
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to generate ideas.',
-            ], 500);
+            return response()->json(['success' => false, 'message' => 'Failed to generate ideas.'], 500);
         }
     }
 
     /**
-     * STEP 3 – Generate story
+     * STEP 3 – Generate story sections
      */
     public function generateStory(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'script_id' => 'required|exists:scripts,id',
-            'title' => 'required|string|max:255',
+            'title'     => 'required|string|max:255',
         ]);
 
         try {
@@ -166,29 +163,22 @@ class ScriptController extends Controller
                 ->where('user_id', Auth::id())
                 ->firstOrFail();
 
-            $story = $this->aiService->generateStory($validated['title']);
+            $rawStory = $this->aiService->generateStory($validated['title']);
+            $decodedStory = json_decode($rawStory, true);
 
-            session([
-                'last_keyword' => $request->keyword,
-                'story' => $story
-            ]);
-            
             $script->update([
                 'title' => $validated['title'],
-                'story' => $story,
+                'story' => $decodedStory, // Stores as JSON in DB
             ]);
 
             return response()->json([
                 'success' => true,
-                'story' => $story,
+                // Return just the sections for the frontend loop
+                'story'   => $decodedStory['sections'] ?? [], 
             ]);
         } catch (Exception $e) {
             Log::error('Story generation failed: '.$e->getMessage());
-
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to generate story.',
-            ], 500);
+            return response()->json(['success' => false, 'message' => 'Failed to generate story.'], 500);
         }
     }
 
@@ -206,35 +196,26 @@ class ScriptController extends Controller
                 ->where('user_id', Auth::id())
                 ->firstOrFail();
 
-            if (!$script->story) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Story is missing.',
-                ], 422);
+            if (empty($script->story)) {
+                return response()->json(['success' => false, 'message' => 'Story context missing.'], 422);
             }
 
-            $finalScript = $this->aiService->generateScript($script->story);
+            // Passing previous data to AI for context
+            $rawScript = $this->aiService->generateScript($script->title, json_encode($script->story));
+            $decodedScript = json_decode($rawScript, true);
 
-            session([
-                'last_keyword' => $request->keyword,
-                'script' => $finalScript
-            ]);
-            
             $script->update([
-                'script' => $finalScript,
+                'script' => $decodedScript,
             ]);
 
             return response()->json([
                 'success' => true,
-                'script' => $finalScript,
+                'script'  => $decodedScript['script'] ?? '',
+                'tone'    => $decodedScript['tone'] ?? '',
             ]);
         } catch (Exception $e) {
             Log::error('Script generation failed: '.$e->getMessage());
-
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to generate script.',
-            ], 500);
+            return response()->json(['success' => false, 'message' => 'Failed to generate script.'], 500);
         }
     }
 

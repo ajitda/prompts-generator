@@ -4,5 +4,5 @@ namespace App\Contracts;
 
 interface AIProviderInterface {
     /** @throws \Exception */
-    public function generate(string $keyword): string;
+    public function generate(string $prompt): string;
 }

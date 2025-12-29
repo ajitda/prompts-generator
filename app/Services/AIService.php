@@ -8,109 +8,89 @@ use Exception;
 class AIService
 {
     protected $providers = [
-        \App\Services\AI\GeminiProvider::class,
+        // \App\Services\AI\GeminiProvider::class,
         \App\Services\AI\OpenRouterProvider::class,
         \App\Services\AI\GroqProvider::class,
         \App\Services\AI\HuggingFaceProvider::class,
     ];
 
-    /**
-     * Existing prompt generator (unchanged)
-     */
-    public function generatePrompt(string $keyword): string
-    {
-        return $this->runProviders('generatePrompt', $keyword);
-    }
-
-    /**
-     * STEP 2 – Generate video ideas
-     */
     public function generateIdeas(string $keyword): string
     {
-        $prompt = <<<PROMPT
-            Generate 5 professional video content ideas for the keyword: "{$keyword}"
+        $prompt = "You are a YouTube content strategist. Generate 5 unique video ideas for: '{$keyword}'. 
+                   Return ONLY a raw JSON array of strings. No markdown, no preamble.";
 
-            Constraints:
-            - Target audience: Working professionals
-            - Tone: Professional, practical
-            - Duration: 60–90 seconds
-            - Each idea must include:
-            - Title
-            - Core message
-            - Value to the viewer
-            PROMPT;
-
-        return $this->runProviders('generate', $prompt);
+        return $this->cleanAndRun('generate', $prompt);
     }
 
-    /**
-     * STEP 3 – Generate story
-     */
-    public function generateStory(string $title): string
+    public function generateStory(string $selectedIdea): string
     {
-        $prompt = <<<PROMPT
-            Create a compelling story for a professional video based on this idea:
+        $prompt = "Create a narrative outline for: '{$selectedIdea}'. 
+                   Structure: Hook (🎣), Journey (📖), Takeaway (🎯). 
+                   Return ONLY valid JSON: {\"sections\": [{\"title\": \"...\", \"content\": \"...\", \"icon\": \"...\"}]}";
 
-            Title: "{$title}"
-
-            Story structure:
-            1. Hook (first 5 seconds)
-            2. Problem
-            3. Solution
-            4. Real-world example
-            5. Closing insight
-
-            Tone: Confident, professional
-            PROMPT;
-
-        return $this->runProviders('generate', $prompt);
+        return $this->cleanAndRun('generate', $prompt);
     }
 
-    /**
-     * STEP 4 – Generate final video script
-     */
-    public function generateScript(string $story): string
+    public function generateScript(string $selectedIdea, string $storyContext): string
     {
-        $prompt = <<<PROMPT
-            Convert the following story into a professional video script.
+        // $storyContext is already a JSON string from the DB
+        $prompt = "Write a YouTube script for Idea: '{$selectedIdea}'. 
+                   Context: {$storyContext}. 
+                   Include [TIMESTAMPS] and [Stage Directions]. Tone: Conversational.
+                   Return ONLY JSON: {\"script\": \"...\", \"tone\": \"...\"}";
 
-            Requirements:
-            - Conversational but professional
-            - Short sentences
-            - Clear pacing
-            - Suitable for voice-over
-            - 60–90 seconds
-
-            Story:
-            {$story}
-            PROMPT;
-
-        return $this->runProviders('generate', $prompt);
+        return $this->cleanAndRun('generate', $prompt);
     }
 
     /**
-     * Shared provider fallback logic
+     * The Logic: Clean the AI response before returning it to the Controller
      */
+    protected function cleanAndRun(string $method, string $payload): string
+    {
+        $rawResponse = $this->runProviders($method, $payload);
+        
+        // 1. Remove Markdown code blocks (e.g., ```json ... ```)
+        $clean = preg_replace('/```(?:json)?\n?|```/', '', $rawResponse);
+        
+        // 2. Trim whitespace/newlines
+        $clean = trim($clean);
+
+        // 3. Validation: Check if it's actually JSON
+        if (!str_starts_with($clean, '{') && !str_starts_with($clean, '[')) {
+            Log::error("AI Service returned non-JSON content: " . substr($clean, 0, 100));
+            throw new Exception('AI response format was invalid.');
+        }
+
+        return $clean;
+    }
+
+    /**
+ * Shared provider fallback logic
+ */
     protected function runProviders(string $method, string $payload): string
     {
         foreach ($this->providers as $providerClass) {
+            // Get the name for logging before instantiating
             $providerName = class_basename($providerClass);
 
             try {
                 $provider = app($providerClass);
 
+                // Execute the AI call
                 $result = $provider->$method($payload);
 
+                // CORRECTED: Use $providerName (string) instead of $provider (object)
                 Log::info("AI_FALLBACK: Success using {$providerName} ({$method}).");
 
                 return $result;
 
             } catch (Exception $e) {
                 Log::warning("AI_FALLBACK: {$providerName} failed ({$method}). Error: " . $e->getMessage());
-                continue;
+                continue; // Move to the next provider in the array
             }
         }
 
         throw new Exception('All AI providers exhausted.');
     }
+
 }

@@ -16,6 +16,12 @@ class Script extends Model
         'script',
     ];
 
+    protected $casts = [
+        'idea' => 'array',  
+        'story' => 'array', 
+        'script' => 'array', 
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
