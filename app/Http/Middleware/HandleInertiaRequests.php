@@ -49,7 +49,11 @@ class HandleInertiaRequests extends Middleware
             'session_data' => [
                 'savedKeyword' => $request->session()->get('last_keyword'),
                 'savedPrompt' => $request->session()->get('ai_response'),
-            ]
+                'savedIdeas' => $request->session()->get('ideas'),
+                'savedStory' => $request->session()->get('story'),
+                'savedScript' => $request->session()->get('script'),
+            ],
+            'prompts' => \App\Models\Prompt::all(),
         ];
     }
 }

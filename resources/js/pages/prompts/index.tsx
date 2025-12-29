@@ -18,6 +18,7 @@ import { BreadcrumbItem, SortField, SortProps } from '@/types';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { Eye, MoreHorizontal, Pencil, Trash, X } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import PromptForm from './prompt-form';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -141,11 +142,13 @@ export default function Index() {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Prompts Generator" />
+            <Head title="AI Prompts Generator" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-lg-xl p-4">
 
+                <PromptForm />
+                
                 {/* Filters Toolbar */}
-                <div className='mb-4 flex w-full flex-wrap items-center gap-4'>
+                {/* <div className='mb-4 flex w-full flex-wrap items-center gap-4'>
                     {/* <Input
                         onChange={handleSearchChange}
                         onKeyDown={handleKeyDown}
@@ -171,7 +174,7 @@ export default function Index() {
                         </Button>
                     )} */}
 
-                    <div className='ml-auto'>
+                    {/* <div className='ml-auto'>
                         <Link
                             className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors"
                             href='/prompts-generator'
@@ -179,15 +182,15 @@ export default function Index() {
                         >
                             Add Prompt
                         </Link>
-                    </div>
-                </div>
+                    </div> */}
+                {/* </div> */}
 
-                <div className='ml-auto flex items-center gap-2'>
+                {/* <div className='ml-auto flex items-center gap-2'> */}
                     {/* <ExportImportButtons filters={filters} /> */}
-                </div>
+                {/* </div> */}
 
                 {/* Table */}
-                <div className="rounded-md border">
+                {/* <div className="rounded-md border">
                     <table className='w-full table-auto'>
                         <thead className="bg-gray-100 dark:bg-gray-800">
                             <tr className='text-left text-sm font-medium text-gray-500 dark:text-gray-300'>
@@ -243,9 +246,9 @@ export default function Index() {
                                                             }
                                                         }}
                                                     > */}
-                                                        <Trash className="mr-2 h-4 w-4" /> Delete
+                                                        {/* <Trash className="mr-2 h-4 w-4" /> Delete */}
                                                     {/* </DropdownMenuItem> */}
-                                                </DropdownMenuContent>
+                                                {/* </DropdownMenuContent>
                                             </DropdownMenu>
                                         </td>
                                     </tr>
@@ -253,7 +256,7 @@ export default function Index() {
                             )}
                         </tbody>
                     </table>
-                </div>
+                </div> */}
                 {/* <Pagination products={products} perPageOptions={perPageOptions} /> */}
 
                 {/* <ImportPreviewModal

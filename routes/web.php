@@ -16,7 +16,7 @@ Route::post('/prompts/generate', [PromptController::class, 'generate'])->name('p
 
 Route::post('/scripts/ideas', [ScriptController::class, 'generateIdeas'])->name('scripts.generateIdeas');
 Route::post('/scripts/story', [ScriptController::class, 'generateStory'])->name('scripts.generateStory');
-Route::post('/scripts/final', [ScriptController::class, 'generateScripts'])->name('scripts.generateScripts');
+Route::post('/scripts/final', [ScriptController::class, 'generateScript'])->name('scripts.generateScript');
 
 Route::middleware(['auth', 'verified'])->group(function () {
 

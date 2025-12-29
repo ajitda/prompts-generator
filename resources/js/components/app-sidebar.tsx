@@ -18,14 +18,6 @@ import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { BookOpen, ChevronRight, Folder, LayoutGrid, Video } from 'lucide-react';
 import AppLogo from './app-logo';
-import prompts from '@/routes/prompts';
-import scripts from '@/routes/scripts';
-import {
-    // destroy as productsDestroy,
-    index as promptsIndex,
-    show as promptsShow
-} from '@/actions/App/Http/Controllers/PromptController';
-import { index as scriptsIndex } from '@/actions/App/Http/Controllers/ScriptController';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible';
 
 const mainNavItems: NavItem[] = [
@@ -55,6 +47,10 @@ export function AppSidebar() {
 
     const { prompts: promptData, scripts: scriptData } = props;
 
+    const promptsList = promptData?.data || (Array.isArray(promptData) ? promptData : []);
+    
+    // console.log('check:', props)
+    
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -83,7 +79,7 @@ export function AppSidebar() {
                             </CollapsibleTrigger>
                             <CollapsibleContent>
                                 <SidebarMenuSub>
-                                    {promptData?.data?.map((prompt: any) => (
+                                    {promptsList.map((prompt: any) => (
                                         <SidebarMenuSubItem key={prompt.id}>
                                             <SidebarMenuSubButton asChild>
                                                 <Link href={`/prompts/${prompt.id}`}>

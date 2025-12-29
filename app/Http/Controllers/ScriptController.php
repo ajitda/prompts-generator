@@ -125,6 +125,11 @@ class ScriptController extends Controller
         try {
             $ideas = $this->aiService->generateIdeas($validated['keyword']);
 
+            session([
+                'last_keyword' => $request->keyword,
+                'ideas' => $ideas
+            ]);
+            
             $script = Script::create([
                 'user_id' => Auth::id(),
                 'keyword' => $validated['keyword'],
@@ -163,6 +168,11 @@ class ScriptController extends Controller
 
             $story = $this->aiService->generateStory($validated['title']);
 
+            session([
+                'last_keyword' => $request->keyword,
+                'story' => $story
+            ]);
+            
             $script->update([
                 'title' => $validated['title'],
                 'story' => $story,
@@ -205,6 +215,11 @@ class ScriptController extends Controller
 
             $finalScript = $this->aiService->generateScript($script->story);
 
+            session([
+                'last_keyword' => $request->keyword,
+                'script' => $finalScript
+            ]);
+            
             $script->update([
                 'script' => $finalScript,
             ]);

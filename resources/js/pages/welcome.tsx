@@ -2,6 +2,7 @@ import AppLayout from '@/layouts/app-layout';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { SharedData } from '@/types';
+import { Video } from 'lucide-react';
 
 export default function Welcome() {
     const { auth } = usePage<SharedData>().props;
@@ -9,7 +10,7 @@ export default function Welcome() {
     return (
         <AppLayout>
             <Head>
-                <title>AI Content Generator for Professionals</title>
+                <title>AI Content Generator</title>
                 <meta
                     name="description"
                     content="Generate optimized AI prompts and professional YouTube video scripts in minutes. Built for working professionals."
@@ -27,7 +28,7 @@ export default function Welcome() {
                     {/* HERO */}
                     <header className="text-center mb-12">
                         <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-                            🚀 AI Content Generator for Professionals
+                            AI Content Generator
                         </h1>
                         <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
                             Turn keywords into optimized AI prompts and professional video scripts
@@ -41,7 +42,7 @@ export default function Welcome() {
                         {/* PROMPT GENERATOR */}
                         <Card className="hover:shadow-lg transition">
                             <CardHeader>
-                                <CardTitle>🤖 AI Prompt Generator</CardTitle>
+                                <CardTitle>AI Prompt Generator</CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <p className="text-gray-600 dark:text-gray-300">
@@ -56,7 +57,7 @@ export default function Welcome() {
                                 </ul>
 
                                 <Link
-                                    href="/prompts-generator"
+                                    href="/prompts-generator/prompts"
                                     className="inline-block mt-4 bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition"
                                 >
                                     Generate Prompts →
@@ -67,7 +68,12 @@ export default function Welcome() {
                         {/* VIDEO SCRIPT GENERATOR */}
                         <Card className="hover:shadow-lg transition">
                             <CardHeader>
-                                <CardTitle>🎬 AI Video Script Generator</CardTitle>
+                                <CardTitle className='flex items-center gap-2'>
+                                    <Video />
+                                    <span>
+                                        AI Video Script Generator
+                                    </span>
+                                </CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <p className="text-gray-600 dark:text-gray-300">
@@ -82,7 +88,7 @@ export default function Welcome() {
                                 </ul>
 
                                 <Link
-                                    href="/video-scripts"
+                                    href="/prompts-generator/scripts"
                                     className="inline-block mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg transition"
                                 >
                                     Create Video Scripts →
