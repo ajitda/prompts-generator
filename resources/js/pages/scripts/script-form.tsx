@@ -1,9 +1,7 @@
-
 import { useState } from "react";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-// import LoadingState from "@/components/LoadingState";
 import { StorySection } from "@/types";
 import IdeaCard from "@/components/IdeaCard";
 import StoryView from "@/components/StoryView";
@@ -27,7 +25,8 @@ const ScriptForm = () => {
     // Helper for CSRF and Headers
     const requestHeaders = {
         'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content || '',
+        'X-CSRF-TOKEN': (document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') as string) || '',
+        // 'X-CSRF-TOKEN': (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content || '',
     };
 
     const handleGenerateIdeas = async () => {
@@ -60,14 +59,15 @@ const ScriptForm = () => {
             const res = await fetch('/scripts/story', {
                 method: 'POST',
                 headers: requestHeaders,
-                body: JSON.stringify({ script_id: scriptId, idea }),
+                body: JSON.stringify({ script_id: scriptId, title: idea }),
             });
             const data = await res.json();
             if (data.success) {
                 setStory(data.story);
             } else throw new Error(data.message);
         } catch (error: any) {
-            toast({ title: "Error", description: error.message, variant: "destructive" });
+            toast.error("Error");
+            console.log('check error:', error);
             setStep("ideas");
         } finally {
             setIsLoading(false);
@@ -89,7 +89,8 @@ const ScriptForm = () => {
                 setTone(data.tone);
             } else throw new Error(data.message);
         } catch (error: any) {
-            toast({ title: "Error", description: error.message, variant: "destructive" });
+            console.error("Full Error Details:", error); // Add this line!
+            toast.error(error.message || "Error");
             setStep("story");
         } finally {
             setIsLoading(false);

@@ -153,31 +153,35 @@ class ScriptController extends Controller
      */
     public function generateStory(Request $request): JsonResponse
     {
+        // Log::info('Request Data:', $request->all());
+
         $validated = $request->validate([
             'script_id' => 'required|exists:scripts,id',
-            'title'     => 'required|string|max:255',
+            'title' => 'required|string',
         ]);
 
         try {
-            $script = Script::where('id', $validated['script_id'])
+            $script = Script::where('id', $validated['script_id']) // Use validated data
                 ->where('user_id', Auth::id())
                 ->firstOrFail();
 
+            // 2. Use $validated['title'] to ensure it's not null
             $rawStory = $this->aiService->generateStory($validated['title']);
+
             $decodedStory = json_decode($rawStory, true);
 
             $script->update([
                 'title' => $validated['title'],
-                'story' => $decodedStory, // Stores as JSON in DB
+                'story' => $decodedStory,
             ]);
 
             return response()->json([
                 'success' => true,
-                // Return just the sections for the frontend loop
-                'story'   => $decodedStory['sections'] ?? [], 
+                'story' => $decodedStory['sections'] ?? [],
             ]);
         } catch (Exception $e) {
-            Log::error('Story generation failed: '.$e->getMessage());
+            // This will now catch structural errors or AI failures
+            Log::error('Story generation failed: ' . $e->getMessage());
             return response()->json(['success' => false, 'message' => 'Failed to generate story.'], 500);
         }
     }
@@ -208,10 +212,15 @@ class ScriptController extends Controller
                 'script' => $decodedScript,
             ]);
 
+            if (!$decodedScript) {
+                Log::error('AI Service returned invalid JSON: ' . $rawScript);
+                return response()->json(['success' => false, 'message' => 'Invalid AI response.'], 500);
+            }
+
             return response()->json([
                 'success' => true,
-                'script'  => $decodedScript['script'] ?? '',
-                'tone'    => $decodedScript['tone'] ?? '',
+                'script' => $decodedScript['script'] ?? '',
+                'tone' => $decodedScript['tone'] ?? 'Neutral', // Provide a fallback
             ]);
         } catch (Exception $e) {
             Log::error('Script generation failed: '.$e->getMessage());

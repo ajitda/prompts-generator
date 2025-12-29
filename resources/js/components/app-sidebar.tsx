@@ -42,15 +42,15 @@ const mainNavItems: NavItem[] = [
 // ];
 
 export function AppSidebar() {
-    
+
     const { props } = usePage<any>();
 
     const { prompts: promptData, scripts: scriptData } = props;
 
     const promptsList = promptData?.data || (Array.isArray(promptData) ? promptData : []);
-    
+
     // console.log('check:', props)
-    
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -67,16 +67,20 @@ export function AppSidebar() {
 
             <SidebarContent>
                 <SidebarMenu>
-                    {/* AI Prompts Section */}
                     <Collapsible asChild defaultOpen className="group/collapsible">
                         <SidebarMenuItem>
-                            <CollapsibleTrigger asChild>
-                                <SidebarMenuButton tooltip="AI Prompts">
-                                    <LayoutGrid />
-                                    <span>AI Prompts</span>
-                                    <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                                </SidebarMenuButton>
-                            </CollapsibleTrigger>
+                            <SidebarMenuButton tooltip="AI Prompts" asChild>
+                                <div>
+                                    <Link href="/prompts-generator/prompts" className="flex flex-1 items-center gap-2">
+                                        <LayoutGrid />
+                                        <span>AI Prompts</span>
+                                    </Link>
+                                    <CollapsibleTrigger>
+                                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                                    </CollapsibleTrigger>
+                                </div>
+                            </SidebarMenuButton>
+
                             <CollapsibleContent>
                                 <SidebarMenuSub>
                                     {promptsList.map((prompt: any) => (
@@ -96,13 +100,17 @@ export function AppSidebar() {
                     {/* AI Video Scripts Section */}
                     <Collapsible asChild defaultOpen className="group/collapsible">
                         <SidebarMenuItem>
-                            <CollapsibleTrigger asChild>
-                                <SidebarMenuButton tooltip="AI Video Scripts">
-                                    <Video />
-                                    <span>AI Video Scripts</span>
-                                    <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                                </SidebarMenuButton>
-                            </CollapsibleTrigger>
+                            <SidebarMenuButton tooltip="AI Video Scripts" asChild>
+                                <div>
+                                    <Link href="/prompts-generator/scripts" className="flex flex-1 items-center gap-2">
+                                        <Video />
+                                        <span>AI Video Scripts</span>
+                                    </Link>
+                                    <CollapsibleTrigger>
+                                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                                    </CollapsibleTrigger>
+                                </div>
+                            </SidebarMenuButton>
                             <CollapsibleContent>
                                 <SidebarMenuSub>
                                     {scriptData?.data?.map((script: any) => (
