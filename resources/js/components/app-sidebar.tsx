@@ -9,50 +9,47 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
+    SidebarMenuSub,
+    SidebarMenuSubButton,
+    SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-react';
+import { BookOpen, ChevronRight, Folder, LayoutGrid, Video } from 'lucide-react';
 import AppLogo from './app-logo';
-import prompts from '@/routes/prompts';
-import {
-    // destroy as productsDestroy,
-    index as promptsIndex,
-    show as promptsShow
-} from '@/actions/App/Http/Controllers/PromptController';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible';
 
 const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: dashboard(),
-        icon: LayoutGrid,
-    },
-    {
-        title: 'Manage Prompts',
-        href: prompts.index(),
-        icon: LayoutGrid,
-    }
+    // {
+    //     title: 'Dashboard',
+    //     href: dashboard(),
+    //     icon: LayoutGrid,
+    // },
 ];
 
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
-    },
-];
+// const footerNavItems: NavItem[] = [
+//     {
+//         title: 'Repository',
+//         href: 'https://github.com/laravel/react-starter-kit',
+//         icon: Folder,
+//     },
+//     {
+//         title: 'Documentation',
+//         href: 'https://laravel.com/docs/starter-kits#react',
+//         icon: BookOpen,
+//     },
+// ];
 
 export function AppSidebar() {
-    
+
     const { props } = usePage<any>();
 
-    const { prompts } = props;
+    const { prompts: promptData, scripts: scriptData } = props;
+
+    const promptsList = promptData?.data || (Array.isArray(promptData) ? promptData : []);
+
+    // console.log('check:', props)
 
     return (
         <Sidebar collapsible="icon" variant="inset">
@@ -69,22 +66,71 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
-                {prompts?.data?.map((prompt, index) => (
-                    <SidebarMenuItem key={prompt.id}>
-                        <Link href={promptsIndex(prompt.id).url} prefetch>
-                            <SidebarMenuButton
-                                data-test="sidebar-menu-button"
-                            >
-                                <span className="pl-8 truncate">{prompt.keyword}</span>
+                <SidebarMenu>
+                    <Collapsible asChild defaultOpen className="group/collapsible">
+                        <SidebarMenuItem>
+                            <SidebarMenuButton tooltip="AI Prompts" asChild>
+                                <div>
+                                    <Link href="/prompts-generator/prompts" className="flex flex-1 items-center gap-2">
+                                        <LayoutGrid />
+                                        <span>AI Prompts</span>
+                                    </Link>
+                                    <CollapsibleTrigger>
+                                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                                    </CollapsibleTrigger>
+                                </div>
                             </SidebarMenuButton>
-                        </Link>
-                    </SidebarMenuItem>
-                ))}
+
+                            <CollapsibleContent>
+                                <SidebarMenuSub>
+                                    {promptsList.map((prompt: any) => (
+                                        <SidebarMenuSubItem key={prompt.id}>
+                                            <SidebarMenuSubButton asChild>
+                                                <Link href={`/prompts/${prompt.id}`}>
+                                                    <span>{prompt.keyword}</span>
+                                                </Link>
+                                            </SidebarMenuSubButton>
+                                        </SidebarMenuSubItem>
+                                    ))}
+                                </SidebarMenuSub>
+                            </CollapsibleContent>
+                        </SidebarMenuItem>
+                    </Collapsible>
+
+                    {/* AI Video Scripts Section */}
+                    <Collapsible asChild defaultOpen className="group/collapsible">
+                        <SidebarMenuItem>
+                            <SidebarMenuButton tooltip="AI Video Scripts" asChild>
+                                <div>
+                                    <Link href="/prompts-generator/scripts" className="flex flex-1 items-center gap-2">
+                                        <Video />
+                                        <span>AI Video Scripts</span>
+                                    </Link>
+                                    <CollapsibleTrigger>
+                                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                                    </CollapsibleTrigger>
+                                </div>
+                            </SidebarMenuButton>
+                            <CollapsibleContent>
+                                <SidebarMenuSub>
+                                    {scriptData?.data?.map((script: any) => (
+                                        <SidebarMenuSubItem key={script.id}>
+                                            <SidebarMenuSubButton asChild>
+                                                <Link href={`/scripts/${script.id}`}>
+                                                    <span>{script.keyword}</span>
+                                                </Link>
+                                            </SidebarMenuSubButton>
+                                        </SidebarMenuSubItem>
+                                    ))}
+                                </SidebarMenuSub>
+                            </CollapsibleContent>
+                        </SidebarMenuItem>
+                    </Collapsible>
+                </SidebarMenu>
             </SidebarContent>
 
             <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
+                {/* <NavFooter items={footerNavItems} className="mt-auto" /> */}
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

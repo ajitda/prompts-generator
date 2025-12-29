@@ -87,3 +87,9 @@ export interface SortProps {
     field: SortField;
     direction: SortDirection;
 }
+
+export interface StorySection {
+  title: string;
+  content: string;
+  icon: string;
+}

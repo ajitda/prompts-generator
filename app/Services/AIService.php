@@ -8,58 +8,74 @@ use Exception;
 class AIService
 {
     protected $providers = [
-        \App\Services\AI\GeminiProvider::class,
+        // \App\Services\AI\GeminiProvider::class,
+        \App\Services\AI\OpenRouterProvider::class,
         \App\Services\AI\GroqProvider::class,
         \App\Services\AI\OpenRouterProvider::class,
     ];
 
-    /**
-     * Orchestrates the 4-step Video Script Process
-     */
-    public function generateVideoScript(string $keyword, string $audience, string $duration): string
+    public function generateIdeas(string $keyword): string
     {
-        // STEP 1: Define the structured meta-prompt
-        $structuredPrompt = <<<PROMPT
-            You are a professional content strategist and video script writer. 
-            Follow this EXACT 4-step process to generate a high-quality video script:
+        $prompt = "You are a YouTube content strategist. Generate 5 unique video ideas for: '{$keyword}'. 
+                   Return ONLY a raw JSON array of strings. No markdown, no preamble.";
 
-            STEP 1: INTENT
-            Keyword: "{$keyword}"
-            Audience: "{$audience}"
-            Duration: "{$duration}"
+        return $this->cleanAndRun('generate', $prompt);
+    }
 
-            STEP 2: IDEA GENERATION
-            Generate the best professional video content idea for this keyword. 
-            Include: Title, Core Message, and Value to the viewer.
+    public function generateStory(string $selectedIdea): string
+    {
+        $prompt = "Create a narrative outline for: '{$selectedIdea}'. 
+                   Structure: Hook (🎣), Journey (📖), Takeaway (🎯). 
+                   Return ONLY valid JSON: {\"sections\": [{\"title\": \"...\", \"content\": \"...\", \"icon\": \"...\"}]}";
 
-            STEP 3: STORY GENERATION
-            Expand that idea into a compelling story using this structure:
-            1. Hook (first 5 seconds)
-            2. Problem
-            3. Solution
-            4. Real-world example
-            5. Closing insight
+        return $this->cleanAndRun('generate', $prompt);
+    }
 
-            STEP 4: VIDEO SCRIPT
-            Convert the story into a spoken script. 
-            Requirements: Conversational but professional, short sentences, suitable for voice-over, timed for {$duration}.
+    public function generateScript(string $selectedIdea, string $storyContext): string
+    {
+        // $storyContext is already a JSON string from the DB
+        $prompt = "Write a YouTube script for Idea: '{$selectedIdea}'. 
+                   Context: {$storyContext}. 
+                   Include [TIMESTAMPS] and [Stage Directions]. Tone: Conversational.
+                   Return ONLY JSON: {\"script\": \"...\", \"tone\": \"...\"}";
 
-            Return ONLY the final result starting from STEP 2. Use clear headings and professional formatting.
-            PROMPT;
-
-        return $this->executeWithFallback($structuredPrompt);
+        return $this->cleanAndRun('generate', $prompt);
     }
 
     /**
-     * Handles provider failover logic
+     * The Logic: Clean the AI response before returning it to the Controller
      */
-    protected function executeWithFallback(string $fullPrompt): string
+    protected function cleanAndRun(string $method, string $payload): string
+    {
+        $rawResponse = $this->runProviders($method, $payload);
+        
+        // 1. Remove Markdown code blocks (e.g., ```json ... ```)
+        $clean = preg_replace('/```(?:json)?\n?|```/', '', $rawResponse);
+        
+        // 2. Trim whitespace/newlines
+        $clean = trim($clean);
+
+        // 3. Validation: Check if it's actually JSON
+        if (!str_starts_with($clean, '{') && !str_starts_with($clean, '[')) {
+            Log::error("AI Service returned non-JSON content: " . substr($clean, 0, 100));
+            throw new Exception('AI response format was invalid.');
+        }
+
+        return $clean;
+    }
+
+    /**
+ * Shared provider fallback logic
+ */
+    protected function runProviders(string $method, string $payload): string
     {
         foreach ($this->providers as $providerClass) {
+            // Get the name for logging before instantiating
             $providerName = class_basename($providerClass);
 
             try {
                 $provider = app($providerClass);
+<<<<<<< HEAD
                 $result = $provider->generate($fullPrompt);
 
                 Log::info("AI_SERVICE: Success using {$providerName}.");
@@ -68,9 +84,24 @@ class AIService
             } catch (Exception $e) {
                 Log::warning("AI_SERVICE: {$providerName} failed: " . $e->getMessage());
                 continue;
+=======
+
+                // Execute the AI call
+                $result = $provider->$method($payload);
+
+                // CORRECTED: Use $providerName (string) instead of $provider (object)
+                Log::info("AI_FALLBACK: Success using {$providerName} ({$method}).");
+
+                return $result;
+
+            } catch (Exception $e) {
+                Log::warning("AI_FALLBACK: {$providerName} failed ({$method}). Error: " . $e->getMessage());
+                continue; // Move to the next provider in the array
+>>>>>>> c99164434da5308d80bfd7cbf0730967bc567b8e
             }
         }
 
         throw new Exception('All AI providers failed to generate the script.');
     }
+
 }
