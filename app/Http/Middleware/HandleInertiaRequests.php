@@ -39,7 +39,7 @@ class HandleInertiaRequests extends Middleware
         [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
 
         // dd($request->session()->get('session_data'));
-        
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
@@ -55,12 +55,12 @@ class HandleInertiaRequests extends Middleware
                 'savedStory' => $request->session()->get('story'),
                 'savedScript' => $request->session()->get('script'),
             ],
-            'prompts' => $request->user()
-                ? \App\Models\Prompt::where('user_id', $request->user()->id)->get()
-                : [],
-            'scripts' => $request->user()
-            ? \App\Models\Script::where('user_id', $request->user()->id)->get()
-            : [],
+            // 'prompts' => $request->user()
+            //     ? \App\Models\Prompt::where('user_id', $request->user()->id)->get()
+            //     : [],
+            // 'scripts' => $request->user()
+            // ? \App\Models\Script::where('user_id', $request->user()->id)->get()
+            // : [],
         ];
     }
 }
