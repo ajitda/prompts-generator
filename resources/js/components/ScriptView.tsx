@@ -7,21 +7,23 @@ import toast from "react-hot-toast";
 interface ScriptViewProps {
   selectedIdea: string;
   script: string;
-  tone: string;
+  tone?: string | null;
   onBack: () => void;
   onRegenerate: () => void;
   onStartOver: () => void;
   isLoading: boolean;
+  showExisting?: boolean;
 }
 
 const ScriptView = ({ 
   selectedIdea, 
   script, 
-  tone, 
+  tone=null, 
   onBack, 
   onRegenerate,
   onStartOver,
-  isLoading 
+  isLoading,
+  showExisting=false
 }: ScriptViewProps) => {
   const [copied, setCopied] = useState(false);
 
@@ -39,6 +41,7 @@ const ScriptView = ({
   return (
     <div className="animate-fade-in space-y-8">
       <div className="space-y-4">
+        {!showExisting && (
         <button 
           onClick={onBack}
           className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-250 text-sm font-medium"
@@ -46,15 +49,18 @@ const ScriptView = ({
           <ArrowLeft className="w-4 h-4" />
           Back to story
         </button>
+        )}
         
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div className="space-y-2">
+            {!showExisting && (
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-success/10 flex items-center justify-center">
                 <Check className="w-5 h-5 text-success" />
               </div>
               <h2 className="text-2xl font-semibold text-foreground">Your script is ready</h2>
             </div>
+            )}
             <p className="text-muted-foreground">{selectedIdea}</p>
           </div>
           

@@ -21,25 +21,21 @@ class PromptController extends Controller
      */
     public function index()
     {
-        $prompts = Auth::check() 
+        $paginatedPrompts = Auth::check()
             ? Prompt::where('user_id', Auth::id())
                 ->latest()
                 ->paginate(10)
                 ->withQueryString()
+                ->through(fn($p) => [
+                    'id' => $p->id,
+                    'keyword' => $p->keyword,
+                    'prompt' => $p->prompt,
+                    'created_at' => $p->created_at->format('d M Y'),
+                ])
             : null;
 
-        if ($prompts) {
-            $prompts->getCollection()->transform(fn($prompt) => [
-                'id' => $prompt->id,
-                'type' => $prompt->type,
-                'keyword' => $prompt->keyword,
-                'prompt' => $prompt->prompt,
-                'created_at' => $prompt->created_at->format('d M Y'),
-            ]);
-        }
-
         return Inertia::render('prompts/index', [
-            'prompts' => $prompts,
+            'promptsList' => $paginatedPrompts,
             'isAuthenticated' => Auth::check(),
         ]);
     }
@@ -82,7 +78,7 @@ class PromptController extends Controller
         // dump($request->all());
         $validated = $request->validate([
             'keyword' => 'required|string|max:1000',
-            'prompt' => 'required|string',
+            'prompt' => 'required|json',
         ], [
             'keyword.required' => 'Keyword is required.',
             'prompt.required' => 'Prompt content is required.',
@@ -110,7 +106,13 @@ class PromptController extends Controller
      */
     public function show(Prompt $prompt)
     {
-        //
+        if ($prompt->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        return Inertia::render('prompts/show', [
+            'prompt' => $prompt,
+        ]);
     }
 
     /**

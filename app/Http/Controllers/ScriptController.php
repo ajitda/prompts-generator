@@ -20,24 +20,21 @@ class ScriptController extends Controller
      */
     public function index()
     {
-        $scripts = Auth::check()
+        $paginatedScripts = Auth::check()
             ? Script::where('user_id', Auth::id())
                 ->latest()
                 ->paginate(10)
                 ->withQueryString()
+                ->through(fn($s) => [
+                    'id' => $s->id,
+                    'keyword' => $s->keyword,
+                    'prompt' => $s->script,
+                    'created_at' => $s->created_at->format('d M Y'),
+                ])
             : null;
 
-        if ($scripts) {
-            $scripts->getCollection()->transform(fn ($script) => [
-                'id' => $script->id,
-                'keyword' => $script->keyword,
-                'title' => $script->title,
-                'created_at' => $script->created_at->format('d M Y'),
-            ]);
-        }
-
         return Inertia::render('scripts/index', [
-            'scripts' => $scripts,
+            'scriptsList' => $paginatedScripts,
             'isAuthenticated' => Auth::check(),
         ]);
 

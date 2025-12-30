@@ -53,7 +53,12 @@ class HandleInertiaRequests extends Middleware
                 'savedStory' => $request->session()->get('story'),
                 'savedScript' => $request->session()->get('script'),
             ],
-            'prompts' => \App\Models\Prompt::all(),
+            'prompts' => $request->user()
+                ? \App\Models\Prompt::where('user_id', $request->user()->id)->get()
+                : [],
+            'scripts' => $request->user()
+            ? \App\Models\Script::where('user_id', $request->user()->id)->get()
+            : [],
         ];
     }
 }

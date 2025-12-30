@@ -33,12 +33,17 @@ class AIService
 
     public function generateScript(string $selectedIdea, string $storyContext): string
     {
-        // $storyContext is already a JSON string from the DB
         $prompt = "Write a YouTube script for Idea: '{$selectedIdea}'. 
                    Context: {$storyContext}. 
                    Include [TIMESTAMPS] and [Stage Directions]. Tone: Conversational.
                    Return ONLY JSON: {\"script\": \"...\", \"tone\": \"...\"}";
 
+        return $this->cleanAndRun('generate', $prompt);
+    }
+
+    public function generatePrompt(string $keyword): string
+    {
+        $prompt = "Write a high-quality AI prompt for: '{$keyword}'. Return ONLY a JSON object: {\"prompt\": \"...\"}";
         return $this->cleanAndRun('generate', $prompt);
     }
 
@@ -48,18 +53,19 @@ class AIService
     protected function cleanAndRun(string $method, string $payload): string
     {
         $rawResponse = $this->runProviders($method, $payload);
-        
-        // 1. Remove Markdown code blocks (e.g., ```json ... ```)
-        $clean = preg_replace('/```(?:json)?\n?|```/', '', $rawResponse);
-        
-        // 2. Trim whitespace/newlines
-        $clean = trim($clean);
 
-        // 3. Validation: Check if it's actually JSON
-        if (!str_starts_with($clean, '{') && !str_starts_with($clean, '[')) {
-            Log::error("AI Service returned non-JSON content: " . substr($clean, 0, 100));
+        // 1. Find the first occurrence of { or [ and the last occurrence of } or ]
+        $firstBracket = strpos($rawResponse, '{') === false ? strpos($rawResponse, '[') : strpos($rawResponse, '{');
+        $lastBracket = strrpos($rawResponse, '}') === false ? strrpos($rawResponse, ']') : strrpos($rawResponse, '}');
+
+        if ($firstBracket === false || $lastBracket === false) {
+            Log::error("AI Service returned no JSON structures: " . substr($rawResponse, 0, 100));
             throw new Exception('AI response format was invalid.');
         }
+
+        // 2. Extract only the JSON part
+        $clean = substr($rawResponse, $firstBracket, ($lastBracket - $firstBracket) + 1);
+        $clean = trim($clean);
 
         return $clean;
     }
@@ -70,16 +76,13 @@ class AIService
     protected function runProviders(string $method, string $payload): string
     {
         foreach ($this->providers as $providerClass) {
-            // Get the name for logging before instantiating
             $providerName = class_basename($providerClass);
 
             try {
                 $provider = app($providerClass);
 
-                // Execute the AI call
                 $result = $provider->$method($payload);
 
-                // CORRECTED: Use $providerName (string) instead of $provider (object)
                 Log::info("AI_FALLBACK: Success using {$providerName} ({$method}).");
 
                 return $result;

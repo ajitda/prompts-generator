@@ -45,12 +45,8 @@ export function AppSidebar() {
 
     const { props } = usePage<any>();
 
-    const { prompts: promptData, scripts: scriptData } = props;
-
-    const promptsList = promptData?.data || (Array.isArray(promptData) ? promptData : []);
-
-    // console.log('check:', props)
-
+    const { prompts, scripts } = props;
+    
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -83,10 +79,10 @@ export function AppSidebar() {
 
                             <CollapsibleContent>
                                 <SidebarMenuSub>
-                                    {promptsList.map((prompt: any) => (
+                                    {Array.isArray(prompts) && prompts.map((prompt: any) => (
                                         <SidebarMenuSubItem key={prompt.id}>
                                             <SidebarMenuSubButton asChild>
-                                                <Link href={`/prompts/${prompt.id}`}>
+                                                <Link href={`/prompts-generator/prompts/${prompt.id}`}>
                                                     <span>{prompt.keyword}</span>
                                                 </Link>
                                             </SidebarMenuSubButton>
@@ -113,10 +109,10 @@ export function AppSidebar() {
                             </SidebarMenuButton>
                             <CollapsibleContent>
                                 <SidebarMenuSub>
-                                    {scriptData?.data?.map((script: any) => (
+                                    {Array.isArray(scripts) && scripts.map((script: any) => (
                                         <SidebarMenuSubItem key={script.id}>
                                             <SidebarMenuSubButton asChild>
-                                                <Link href={`/scripts/${script.id}`}>
+                                                <Link href={`/prompts-generator/scripts/${script.id}`}>
                                                     <span>{script.keyword}</span>
                                                 </Link>
                                             </SidebarMenuSubButton>

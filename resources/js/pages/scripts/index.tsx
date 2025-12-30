@@ -13,7 +13,7 @@ import { useCallback, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'AI Prompts',
+        title: 'AI Video Scripts',
         href: scriptsIndex().url,
     },
 ];
@@ -109,18 +109,14 @@ export default function VideoScripts() {
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head>
-        <title>AI Video Script Generator</title>
+        {/* <title>AI Video Script Generator</title> */}
         <meta
           name="description"
           content="Generate professional YouTube video scripts using AI. Keyword to script in minutes."
         />
       </Head>
 
-      <div className="max-w-4xl mx-auto p-6">
-        <h1 className="text-3xl font-bold mb-2">🎬 AI Video Script Generator</h1>
-        <p className="text-gray-600 mb-6">
-          Create professional Video scripts in 3 simple steps.
-        </p>
+      <div className="max-w-4xl mx-auto p-2">
 
         <ScriptForm />
       </div>

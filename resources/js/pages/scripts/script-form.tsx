@@ -109,7 +109,7 @@ const ScriptForm = () => {
 
     return (
         <div className="min-h-screen bg-background">
-            <main className="container mx-auto px-6 pt-24 pb-16 max-w-3xl">
+            <main className="container mx-auto px-6 max-w-3xl">
                 {step === "input" && !isLoading && (
                    <div className="animate-fade-in flex flex-col items-center justify-center min-h-[60vh]">
                         <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-8">

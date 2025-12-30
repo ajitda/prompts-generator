@@ -13,6 +13,10 @@ class Prompt extends Model
         'prompt',
     ];
 
+    protected $casts = [
+        'prompt' => 'array',
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
