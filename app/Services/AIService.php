@@ -11,7 +11,7 @@ class AIService
         // \App\Services\AI\GeminiProvider::class,
         \App\Services\AI\OpenRouterProvider::class,
         \App\Services\AI\GroqProvider::class,
-        \App\Services\AI\HuggingFaceProvider::class,
+        \App\Services\AI\OpenRouterProvider::class,
     ];
 
     public function generateIdeas(string $keyword): string
@@ -93,7 +93,7 @@ class AIService
             }
         }
 
-        throw new Exception('All AI providers exhausted.');
+        throw new Exception('All AI providers failed to generate the script.');
     }
 
 }

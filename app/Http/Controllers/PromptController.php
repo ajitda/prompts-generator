@@ -8,24 +8,18 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class PromptController extends Controller
 {
-    public function __construct(protected AIService $aiService){}
+    public function __construct(protected AIService $aiService) {}
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $paginatedPrompts = Auth::check()
             ? Prompt::where('user_id', Auth::id())
                 ->latest()
                 ->paginate(10)
-                ->withQueryString()
                 ->through(fn($p) => [
                     'id' => $p->id,
                     'keyword' => $p->keyword,
@@ -40,42 +34,39 @@ class PromptController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(Request $request): JsonResponse
+    public function generate(Request $request)
     {
         $validated = $request->validate([
-            'keyword' => 'required|string|max:255|min:2',
-        ], [
-            'keyword.required' => 'Please enter a keyword or topic.',
-            'keyword.min' => 'Keyword must be at least 2 characters.',
-            'keyword.max' => 'Keyword must not exceed 255 characters.',
+            'keyword' => 'required|string|max:255',
+            'audience' => 'required|string',
+            'duration' => 'required|string',
         ]);
 
         try {
-            $prompt = $this->generate( $validated['keyword']);
+            $content = $this->aiService->generateVideoScript(
+                $validated['keyword'],
+                $validated['audience'],
+                $validated['duration']
+            );
 
-            return response()->json([
-                'success' => true,
-                'prompt' => $prompt,
+            // PERSISTENT STORAGE: This stays until session is cleared
+            session([
+                'session_data' => [
+                    'savedKeyword' => $validated['keyword'],
+                    'savedAudience' => $validated['audience'],
+                    'savedDuration' => $validated['duration'],
+                    'savedPrompt' => $content,
+                ]
             ]);
+
+            return back();
         } catch (Exception $e) {
-            Log::error('Error generating prompt: ' . $e->getMessage());
-            
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to generate prompt. Please try again.',
-            ], 500);
+            return back()->withErrors(['keyword' => 'AI Generation failed']);
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        // dump($request->all());
         $validated = $request->validate([
             'keyword' => 'required|string|max:1000',
             'prompt' => 'required|json',
@@ -84,21 +75,13 @@ class PromptController extends Controller
             'prompt.required' => 'Prompt content is required.',
         ]);
 
-        try {
-            $prompt = Prompt::create([
-                'user_id' => Auth::id(),
-                'keyword' => $validated['keyword'],
-                'prompt' => $validated['prompt'],
-            ]);
+        Prompt::create([
+            'user_id' => Auth::id(),
+            'keyword' => $validated['keyword'],
+            'prompt' => $validated['prompt'],
+        ]);
 
-            return redirect()->route('prompts.index')
-                ->with('success', 'Prompt saved successfully.');
-        } catch (Exception $e) {
-            Log::error('Error saving prompt: ' . $e->getMessage());
-            
-            return redirect()->back()
-                ->with('error', 'Failed to save prompt. Please try again.');
-        }
+        return redirect()->route('prompts.index')->with('success', 'Script saved.');
     }
 
     /**
@@ -136,45 +119,11 @@ class PromptController extends Controller
      */
     public function destroy(Prompt $prompt)
     {
-        try {
-            if ($prompt->user_id !== Auth::id()) {
-                return redirect()->back()
-                    ->with('error', 'Unauthorized action.');
-            }
-
-            $prompt->delete();
-
-            return redirect()->route('prompts.index')
-                ->with('success', 'Prompt deleted successfully.');
-        } catch (Exception $e) {
-            Log::error('Error deleting prompt: ' . $e->getMessage());
-            
-            return redirect()->back()
-                ->with('error', 'Failed to delete prompt. Please try again.');
+        if ($prompt->user_id !== Auth::id()) {
+            return back()->with('error', 'Unauthorized.');
         }
-    }
 
-    public function generate(Request $request): JsonResponse
-    {
-        $request->validate(['keyword' => 'required|string|max:255']);
-        
-        
-        try {
-            $content = $this->aiService->generatePrompt($request->keyword);
-            
-            session([
-                'last_keyword' => $request->keyword,
-                'ai_response' => $content
-            ]);
-            
-            return response()->json([
-                'success' => true,
-                'prompt' => $content
-            ]);
-        } catch (Exception $e) {
-            report($e); // Logs the error automatically
-            return response()->json(['message' => 'AI Generation failed'], 500);
-        }
+        $prompt->delete();
+        return redirect()->route('prompts.index')->with('success', 'Deleted.');
     }
-
 }

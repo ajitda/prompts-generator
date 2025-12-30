@@ -22,11 +22,11 @@ export default function PromptForm() {
 
     const [generatedPrompt, setGeneratedPrompt] = useState('');
     const [isGenerating, setIsGenerating] = useState(false);
-    const [copied, setCopied] = useState(false);    
+    const [copied, setCopied] = useState(false);
 
     const handleGenerate = async () => {
         if (!data.keyword.trim()) return;
-        
+
         setIsGenerating(true);
         try {
             const response = await fetch('/prompts/generate', {
@@ -36,7 +36,7 @@ export default function PromptForm() {
                     'X-CSRF-TOKEN': document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content || '',
                 },
                 body: JSON.stringify({
-                    keyword: data.keyword 
+                    keyword: data.keyword
                 }),
             });
 
@@ -96,7 +96,7 @@ export default function PromptForm() {
             setGeneratedPrompt(savedPrompt);
         }
     }, [session_data?.savedPrompt]);
-    
+
     return (
         <>
             <Card>
