@@ -109,7 +109,7 @@ export default function VideoScripts() {
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head>
-        {/* <title>AI Video Script Generator</title> */}
+        <title>AI Video Scripts Generator</title>
         <meta
           name="description"
           content="Generate professional YouTube video scripts using AI. Keyword to script in minutes."
