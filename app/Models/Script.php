@@ -5,16 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Prompt extends Model
+class Script extends Model
 {
     protected $fillable = [
         'user_id',
         'keyword',
-        'prompt',
+        'title',
+        'idea',
+        'story',
+        'script',
     ];
 
     protected $casts = [
-        'prompt' => 'array',
+        'idea' => 'array',  
+        'story' => 'array', 
+        'script' => 'array', 
     ];
 
     public function user(): BelongsTo
@@ -33,4 +38,5 @@ class Prompt extends Model
         static::updated($clearCache);
         static::deleted($clearCache);
     }
+
 }

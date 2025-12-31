@@ -1,4 +1,5 @@
 import InputError from "@/components/input-error";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { SharedData } from "@/types";
@@ -21,11 +22,11 @@ export default function PromptForm() {
 
     const [generatedPrompt, setGeneratedPrompt] = useState('');
     const [isGenerating, setIsGenerating] = useState(false);
-    const [copied, setCopied] = useState(false);    
+    const [copied, setCopied] = useState(false);
 
     const handleGenerate = async () => {
         if (!data.keyword.trim()) return;
-        
+
         setIsGenerating(true);
         try {
             const response = await fetch('/prompts/generate', {
@@ -35,7 +36,7 @@ export default function PromptForm() {
                     'X-CSRF-TOKEN': document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content || '',
                 },
                 body: JSON.stringify({
-                    keyword: data.keyword 
+                    keyword: data.keyword
                 }),
             });
 
@@ -95,7 +96,7 @@ export default function PromptForm() {
             setGeneratedPrompt(savedPrompt);
         }
     }, [session_data?.savedPrompt]);
-    
+
     return (
         <>
             <Card>
@@ -152,10 +153,10 @@ export default function PromptForm() {
 
                         {/* Generate Button */}
                         <div>
-                            <button
+                            <Button
                                 onClick={handleGenerate}
                                 disabled={!data.keyword.trim() || isGenerating || processing}
-                                className="w-full bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white font-semibold py-4 px-10 rounded-lg transition-all duration-200 transform hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                                className="cursor-pointer w-full bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white font-semibold py-4 px-10 rounded-lg transition-all duration-200 transform hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                             >
                                 {isGenerating ? (
                                     <>
@@ -168,7 +169,7 @@ export default function PromptForm() {
                                         Generate Optimized Prompt
                                     </>
                                 )}
-                            </button>
+                            </Button>
                         </div>
 
                         {/* Loading Spinner */}
@@ -184,14 +185,14 @@ export default function PromptForm() {
                             <>
                                 <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-6">
                                     <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                                        ✅ Your Optimized Prompt:
+                                        Your Optimized Prompt:
                                     </h2>
                                     <div className="bg-white dark:bg-gray-900 p-5 rounded-lg border-l-4 border-purple-500 whitespace-pre-wrap text-gray-700 dark:text-gray-300 leading-relaxed min-h-[120px]">
                                         {generatedPrompt}
                                     </div>
                                     <div className="flex justify-between items-center mt-4">
-                                        <button
-                                            type='button'
+                                        <Button
+                                            // type='Button'
                                             onClick={handleCopy}
                                             disabled={processing}
                                             className="bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-8 rounded-lg transition-colors"
@@ -207,13 +208,13 @@ export default function PromptForm() {
                                                     Copy to Clipboard
                                                 </>
                                             )}
-                                        </button>
+                                        </Button>
                                     </div>
                                 </div>
 
                                 {/* Save Button */}
                                 <div>
-                                    <button
+                                    <Button
                                         type="submit"
                                         disabled={processing}
                                         className="w-full bg-gradient-to-r from-indigo-600 to-indigo-800 hover:from-indigo-700 hover:to-indigo-900 text-white font-semibold py-4 px-10 rounded-lg transition-all duration-200 transform hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
@@ -229,7 +230,7 @@ export default function PromptForm() {
                                                 {auth?.user ? 'Save Prompt' : 'Login to Save Prompt'}
                                             </>
                                         )}
-                                    </button>
+                                    </Button>
                                 </div>
                             </>
                         )}

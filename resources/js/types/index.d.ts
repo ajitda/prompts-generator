@@ -30,6 +30,8 @@ export interface SharedData {
     [key: string]: unknown;
     session_data?: {
         savedKeyword: string;
+        savedAudience: string;
+        savedDuration: string;
         savedPrompt: string;
     };
 }
@@ -84,4 +86,10 @@ type SortField = 'name' | 'description' | 'price' | 'created_at' | 'tag';
 export interface SortProps {
     field: SortField;
     direction: SortDirection;
+}
+
+export interface StorySection {
+  title: string;
+  content: string;
+  icon: string;
 }

@@ -11,12 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('prompts', function (Blueprint $table) {
+        Schema::create('scripts', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('keyword');
-            $table->json('prompt')->nullable();
+            $table->string('title')->nullable();
+
+            $table->json('idea')->nullable(); 
+            $table->json('story')->nullable();            
+            $table->json('script')->nullable();
         });
     }
 
@@ -25,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('prompts');
+        Schema::dropIfExists('scripts');
     }
 };

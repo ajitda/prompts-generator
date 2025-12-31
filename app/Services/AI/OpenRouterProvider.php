@@ -8,22 +8,38 @@ use Exception;
 
 class OpenRouterProvider implements AIProviderInterface
 {
-    public function generate(string $keyword): string
+
+    public function generate(string $prompt): string
     {
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . config('services.openrouter.key'),
-            'HTTP-Referer' => config('app.url'),
-        ])->timeout(15)->post('https://openrouter.ai/api/v1/chat/completions', [
-            'model' => 'google/gemini-2.0-flash-001',
-            'messages' => [
-                ['role' => 'user', 'content' => "Generate a creative prompt for: $keyword"]
-            ],
-        ]);
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . config('services.openrouter.key'),
+                'HTTP-Referer' => config('app.url'),
+                'X-Title' => config('app.name'), // Recommended by OpenRouter
+            ])->timeout(120) //(2 minutes) Increased timeout for free models
+                ->post('https://openrouter.ai/api/v1/chat/completions', [
+                    'model' => 'google/gemma-3-27b-it:free',
+                    'messages' => [['role' => 'user', 'content' => $prompt]],
+                ]);
 
-        if (!$response->successful()) {
-            throw new Exception('OpenRouter API Error: ' . $response->body());
+            if ($response->failed()) {
+                throw new Exception("OpenRouter HTTP Error: {$response->status()}");
+            }
+
+            $content = $response->json('choices.0.message.content');
+
+            if (is_null($content) || $content === '') {
+                // Check for specific error messages in the body
+                $errorMessage = $response->json('error.message') ?? 'Unknown error / Empty content';
+                throw new Exception("OpenRouter API Error: {$errorMessage}");
+            }
+
+            return $content;
+
+        } catch (Exception $e) {
+            \Log::warning("AI Provider Failure: " . $e->getMessage());
+            throw $e;
         }
-
-        return $response->json('choices.0.message.content') ?? throw new Exception('Empty response');
     }
+    
 }

@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -38,6 +39,24 @@ class HandleInertiaRequests extends Middleware
     {
         [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
 
+        $user = $request->user();
+
+        $menuData = [
+            'prompts' => [],
+            'scripts' => []
+        ];
+
+        if ($user) {
+            $cacheKey = "sidebar_menu_user_{$user->id}";
+
+            $menuData = Cache::remember($cacheKey, now()->addDay(), function () use ($user) {
+                return [
+                    'prompts' => $user->prompts()->latest()->limit(10)->get(['id', 'keyword']),
+                    'scripts' => $user->scripts()->latest()->limit(10)->get(['id', 'keyword']),
+                ];
+            });
+        }
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
@@ -49,7 +68,11 @@ class HandleInertiaRequests extends Middleware
             'session_data' => [
                 'savedKeyword' => $request->session()->get('last_keyword'),
                 'savedPrompt' => $request->session()->get('ai_response'),
-            ]
+                'savedIdeas' => $request->session()->get('ideas'),
+                'savedStory' => $request->session()->get('story'),
+                'savedScript' => $request->session()->get('script'),
+            ],
+            'menu_data' => $menuData,
         ];
     }
 }

@@ -8,35 +8,25 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class PromptController extends Controller
 {
-    public function __construct(protected AIService $aiService){}
+    public function __construct(protected AIService $aiService) {}
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $prompts = Auth::check() 
+        $prompts = Auth::check()
             ? Prompt::where('user_id', Auth::id())
                 ->latest()
                 ->paginate(10)
-                ->withQueryString()
+                ->through(fn($p) => [
+                    'id' => $p->id,
+                    'keyword' => $p->keyword,
+                    'prompt' => $p->prompt,
+                    'created_at' => $p->created_at->format('d M Y'),
+                ])
             : null;
-
-        if ($prompts) {
-            $prompts->getCollection()->transform(fn($prompt) => [
-                'id' => $prompt->id,
-                'type' => $prompt->type,
-                'keyword' => $prompt->keyword,
-                'prompt' => $prompt->prompt,
-                'created_at' => $prompt->created_at->format('d M Y'),
-            ]);
-        }
 
         return Inertia::render('prompts/index', [
             'prompts' => $prompts,
@@ -44,9 +34,6 @@ class PromptController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create(Request $request): JsonResponse
     {
         $validated = $request->validate([
@@ -74,9 +61,6 @@ class PromptController extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         // dump($request->all());
@@ -110,7 +94,13 @@ class PromptController extends Controller
      */
     public function show(Prompt $prompt)
     {
-        //
+        if ($prompt->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        return Inertia::render('prompts/show', [
+            'prompt' => $prompt,
+        ]);
     }
 
     /**
@@ -134,22 +124,12 @@ class PromptController extends Controller
      */
     public function destroy(Prompt $prompt)
     {
-        try {
-            if ($prompt->user_id !== Auth::id()) {
-                return redirect()->back()
-                    ->with('error', 'Unauthorized action.');
-            }
-
-            $prompt->delete();
-
-            return redirect()->route('prompts.index')
-                ->with('success', 'Prompt deleted successfully.');
-        } catch (Exception $e) {
-            Log::error('Error deleting prompt: ' . $e->getMessage());
-            
-            return redirect()->back()
-                ->with('error', 'Failed to delete prompt. Please try again.');
+        if ($prompt->user_id !== Auth::id()) {
+            return back()->with('error', 'Unauthorized.');
         }
+
+        $prompt->delete();
+        return redirect()->route('prompts.index')->with('success', 'Deleted.');
     }
 
     public function generate(Request $request): JsonResponse
@@ -174,5 +154,4 @@ class PromptController extends Controller
             return response()->json(['message' => 'AI Generation failed'], 500);
         }
     }
-
 }
