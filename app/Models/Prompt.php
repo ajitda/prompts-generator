@@ -21,4 +21,16 @@ class Prompt extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    protected static function booted()
+    {
+        // Clear cache for the specific user who owns the record
+        $clearCache = function ($model) {
+            \Illuminate\Support\Facades\Cache::forget("sidebar_menu_user_{$model->user_id}");
+        };
+
+        static::created($clearCache);
+        static::updated($clearCache);
+        static::deleted($clearCache);
+    }
 }

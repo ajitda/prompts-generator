@@ -16,7 +16,7 @@ class PromptController extends Controller
 
     public function index()
     {
-        $paginatedPrompts = Auth::check()
+        $prompts = Auth::check()
             ? Prompt::where('user_id', Auth::id())
                 ->latest()
                 ->paginate(10)
@@ -29,7 +29,7 @@ class PromptController extends Controller
             : null;
 
         return Inertia::render('prompts/index', [
-            'promptsList' => $paginatedPrompts,
+            'prompts' => $prompts,
             'isAuthenticated' => Auth::check(),
         ]);
     }

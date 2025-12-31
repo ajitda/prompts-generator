@@ -7,6 +7,7 @@ import {
     SidebarFooter,
     SidebarHeader,
     SidebarMenu,
+    SidebarMenuAction,
     SidebarMenuButton,
     SidebarMenuItem,
     SidebarMenuSub,
@@ -16,9 +17,10 @@ import {
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, ChevronRight, Folder, LayoutGrid, Video } from 'lucide-react';
+import { BookOpen, ChevronRight, Folder, LayoutGrid, Plus, Video } from 'lucide-react';
 import AppLogo from './app-logo';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 
 const mainNavItems: NavItem[] = [
     // {
@@ -45,8 +47,23 @@ export function AppSidebar() {
 
     const { props } = usePage<any>();
 
-    const { prompts, scripts } = props;
-    
+    const { menu_data = { prompts: [], scripts: [] } } = props;
+
+    const dynamicGroups = [
+        {
+            title: 'AI Prompts',
+            icon: LayoutGrid,
+            baseHref: '/prompts-generator/prompts',
+            items: menu_data.prompts,
+        },
+        {
+            title: 'AI Video Scripts',
+            icon: Video,
+            baseHref: '/prompts-generator/scripts',
+            items: menu_data.scripts,
+        },
+    ];
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -63,65 +80,65 @@ export function AppSidebar() {
 
             <SidebarContent>
                 <SidebarMenu>
-                    <Collapsible asChild defaultOpen className="group/collapsible">
-                        <SidebarMenuItem>
-                            <SidebarMenuButton tooltip="AI Prompts" asChild>
-                                <div>
-                                    <Link href="/prompts-generator/prompts" className="flex flex-1 items-center gap-2">
-                                        <LayoutGrid />
-                                        <span>AI Prompts</span>
-                                    </Link>
-                                    <CollapsibleTrigger>
-                                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                                    </CollapsibleTrigger>
-                                </div>
-                            </SidebarMenuButton>
+                    {dynamicGroups.map((group) => {
+                        const hasItems = group.items?.length > 0;
 
-                            <CollapsibleContent>
-                                <SidebarMenuSub>
-                                    {Array.isArray(prompts) && prompts.map((prompt: any) => (
-                                        <SidebarMenuSubItem key={prompt.id}>
-                                            <SidebarMenuSubButton asChild>
-                                                <Link href={`/prompts-generator/prompts/${prompt.id}`}>
-                                                    <span>{prompt.keyword}</span>
-                                                </Link>
-                                            </SidebarMenuSubButton>
-                                        </SidebarMenuSubItem>
-                                    ))}
-                                </SidebarMenuSub>
-                            </CollapsibleContent>
-                        </SidebarMenuItem>
-                    </Collapsible>
-
-                    {/* AI Video Scripts Section */}
-                    <Collapsible asChild defaultOpen className="group/collapsible">
-                        <SidebarMenuItem>
-                            <SidebarMenuButton tooltip="AI Video Scripts" asChild>
-                                <div>
-                                    <Link href="/prompts-generator/scripts" className="flex flex-1 items-center gap-2">
-                                        <Video />
-                                        <span>AI Video Scripts</span>
-                                    </Link>
-                                    <CollapsibleTrigger>
-                                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                        return (
+                            <Collapsible
+                                key={group.title}
+                                asChild
+                                defaultOpen={false}
+                                className="group/collapsible"
+                            >
+                                <SidebarMenuItem>
+                                    {/* 1. Main Toggle: Clicking the Text toggles the menu */}
+                                    <CollapsibleTrigger asChild>
+                                        <SidebarMenuButton tooltip={group.title}>
+                                            <group.icon className="h-4 w-4" />
+                                            <span>{group.title}</span>
+                                            {hasItems && (
+                                                <ChevronRight className="ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                                            )}
+                                        </SidebarMenuButton>
                                     </CollapsibleTrigger>
-                                </div>
-                            </SidebarMenuButton>
-                            <CollapsibleContent>
-                                <SidebarMenuSub>
-                                    {Array.isArray(scripts) && scripts.map((script: any) => (
-                                        <SidebarMenuSubItem key={script.id}>
-                                            <SidebarMenuSubButton asChild>
-                                                <Link href={`/prompts-generator/scripts/${script.id}`}>
-                                                    <span>{script.keyword}</span>
-                                                </Link>
-                                            </SidebarMenuSubButton>
-                                        </SidebarMenuSubItem>
-                                    ))}
-                                </SidebarMenuSub>
-                            </CollapsibleContent>
-                        </SidebarMenuItem>
-                    </Collapsible>
+
+                                    {/* 2. Add Button: Clicking the Plus navigates to the URL */}
+                                    <TooltipProvider delayDuration={0}>
+                                        <Tooltip>
+                                            <TooltipTrigger asChild>
+                                                <SidebarMenuAction
+                                                    asChild
+                                                    className={hasItems ? "right-8" : "right-2"}
+                                                >
+                                                    <Link href={group.baseHref}>
+                                                        <Plus className="mr-16 h-4 w-4" />
+                                                    </Link>
+                                                </SidebarMenuAction>
+                                            </TooltipTrigger>
+                                            <TooltipContent side="top">Add New</TooltipContent>
+                                        </Tooltip>
+                                    </TooltipProvider>
+
+                                    {/* 3. Sub-Items */}
+                                    {hasItems && (
+                                        <CollapsibleContent>
+                                            <SidebarMenuSub>
+                                                {group.items.map((item: any) => (
+                                                    <SidebarMenuSubItem key={item.id}>
+                                                        <SidebarMenuSubButton asChild>
+                                                            <Link href={`${group.baseHref}/${item.id}`}>
+                                                                <span>{item.keyword}</span>
+                                                            </Link>
+                                                        </SidebarMenuSubButton>
+                                                    </SidebarMenuSubItem>
+                                                ))}
+                                            </SidebarMenuSub>
+                                        </CollapsibleContent>
+                                    )}
+                                </SidebarMenuItem>
+                            </Collapsible>
+                        );
+                    })}
                 </SidebarMenu>
             </SidebarContent>
 

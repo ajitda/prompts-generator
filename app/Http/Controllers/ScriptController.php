@@ -20,7 +20,7 @@ class ScriptController extends Controller
      */
     public function index()
     {
-        $paginatedScripts = Auth::check()
+        $scripts = Auth::check()
             ? Script::where('user_id', Auth::id())
                 ->latest()
                 ->paginate(10)
@@ -34,7 +34,7 @@ class ScriptController extends Controller
             : null;
 
         return Inertia::render('scripts/index', [
-            'scriptsList' => $paginatedScripts,
+            'scripts' => $scripts,
             'isAuthenticated' => Auth::check(),
         ]);
 
