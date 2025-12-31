@@ -45,6 +45,7 @@ export interface User {
     two_factor_enabled?: boolean;
     created_at: string;
     updated_at: string;
+    role: 'user' | 'admin';
     [key: string]: unknown; // This allows for additional properties...
 }
 
@@ -93,3 +94,16 @@ export interface StorySection {
   content: string;
   icon: string;
 }
+
+export interface Post {
+    id: number;
+    title: string;
+    content: string;
+    created_at: string;
+    updated_at: string;
+    image: string;
+    image_original_name: string;
+}
+
+// This helper allows you to merge SharedData with specific Page props
+export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & SharedData;

@@ -1,3 +1,4 @@
+import postsRoutes from '@/routes/posts';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
@@ -17,7 +18,7 @@ import {
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, ChevronRight, Folder, LayoutGrid, Plus, Video } from 'lucide-react';
+import { BookOpen, ChevronRight, FileText, Folder, LayoutGrid, Plus, Video } from 'lucide-react';
 import AppLogo from './app-logo';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
@@ -47,7 +48,7 @@ export function AppSidebar() {
 
     const { props } = usePage<any>();
 
-    const { menu_data = { prompts: [], scripts: [] } } = props;
+    const { auth, menu_data = { prompts: [], scripts: [] } } = props;
 
     const dynamicGroups = [
         {
@@ -64,6 +65,8 @@ export function AppSidebar() {
         },
     ];
 
+    const isAdmin = auth.user.role === 'admin';
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -74,12 +77,25 @@ export function AppSidebar() {
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>
-                    </SidebarMenuItem>
+                    </SidebarMenuItem>                    
                 </SidebarMenu>
             </SidebarHeader>
 
             <SidebarContent>
                 <SidebarMenu>
+                    {isAdmin && (
+                        <SidebarMenuItem>
+                            <SidebarMenuButton tooltip="Manage Posts">
+                                <Link
+                                    className='flex items-center gap-2'
+                                    href={postsRoutes.index().url}
+                                >
+                                    <FileText className="h-4 w-4" />
+                                    <span>Posts</span>
+                                </Link>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                    )}
                     {dynamicGroups.map((group) => {
                         const hasItems = group.items?.length > 0;
 

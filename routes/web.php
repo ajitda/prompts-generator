@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\PromptController;
 use App\Http\Controllers\ScriptController;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +32,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('prompts-generator/scripts', ScriptController::class)
     ->names('scripts')
     ->parameters(['scripts' => 'script']);
+
+    Route::middleware('can:admin')->group(function () {
+        Route::resource('/prompts-generator/posts', PostController::class)
+            ->names('posts')
+            ->parameters(['posts' => 'post']);
+    });
 });
 
 require __DIR__.'/settings.php';
