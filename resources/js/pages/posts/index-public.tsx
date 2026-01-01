@@ -1,3 +1,4 @@
+import postsRoutes from '@/routes/posts';
 import { Head, Link } from '@inertiajs/react';
 
 interface PostSummary {
@@ -33,7 +34,7 @@ export default function IndexPublic({ posts }: Props) {
                 {posts.data.map((post) => (
                     <Link 
                         key={post.id} 
-                        href={`/prompts-generator/blog/${post.slug}`}
+                        href={postsRoutes.showPublic(post.slug).url}
                         className="group flex flex-col overflow-hidden rounded-lg border bg-card transition-all hover:shadow-lg"
                     >
                         <div className="aspect-video w-full overflow-hidden bg-muted">

@@ -136,7 +136,7 @@ export default function Index({ posts }: PageProps<{ posts: Post[] }>) {
                                     licenseKey="gpl"
                                     init={{
                                         height: 300,
-                                        menubar: false,
+                                        menubar: true,
                                         base_url: '/build/tinymce',
                                         suffix: '.min',
                                         plugins: [

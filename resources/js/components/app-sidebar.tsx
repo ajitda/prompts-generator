@@ -29,6 +29,11 @@ const mainNavItems: NavItem[] = [
     //     href: dashboard(),
     //     icon: LayoutGrid,
     // },
+    {
+        title: 'Blog',
+        href: postsRoutes.indexPublic().url,
+        icon: BookOpen,
+    },
 ];
 
 // const footerNavItems: NavItem[] = [
@@ -96,12 +101,7 @@ export function AppSidebar() {
                             </SidebarMenuButton>
                         </SidebarMenuItem>
                     )}
-                    <Link
-                        // href={route('posts.index.public')}
-                        className="inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 transition duration-150 ease-in-out hover:text-blue-600"
-                    >
-                        Blog
-                    </Link>
+                    <NavMain items={mainNavItems} />
                     {dynamicGroups.map((group) => {
                         const hasItems = group.items?.length > 0;
 
