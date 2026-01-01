@@ -77,4 +77,29 @@ class PostController extends Controller
 
         return redirect()->back()->with('success', 'Post deleted.');
     }
+
+    public function indexPublic()
+    {
+        // Changed 'image_path' to 'image' to match your migration
+        $posts = Post::latest()
+            ->select(['id', 'title', 'slug', 'image', 'created_at'])
+            ->paginate(12);
+
+        return Inertia::render('posts/index-public', [
+            'posts' => $posts
+        ]);
+    }
+
+    public function showPublic(Post $post)
+    {
+        return Inertia::render('posts/show-public', [
+            'post' => [
+                'title' => $post->title,
+                'content' => $post->content,
+                // Changed $post->image_path to $post->image
+                'image_url' => $post->image ? asset('storage/' . $post->image) : null,
+                'created_at' => $post->created_at->format('M d, Y'),
+            ]
+        ]);
+    }
 }

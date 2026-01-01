@@ -19,6 +19,12 @@ Route::post('/scripts/ideas', [ScriptController::class, 'generateIdeas'])->name(
 Route::post('/scripts/story', [ScriptController::class, 'generateStory'])->name('scripts.generateStory');
 Route::post('/scripts/final', [ScriptController::class, 'generateScript'])->name('scripts.generateScript');
 
+Route::get('/prompts-generator/blog/{post:slug}', [PostController::class, 'showPublic'])
+    ->name('posts.show.public');
+
+Route::get('/prompts-generator/blog', [PostController::class, 'indexPublic'])
+    ->name('posts.index.public');
+
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/prompts-generator/dashboard', function () {
