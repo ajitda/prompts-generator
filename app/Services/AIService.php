@@ -10,13 +10,13 @@ class AIService
     protected $providers = [
         \App\Services\AI\GeminiProvider::class,
         \App\Services\AI\OpenRouterProvider::class,
-        \App\Services\AI\GroqProvider::class,
-        \App\Services\AI\OpenRouterProvider::class,
+        // \App\Services\AI\GroqProvider::class,
     ];
 
+
     public function generateIdeas(string $keyword): string
-{
-    $prompt = <<<PROMPT
+    {
+        $prompt = <<<PROMPT
 You are a world-class YouTube Strategist and Scriptwriter expert in high-CTR (Click Through Rate) and high-retention content.
 
 Task:
@@ -53,8 +53,8 @@ Remember:
 - Hook scripts must immediately promise value or transformation
 PROMPT;
 
-    return $this->cleanAndRun('generate', $prompt);
-}
+        return $this->cleanAndRun('generate', $prompt);
+    }
 
 
     public function generateStory(string $selectedIdea): string
@@ -85,40 +85,40 @@ PROMPT;
     /**
      * The Logic: Clean the AI response before returning it to the Controller
      */
-protected function cleanAndRun(string $method, string $payload): string
-{
-    $rawResponse = $this->runProviders($method, $payload);
+    protected function cleanAndRun(string $method, string $payload): string
+    {
+        $rawResponse = $this->runProviders($method, $payload);
 
-    // Trim whitespace
-    $rawResponse = trim($rawResponse);
+        // Trim whitespace
+        $rawResponse = trim($rawResponse);
 
-    // If it starts with '{' and has '},{', wrap in array
-    if (str_starts_with($rawResponse, '{') && str_contains($rawResponse, '},{')) {
-        $rawResponse = '[' . $rawResponse . ']';
-    }
-
-    // Ensure it starts with { or [
-    $firstChar = $rawResponse[0] ?? '';
-    if (!in_array($firstChar, ['{','['])) {
-        // Try to extract JSON from first { to last }
-        $firstBracket = strpos($rawResponse, '{');
-        $lastBracket  = strrpos($rawResponse, '}');
-        if ($firstBracket === false || $lastBracket === false) {
-            Log::error("AI Service returned no JSON: " . substr($rawResponse, 0, 100));
-            throw new Exception('AI response format invalid');
+        // If it starts with '{' and has '},{', wrap in array
+        if (str_starts_with($rawResponse, '{') && str_contains($rawResponse, '},{')) {
+            $rawResponse = '[' . $rawResponse . ']';
         }
-        $rawResponse = substr($rawResponse, $firstBracket, $lastBracket - $firstBracket + 1);
-    }
 
-    return $rawResponse;
-}
+        // Ensure it starts with { or [
+        $firstChar = $rawResponse[0] ?? '';
+        if (!in_array($firstChar, ['{', '['])) {
+            // Try to extract JSON from first { to last }
+            $firstBracket = strpos($rawResponse, '{');
+            $lastBracket = strrpos($rawResponse, '}');
+            if ($firstBracket === false || $lastBracket === false) {
+                Log::error("AI Service returned no JSON: " . substr($rawResponse, 0, 100));
+                throw new Exception('AI response format invalid');
+            }
+            $rawResponse = substr($rawResponse, $firstBracket, $lastBracket - $firstBracket + 1);
+        }
+
+        return $rawResponse;
+    }
 
 
 
 
     /**
- * Shared provider fallback logic
- */
+     * Shared provider fallback logic
+     */
     protected function runProviders(string $method, string $payload): string
     {
         foreach ($this->providers as $providerClass) {

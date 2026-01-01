@@ -8,14 +8,26 @@ import StoryView from "@/components/StoryView";
 import ScriptView from "@/components/ScriptView";
 import LoadingState from "@/components/LoadingState";
 import toast from "react-hot-toast";
+import { usePage } from "@inertiajs/react";
+import { SharedData } from "@/types";
+
+interface Idea {
+    Title: string;
+    Thumbnail_Concept: string;
+    Hook_Script: string;
+    Difficulty: string;
+}
 
 type AppStep = "input" | "ideas" | "story" | "script";
 
 const ScriptForm = () => {
+    const { props } = usePage<SharedData>();
+    const { auth } = props;
+    const userCredits = auth?.user?.credits ?? 0;
     const [step, setStep] = useState<AppStep>("input");
     const [scriptId, setScriptId] = useState<number | null>(null);
     const [keyword, setKeyword] = useState("");
-    const [ideas, setIdeas] = useState<string[]>([]);
+    const [ideas, setIdeas] = useState<Idea[]>([]);
     const [selectedIdea, setSelectedIdea] = useState("");
     const [story, setStory] = useState<StorySection[]>([]);
     const [script, setScript] = useState("");
@@ -27,6 +39,19 @@ const ScriptForm = () => {
         'Content-Type': 'application/json',
         'X-CSRF-TOKEN': (document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') as string) || '',
         // 'X-CSRF-TOKEN': (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content || '',
+    };
+
+    const handleSaveIdeas = async (scriptId: number, ideas: string[]) => {
+        try {
+            await fetch(`/scripts/${scriptId}`, {
+                method: 'PUT',
+                headers: requestHeaders,
+                body: JSON.stringify({ idea: ideas }),
+            });
+        } catch (error) {
+            console.error('Failed to save ideas:', error);
+            toast.error('Failed to save ideas');
+        }
     };
 
     const handleGenerateIdeas = async () => {
@@ -43,9 +68,10 @@ const ScriptForm = () => {
                 setIdeas(data.ideas);
                 setScriptId(data.script_id);
                 setStep("ideas");
+                handleSaveIdeas(data.script_id, data.ideas);
             } else throw new Error(data.message);
-        } catch (error: any) {
-            toast.success("Error");
+        } catch (_error: unknown) {
+            toast.error((_error as Error).message || "Error");
         } finally {
             setIsLoading(false);
         }
@@ -65,9 +91,9 @@ const ScriptForm = () => {
             if (data.success) {
                 setStory(data.story);
             } else throw new Error(data.message);
-        } catch (error: any) {
-            toast.error("Error");
-            console.log('check error:', error);
+        } catch (_error: unknown) {
+            toast.error((_error as Error).message || "Error");
+            console.log('check error:', _error);
             setStep("ideas");
         } finally {
             setIsLoading(false);
@@ -88,9 +114,9 @@ const ScriptForm = () => {
                 setScript(data.script);
                 setTone(data.tone);
             } else throw new Error(data.message);
-        } catch (error: any) {
-            console.error("Full Error Details:", error); // Add this line!
-            toast.error(error.message || "Error");
+        } catch (_error: unknown) {
+            console.error("Full Error Details:", _error); // Add this line!
+            toast.error((_error as Error).message || "Error");
             setStep("story");
         } finally {
             setIsLoading(false);
@@ -124,7 +150,7 @@ const ScriptForm = () => {
                                 className="text-center text-lg h-14"
                                 onKeyDown={(e) => e.key === "Enter" && handleGenerateIdeas()}
                             />
-                            <Button onClick={handleGenerateIdeas} disabled={!keyword.trim()} size="lg" className="w-full gap-2">
+                            <Button onClick={handleGenerateIdeas} disabled={!keyword.trim() || userCredits <= 0} size="lg" className="w-full gap-2">
                                 Generate video ideas <ArrowRight className="w-4 h-4" />
                             </Button>
                         </div>
@@ -144,7 +170,7 @@ const ScriptForm = () => {
                         </div>
                         <div className="space-y-3">
                             {ideas.map((idea, index) => (
-                                <IdeaCard key={index} idea={idea} index={index} onSelect={() => handleSelectIdea(idea)} />
+                                <IdeaCard key={index} idea={idea} index={index} />
                             ))}
                         </div>
                         <Button variant="ghost" onClick={handleStartOver} className="w-full">← Try a different topic</Button>

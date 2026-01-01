@@ -84,7 +84,20 @@ class ScriptController extends Controller
      */
     public function update(Request $request, Script $script)
     {
-        //
+        if ($script->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'idea' => 'nullable|array',
+            'title' => 'nullable|string|max:255',
+            'story' => 'nullable|array',
+            'script' => 'nullable|array',
+        ]);
+
+        $script->update($validated);
+
+        return response()->json(['success' => true]);
     }
 
     /**
@@ -110,38 +123,58 @@ class ScriptController extends Controller
 
     }
 
+    public function getCredits(): JsonResponse
+    {
+        $user = Auth::user();
+        return response()->json(['credits' => $user ? $user->credits : 0]);
+    }
+
+
     /**
      * STEP 2 – Generate ideas from keyword
      */
-public function generateIdeas(Request $request): JsonResponse
-{
-    $validated = $request->validate([
-        'keyword' => 'required|string|min:2|max:255',
-    ]);
+    public function generateIdeas(Request $request): JsonResponse
+    {
+        $user = Auth::user();
 
-    try {
-        $rawIdeas = $this->aiService->generateIdeas($validated['keyword']);
+        if (!$user || $user->credits <= 0) {
+            return response()->json(['success' => false, 'message' => 'Insufficient credits.'], 403);
+        }
 
-        // Trim whitespace
-        $trimmed = trim($rawIdeas);
+        $validated = $request->validate([
+            'keyword' => 'required|string|min:2|max:255',
+        ]);
 
-        // Check if it's multiple top-level objects not inside an array
-        if (str_starts_with($trimmed, '{')) {
-            // Match all objects individually
-            preg_match_all('/\{.*?\}(?=\s*,\s*|$)/s', $trimmed, $matches);
+        try {
+            $user->decrement('credits');
+            $rawIdeas = $this->aiService->generateIdeas($validated['keyword']);
 
-            if (!empty($matches[0])) {
-                // Wrap them in an array
-                $rawIdeas = '[' . implode(',', $matches[0]) . ']';
+            // Trim whitespace
+            $trimmed = trim($rawIdeas);
+
+            // Check if it's multiple top-level objects not inside an array
+            if (str_starts_with($trimmed, '{')) {
+                // Match all objects individually
+                preg_match_all('/\{.*?\}(?=\s*,\s*|$)/s', $trimmed, $matches);
+
+                if (!empty($matches[0])) {
+                    // Wrap them in an array
+                    $rawIdeas = '[' . implode(',', $matches[0]) . ']';
+                }
             }
-        }
 
-        // Decode JSON safely
-        $decodedIdeas = json_decode($rawIdeas, true, 512, JSON_THROW_ON_ERROR);
+            // Decode JSON safely
+            $decodedIdeas = json_decode($rawIdeas, true, 512, JSON_THROW_ON_ERROR);
 
-        if (!is_array($decodedIdeas) || count($decodedIdeas) === 0 || !isset($decodedIdeas[0]['Title'])) {
-            throw new Exception('AI returned invalid idea structure');
-        }
+            if (!is_array($decodedIdeas) || count($decodedIdeas) === 0 || !isset($decodedIdeas[0]['Title'])) {
+                throw new Exception('AI returned invalid idea structure');
+            }
+
+            $script = Script::create([
+                'user_id' => Auth::id(),
+                'keyword' => $validated['keyword'],
+                'idea'    => $decodedIdeas,
+            ]);
 
         $script = Script::create([
             'user_id' => Auth::id(),
@@ -225,6 +258,7 @@ public function generateIdeas(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'script_id' => 'required|exists:scripts,id',
+            'title' => 'required|string',
         ]);
 
         try {

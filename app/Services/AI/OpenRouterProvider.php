@@ -18,7 +18,7 @@ class OpenRouterProvider implements AIProviderInterface
                 'X-Title' => config('app.name'), // Recommended by OpenRouter
             ])->timeout(120) //(2 minutes) Increased timeout for free models
                 ->post('https://openrouter.ai/api/v1/chat/completions', [
-                    'model' => 'google/gemma-3-27b-it:free',
+                    'model' => 'google/gemma-3n-e2b-it:free',
                     'messages' => [['role' => 'user', 'content' => $prompt]],
                 ]);
 
@@ -41,5 +41,5 @@ class OpenRouterProvider implements AIProviderInterface
             throw $e;
         }
     }
-    
+
 }

@@ -58,8 +58,8 @@ const IdeaGenerator = () => {
             setIdeas(data.ideas);
             setScriptId(data.script_id);
             setStep('ideas');
-        } catch (err) {
-            toast.error('Failed to generate ideas');
+        } catch (err:any) {
+            toast.error(err.message);
         } finally {
             setIsLoading(false);
         }
@@ -178,7 +178,7 @@ const IdeaGenerator = () => {
                             key={index}
                             idea={idea}
                             index={index}
-                            onSelect={() => handleSelectIdea(idea)}
+                            // onSelect={() => handleSelectIdea(idea)}
                         />
                     ))}
                 </div>

@@ -9,7 +9,7 @@ interface IdeaCardProps {
     Difficulty: string;
   };
   index: number;
-  onSelect: () => void;
+//   onSelect: () => void;
 }
 
 const difficultyColors: Record<string, string> = {
@@ -18,7 +18,7 @@ const difficultyColors: Record<string, string> = {
   Hard: "bg-red-100 text-red-700",
 };
 
-const IdeaCard = ({ idea, index, onSelect }: IdeaCardProps) => {
+const IdeaCard = ({ idea, index}: IdeaCardProps) => {
   const [copiedField, setCopiedField] = useState<string | null>(null);
 
   const copyToClipboard = async (text: string, field: string) => {
@@ -46,7 +46,7 @@ const IdeaCard = ({ idea, index, onSelect }: IdeaCardProps) => {
     <div
       className="bg-card rounded-xl p-6 shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1 border border-border/50"
       style={{ animationDelay: `${index * 100}ms` }}
-      onClick={onSelect}
+    //   onClick={onSelect}
     >
       <div className="flex items-start justify-between gap-4 mb-4">
         <div className="flex items-center gap-3">

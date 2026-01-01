@@ -31,6 +31,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('prompts-generator/scripts', ScriptController::class)
     ->names('scripts')
     ->parameters(['scripts' => 'script']);
+
+    Route::get('/user/credits', [ScriptController::class, 'getCredits'])->name('user.credits');
 });
 
 require __DIR__.'/settings.php';
