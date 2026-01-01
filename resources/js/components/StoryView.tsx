@@ -17,13 +17,13 @@ interface StoryViewProps {
   isLoading: boolean;
 }
 
-const StoryView = ({ 
-  selectedIdea, 
-  story, 
-  onRegenerate, 
-  onGenerateScript, 
+const StoryView = ({
+  selectedIdea,
+  story,
+  onRegenerate,
+  onGenerateScript,
   onBack,
-  isLoading 
+  isLoading
 }: StoryViewProps) => {
   const sectionIcons: Record<string, React.ReactNode> = {
     "🎣": <span className="text-2xl">🎣</span>,
@@ -34,14 +34,14 @@ const StoryView = ({
   return (
     <div className="animate-fade-in space-y-8">
       <div className="space-y-4">
-        <button 
+        <button
           onClick={onBack}
           className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-250 text-sm font-medium"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to ideas
         </button>
-        
+
         <div className="space-y-2">
           <p className="text-sm text-muted-foreground">Building story for:</p>
           <h2 className="text-2xl font-semibold text-foreground">{selectedIdea}</h2>
@@ -65,8 +65,8 @@ const StoryView = ({
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3 pt-4">
-        <Button 
-          variant="secondary" 
+        <Button
+          variant="secondary"
           onClick={onRegenerate}
           disabled={isLoading}
           className="gap-2"
@@ -74,7 +74,7 @@ const StoryView = ({
           <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
           Try a different version
         </Button>
-        <Button 
+        <Button
           onClick={onGenerateScript}
           disabled={isLoading}
           className="gap-2"

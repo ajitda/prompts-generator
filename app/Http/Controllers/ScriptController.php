@@ -14,7 +14,7 @@ use Inertia\Inertia;
 class ScriptController extends Controller
 {
     public function __construct(protected AIService $aiService){}
-    
+
     /**
      * Display a listing of the resource.
      */
@@ -113,37 +113,72 @@ class ScriptController extends Controller
     /**
      * STEP 2 – Generate ideas from keyword
      */
-    public function generateIdeas(Request $request): JsonResponse
-    {
-        $validated = $request->validate([
-            'keyword' => 'required|string|min:2|max:255',
+public function generateIdeas(Request $request): JsonResponse
+{
+    $validated = $request->validate([
+        'keyword' => 'required|string|min:2|max:255',
+    ]);
+
+    try {
+        $rawIdeas = $this->aiService->generateIdeas($validated['keyword']);
+
+        // Trim whitespace
+        $trimmed = trim($rawIdeas);
+
+        // Check if it's multiple top-level objects not inside an array
+        if (str_starts_with($trimmed, '{')) {
+            // Match all objects individually
+            preg_match_all('/\{.*?\}(?=\s*,\s*|$)/s', $trimmed, $matches);
+
+            if (!empty($matches[0])) {
+                // Wrap them in an array
+                $rawIdeas = '[' . implode(',', $matches[0]) . ']';
+            }
+        }
+
+        // Decode JSON safely
+        $decodedIdeas = json_decode($rawIdeas, true, 512, JSON_THROW_ON_ERROR);
+
+        if (!is_array($decodedIdeas) || count($decodedIdeas) === 0 || !isset($decodedIdeas[0]['Title'])) {
+            throw new Exception('AI returned invalid idea structure');
+        }
+
+        $script = Script::create([
+            'user_id' => Auth::id(),
+            'keyword' => $validated['keyword'],
+            'idea'    => $decodedIdeas,
         ]);
 
-        try {
-            // Assume AI returns raw JSON string: ["Idea 1", "Idea 2"]
-            $rawIdeas = $this->aiService->generateIdeas($validated['keyword']);
-            $decodedIdeas = json_decode($rawIdeas, true);
+        return response()->json([
+            'success'   => true,
+            'script_id' => $script->id,
+            'ideas'     => $decodedIdeas,
+        ]);
 
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                throw new Exception('Invalid JSON format from AI Service');
-            }
+    } catch (\JsonException $e) {
+        Log::error('JSON decode failed', [
+            'raws' => $rawIdeas ?? null,
+            'error' => $e->getMessage()
+        ]);
 
-            $script = Script::create([
-                'user_id' => Auth::id(),
-                'keyword' => $validated['keyword'],
-                'idea'    => $decodedIdeas, // Pass array, Laravel casts to JSON
-            ]);
+        return response()->json([
+            'success' => false,
+            'message' => 'AI returned malformed JSON.'
+        ], 500);
 
-            return response()->json([
-                'success'   => true,
-                'script_id' => $script->id,
-                'ideas'     => $decodedIdeas,
-            ]);
-        } catch (Exception $e) {
-            Log::error('Idea generation failed: '.$e->getMessage());
-            return response()->json(['success' => false, 'message' => 'Failed to generate ideas.'], 500);
-        }
+    } catch (Exception $e) {
+        Log::error('Idea generation failed', [
+            'error' => $e->getMessage()
+        ]);
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to generate ideas.'
+        ], 500);
     }
+}
+
+
 
     /**
      * STEP 3 – Generate story sections

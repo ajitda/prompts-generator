@@ -7,9 +7,11 @@ import {
 } from '@/actions/App/Http/Controllers/ScriptController';
 import AppLayout from '@/layouts/app-layout';
 import { Head, router, usePage } from '@inertiajs/react';
-import ScriptForm from './script-form';
 import { BreadcrumbItem, SortField, SortProps } from '@/types';
 import { useCallback, useState } from 'react';
+import { Sparkles } from 'lucide-react';
+import Hero from '@/components/Hero';
+import IdeaGenerator from '@/components/IdeaGenerator';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -19,25 +21,25 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function VideoScripts() {
-  
+
   const { props } = usePage<any>();
-  
+
       const { scripts, filters = {}, perPageOptions } = props;
-  
+
       // const currentPerPage = prompts?.per_page || 2;
-      
+
       // const [localSearch, setLocalSearch] = useState(filters.search || '');
       // const [localMinPrice, setLocalMinPrice] = useState(filters.min_price || '');
       // const [localMaxPrice, setLocalMaxPrice] = useState(filters.max_price || '');
-  
+
       const [sortConfig, setSortConfig] = useState<SortProps>({
           field: filters?.sort as SortField,
           direction: filters?.direction as SortProps['direction'],
       });
-  
+
       // const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  
-      const fetchData = useCallback((        
+
+      const fetchData = useCallback((
           overrideParams: Partial<{
               // search: string;
               // min_price: string;
@@ -47,7 +49,7 @@ export default function VideoScripts() {
               // per_page: number;
           }> = {}
       ) => {
-          
+
           const params = {
               // search: localSearch,
               // min_price: localMinPrice,
@@ -55,9 +57,9 @@ export default function VideoScripts() {
               sort: sortConfig.field,
               direction: sortConfig.direction,
               // per_page: products?.per_page || 2,
-              ...overrideParams, 
+              ...overrideParams,
           };
-  
+
           const queryParams: Record<string, any> = {};
           Object.keys(params).forEach((key) => {
               // @ts-ignore
@@ -66,43 +68,43 @@ export default function VideoScripts() {
                   queryParams[key] = params[key];
               }
           });
-  
+
           router.get(scriptsIndex().url, {
               preserveScroll: true,
               preserveState: true,
               replace: true,
           });
       }, [sortConfig]);
-  
+
       // const [importErrors, setImportErrors] = useState<any[]>([]);
       // const [showImportPreview, setShowImportPreview] = useState(false);
-      
+
       // const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       //     const value = e.target.value;
       //     setLocalSearch(value);
-  
+
       //     if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-  
+
       //     searchTimeoutRef.current = setTimeout(() => {
       //         fetchData({ search: value });
       //     }, 500);
       // };
-  
+
       // const handlePriceChange = (min: string, max: string) => {
       //     setLocalMinPrice(min);
       //     setLocalMaxPrice(max);
       //     fetchData({ min_price: min, max_price: max });
       // };
-  
+
       const handleSort = (field: SortField) => {
           let newDirection: SortProps['direction'] = 'asc';
           if (sortConfig.field === field) {
               newDirection = sortConfig.direction === 'asc' ? 'desc' : 'asc';
           }
-  
+
           const newSort = { field, direction: newDirection };
           setSortConfig(newSort);
-  
+
           fetchData({ sort: field, direction: newDirection });
       };
 
@@ -115,11 +117,12 @@ export default function VideoScripts() {
           content="Generate professional YouTube video scripts using AI. Keyword to script in minutes."
         />
       </Head>
-
-      <div className="max-w-4xl mx-auto p-2">
-
-        <ScriptForm />
-      </div>
+      <div className="min-h-screen bg-background">
+      <main className="container mx-auto px-4 py-12 md:py-20">
+        <Hero />
+        <IdeaGenerator/>
+      </main>
+    </div>
     </AppLayout>
   );
 }

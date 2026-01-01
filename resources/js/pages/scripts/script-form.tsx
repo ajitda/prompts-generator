@@ -117,8 +117,8 @@ const ScriptForm = () => {
                         </div>
                         <h1 className="text-center mb-4 text-balance text-4xl font-bold">What's your video about?</h1>
                         <div className="w-full max-w-lg space-y-4">
-                            <Input 
-                                value={keyword} 
+                            <Input
+                                value={keyword}
                                 onChange={(e) => setKeyword(e.target.value)}
                                 placeholder="e.g., productivity tips for students"
                                 className="text-center text-lg h-14"
@@ -133,7 +133,7 @@ const ScriptForm = () => {
 
                 {isLoading && (
                     <LoadingState
-                        message={step === "input" ? "Exploring possibilities..." : step === "ideas" ? "Crafting your story..." : "Writing your script..."} 
+                        message={step === "input" ? "Exploring possibilities..." : step === "ideas" ? "Crafting your story..." : "Writing your script..."}
                     />
                 )}
 
@@ -152,25 +152,25 @@ const ScriptForm = () => {
                 )}
 
                 {step === "story" && !isLoading && (
-                    <StoryView 
-                        selectedIdea={selectedIdea} 
-                        story={story} 
-                        onRegenerate={() => handleSelectIdea(selectedIdea)} 
-                        onGenerateScript={handleGenerateScript} 
+                    <StoryView
+                        selectedIdea={selectedIdea}
+                        story={story}
+                        onRegenerate={() => handleSelectIdea(selectedIdea)}
+                        onGenerateScript={handleGenerateScript}
                         onBack={() => setStep("ideas")}
-                        isLoading={isLoading} 
+                        isLoading={isLoading}
                     />
                 )}
 
                 {step === "script" && !isLoading && (
                     <ScriptView
-                        selectedIdea={selectedIdea} 
-                        script={script} 
-                        tone={tone} 
-                        onBack={() => setStep("story")} 
-                        onRegenerate={handleGenerateScript} 
-                        onStartOver={handleStartOver} 
-                        isLoading={isLoading} 
+                        selectedIdea={selectedIdea}
+                        script={script}
+                        tone={tone}
+                        onBack={() => setStep("story")}
+                        onRegenerate={handleGenerateScript}
+                        onStartOver={handleStartOver}
+                        isLoading={isLoading}
                     />
                 )}
             </main>
