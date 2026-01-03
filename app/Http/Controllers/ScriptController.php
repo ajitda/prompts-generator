@@ -173,12 +173,6 @@ class ScriptController extends Controller
                 'idea'    => $decodedIdeas,
             ]);
 
-            $script = Script::create([
-                'user_id' => Auth::id(),
-                'keyword' => $validated['keyword'],
-                'idea'    => $decodedIdeas,
-            ]);
-
             // credit deduction here, before return
             $user->decrement('credits');
 
