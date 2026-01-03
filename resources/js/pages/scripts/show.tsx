@@ -31,7 +31,20 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Show({ ideas, script }: Props) {
+const IdeaCardContainer = ({script}: {script: any}) => {
+    console.log("Script idea data:", script.idea);
+    const ideas = script.idea ?? [];
+    return <>{ideas.map((idea: any, index: number) => (
+                            <IdeaCard
+                                key={index}
+                                index={index}
+                                idea={idea}
+                                // onSelect={() => handleSelectIdea(idea)}
+                            />
+                        ))}</>;
+};
+
+export default function Show({ script }: Props) {
     const scriptContent = script.script?.script || 'No script content found.';
     const tone = script.script?.tone || 'Professional';
 
@@ -42,14 +55,10 @@ export default function Show({ ideas, script }: Props) {
 
                 <div className="mx-auto sm:px-6 lg:px-8 py-12 max-w-5xl">
                     <div className="space-y-6">
-                        {ideas.map((item, index) => (
-                            <IdeaCard
-                                key={index}
-                                index={index}
-                                idea={item.idea}
-                                // onSelect={() => handleSelectIdea(idea)}
-                            />
-                        ))}
+                        <h2 className="text-xl font-bold">
+                        Your Video Ideas for <span className="text-primary">"{script.keyword}"</span>
+                        </h2>
+                        <IdeaCardContainer script={script} />
                     </div>
 
                     {/* <ScriptView

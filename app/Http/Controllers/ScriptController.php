@@ -63,11 +63,9 @@ class ScriptController extends Controller
         if ($script->user_id !== Auth::id()) {
             abort(403);
         }
-        $ideas = $script->idea;
 
         return Inertia::render('scripts/show', [
-            'script' => $script,
-            'ideas' => $ideas
+            'script' => $script
         ]);
     }
 
