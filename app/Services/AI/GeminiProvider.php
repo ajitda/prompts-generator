@@ -3,6 +3,7 @@
 namespace App\Services\AI;
 
 use App\Contracts\AIProviderInterface;
+use Dotenv\Repository\RepositoryBuilder;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
@@ -14,6 +15,9 @@ class GeminiProvider implements AIProviderInterface
     public function generate(string $keyword): string
     {
         $apiKey = config('services.gemini.key');
+        if (!$apiKey) {
+            throw new Exception('Gemini API key not found.');
+        }
         $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={$apiKey}";
 
         /**
@@ -25,9 +29,9 @@ class GeminiProvider implements AIProviderInterface
             return $exception instanceof RequestException &&
                 in_array($exception->response->status(), [429, 500, 503]);
         })->timeout(15)->post($url, [
-                    'system_instruction' => ['parts' => [['text' => 'You are an expert.']]],
-                    'contents' => [['role' => 'user', 'parts' => [['text' => "Prompt for: $keyword"]]]],
-                ]);
+            'system_instruction' => ['parts' => [['text' => 'You are an expert.']]],
+            'contents' => [['role' => 'user', 'parts' => [['text' => "Prompt for: $keyword"]]]],
+        ]);
 
         if ($response->failed()) {
             $this->handleApiError($response);

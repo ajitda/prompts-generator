@@ -1,5 +1,3 @@
-import { NavFooter } from '@/components/nav-footer';
-import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import {
     Sidebar,
@@ -17,10 +15,19 @@ import {
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, ChevronRight, Folder, LayoutGrid, Plus, Video } from 'lucide-react';
+import { ChevronRight, LayoutGrid, Plus, Video } from 'lucide-react';
 import AppLogo from './app-logo';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
+import {
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger,
+} from './ui/collapsible';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from './ui/tooltip';
 
 const mainNavItems: NavItem[] = [
     // {
@@ -44,7 +51,6 @@ const mainNavItems: NavItem[] = [
 // ];
 
 export function AppSidebar() {
-
     const { props } = usePage<any>();
 
     const { menu_data = { prompts: [], scripts: [] } } = props;
@@ -93,7 +99,9 @@ export function AppSidebar() {
                                 <SidebarMenuItem>
                                     {/* 1. Main Toggle: Clicking the Text toggles the menu */}
                                     <CollapsibleTrigger asChild>
-                                        <SidebarMenuButton tooltip={group.title}>
+                                        <SidebarMenuButton
+                                            tooltip={group.title}
+                                        >
                                             <group.icon className="h-4 w-4" />
                                             <span>{group.title}</span>
                                             {hasItems && (
@@ -108,14 +116,20 @@ export function AppSidebar() {
                                             <TooltipTrigger asChild>
                                                 <SidebarMenuAction
                                                     asChild
-                                                    className={hasItems ? "right-8" : "right-2"}
+                                                    className={
+                                                        hasItems
+                                                            ? 'right-8'
+                                                            : 'right-2'
+                                                    }
                                                 >
                                                     <Link href={group.baseHref}>
                                                         <Plus className="mr-16 h-4 w-4" />
                                                     </Link>
                                                 </SidebarMenuAction>
                                             </TooltipTrigger>
-                                            <TooltipContent side="top">Add New</TooltipContent>
+                                            <TooltipContent side="top">
+                                                Add New
+                                            </TooltipContent>
                                         </Tooltip>
                                     </TooltipProvider>
 
@@ -123,15 +137,27 @@ export function AppSidebar() {
                                     {hasItems && (
                                         <CollapsibleContent>
                                             <SidebarMenuSub>
-                                                {group.items.map((item: any) => (
-                                                    <SidebarMenuSubItem key={item.id}>
-                                                        <SidebarMenuSubButton asChild>
-                                                            <Link href={`${group.baseHref}/${item.id}`}>
-                                                                <span>{item.keyword}</span>
-                                                            </Link>
-                                                        </SidebarMenuSubButton>
-                                                    </SidebarMenuSubItem>
-                                                ))}
+                                                {group.items.map(
+                                                    (item: any) => (
+                                                        <SidebarMenuSubItem
+                                                            key={item.id}
+                                                        >
+                                                            <SidebarMenuSubButton
+                                                                asChild
+                                                            >
+                                                                <Link
+                                                                    href={`${group.baseHref}/${item.id}`}
+                                                                >
+                                                                    <span>
+                                                                        {
+                                                                            item.keyword
+                                                                        }
+                                                                    </span>
+                                                                </Link>
+                                                            </SidebarMenuSubButton>
+                                                        </SidebarMenuSubItem>
+                                                    ),
+                                                )}
                                             </SidebarMenuSub>
                                         </CollapsibleContent>
                                     )}

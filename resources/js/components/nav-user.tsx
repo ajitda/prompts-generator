@@ -13,7 +13,7 @@ import { UserInfo } from '@/components/user-info';
 import { UserMenuContent } from '@/components/user-menu-content';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { type SharedData } from '@/types';
-import { usePage } from '@inertiajs/react';
+import { router, usePage } from '@inertiajs/react';
 import { ChevronsUpDown } from 'lucide-react';
 
 export function NavUser() {
@@ -21,10 +21,16 @@ export function NavUser() {
     const { state } = useSidebar();
     const isMobile = useIsMobile();
 
+    const handleMenuOpen = (open: boolean) => {
+        if (open) {
+            router.reload({ only: ['auth'] });
+        }
+    };
+
     return (
         <SidebarMenu>
             <SidebarMenuItem>
-                <DropdownMenu>
+                <DropdownMenu onOpenChange={handleMenuOpen}>
                     <DropdownMenuTrigger asChild>
                         <SidebarMenuButton
                             size="lg"

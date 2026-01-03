@@ -13,7 +13,7 @@ use Inertia\Inertia;
 
 class ScriptController extends Controller
 {
-    public function __construct(protected AIService $aiService){}
+    public function __construct(protected AIService $aiService) {}
 
     /**
      * Display a listing of the resource.
@@ -22,22 +22,21 @@ class ScriptController extends Controller
     {
         $scripts = Auth::check()
             ? Script::where('user_id', Auth::id())
-                ->latest()
-                ->paginate(10)
-                ->withQueryString()
-                ->through(fn($s) => [
-                    'id' => $s->id,
-                    'keyword' => $s->keyword,
-                    'prompt' => $s->script,
-                    'created_at' => $s->created_at->format('d M Y'),
-                ])
+            ->latest()
+            ->paginate(10)
+            ->withQueryString()
+            ->through(fn($s) => [
+                'id' => $s->id,
+                'keyword' => $s->keyword,
+                'prompt' => $s->script,
+                'created_at' => $s->created_at->format('d M Y'),
+            ])
             : null;
 
         return Inertia::render('scripts/index', [
             'scripts' => $scripts,
             'isAuthenticated' => Auth::check(),
         ]);
-
     }
 
     /**
@@ -68,7 +67,6 @@ class ScriptController extends Controller
         return Inertia::render('scripts/show', [
             'script' => $script,
         ]);
-
     }
 
     /**
@@ -115,12 +113,11 @@ class ScriptController extends Controller
             return redirect()->route('scripts.index')
                 ->with('success', 'Script deleted successfully.');
         } catch (Exception $e) {
-            Log::error('Script deletion failed: '.$e->getMessage());
+            Log::error('Script deletion failed: ' . $e->getMessage());
 
             return redirect()->back()
                 ->with('error', 'Failed to delete script.');
         }
-
     }
 
     public function getCredits(): JsonResponse
@@ -146,7 +143,7 @@ class ScriptController extends Controller
         ]);
 
         try {
-            $user->decrement('credits');
+            // /** @var \App\Models\User $user */
             $rawIdeas = $this->aiService->generateIdeas($validated['keyword']);
 
             // Trim whitespace
@@ -176,40 +173,41 @@ class ScriptController extends Controller
                 'idea'    => $decodedIdeas,
             ]);
 
-        $script = Script::create([
-            'user_id' => Auth::id(),
-            'keyword' => $validated['keyword'],
-            'idea'    => $decodedIdeas,
-        ]);
+            $script = Script::create([
+                'user_id' => Auth::id(),
+                'keyword' => $validated['keyword'],
+                'idea'    => $decodedIdeas,
+            ]);
 
-        return response()->json([
-            'success'   => true,
-            'script_id' => $script->id,
-            'ideas'     => $decodedIdeas,
-        ]);
+            // credit deduction here, before return
+            $user->decrement('credits');
 
-    } catch (\JsonException $e) {
-        Log::error('JSON decode failed', [
-            'raws' => $rawIdeas ?? null,
-            'error' => $e->getMessage()
-        ]);
+            return response()->json([
+                'success'   => true,
+                'script_id' => $script->id,
+                'ideas'     => $decodedIdeas,
+            ]);
+        } catch (\JsonException $e) {
+            Log::error('JSON decode failed', [
+                'raws' => $rawIdeas ?? null,
+                'error' => $e->getMessage()
+            ]);
 
-        return response()->json([
-            'success' => false,
-            'message' => 'AI returned malformed JSON.'
-        ], 500);
+            return response()->json([
+                'success' => false,
+                'message' => 'AI returned malformed JSON.'
+            ], 500);
+        } catch (Exception $e) {
+            Log::error('Idea generation failed', [
+                'error' => $e->getMessage()
+            ]);
 
-    } catch (Exception $e) {
-        Log::error('Idea generation failed', [
-            'error' => $e->getMessage()
-        ]);
-
-        return response()->json([
-            'success' => false,
-            'message' => 'Failed to generate ideas.'
-        ], 500);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to generate ideas.'
+            ], 500);
+        }
     }
-}
 
 
 
@@ -289,9 +287,8 @@ class ScriptController extends Controller
                 'tone' => $decodedScript['tone'] ?? 'Neutral', // Provide a fallback
             ]);
         } catch (Exception $e) {
-            Log::error('Script generation failed: '.$e->getMessage());
+            Log::error('Script generation failed: ' . $e->getMessage());
             return response()->json(['success' => false, 'message' => 'Failed to generate script.'], 500);
         }
     }
-
 }
