@@ -63,9 +63,11 @@ class ScriptController extends Controller
         if ($script->user_id !== Auth::id()) {
             abort(403);
         }
+        $ideas = $script->idea;
 
         return Inertia::render('scripts/show', [
             'script' => $script,
+            'ideas' => $ideas
         ]);
     }
 
@@ -143,7 +145,7 @@ class ScriptController extends Controller
         ]);
 
         try {
-            // /** @var \App\Models\User $user */
+            /** @var \App\Models\User $user */
             $rawIdeas = $this->aiService->generateIdeas($validated['keyword']);
 
             // Trim whitespace

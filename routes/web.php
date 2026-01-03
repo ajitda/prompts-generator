@@ -22,17 +22,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/prompts-generator/dashboard', function () {
         return Inertia::render('dashboard');
-    })->name('dashboard');    
-    
+    })->name('dashboard');
+
     Route::resource('prompts-generator/prompts', PromptController::class)
-    ->names('prompts')
-    ->parameters(['prompts' => 'prompt']);
-    
+        ->names('prompts')
+        ->parameters(['prompts' => 'prompt']);
+
     Route::resource('prompts-generator/scripts', ScriptController::class)
-    ->names('scripts')
-    ->parameters(['scripts' => 'script']);
+        ->names('scripts')
+        ->parameters(['scripts' => 'script']);
 
     Route::get('/user/credits', [ScriptController::class, 'getCredits'])->name('user.credits');
 });
 
-require __DIR__.'/settings.php';
+require __DIR__ . '/settings.php';

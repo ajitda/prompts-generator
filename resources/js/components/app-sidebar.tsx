@@ -13,7 +13,6 @@ import {
     SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
-import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { ChevronRight, LayoutGrid, Plus, Video } from 'lucide-react';
 import AppLogo from './app-logo';
@@ -29,13 +28,13 @@ import {
     TooltipTrigger,
 } from './ui/tooltip';
 
-const mainNavItems: NavItem[] = [
-    // {
-    //     title: 'Dashboard',
-    //     href: dashboard(),
-    //     icon: LayoutGrid,
-    // },
-];
+// const mainNavItems: NavItem[] = [
+// {
+//     title: 'Dashboard',
+//     href: dashboard(),
+//     icon: LayoutGrid,
+// },
+// ];
 
 // const footerNavItems: NavItem[] = [
 //     {
@@ -60,13 +59,15 @@ export function AppSidebar() {
             title: 'AI Prompts',
             icon: LayoutGrid,
             baseHref: '/prompts-generator/prompts',
-            items: menu_data.prompts,
+            items: props?.prompts?.data,
+            // items: menu_data.prompts,
         },
         {
             title: 'AI Video Scripts',
             icon: Video,
             baseHref: '/prompts-generator/scripts',
-            items: menu_data.scripts,
+            items: props?.scripts?.data,
+            // items: menu_data.scripts,
         },
     ];
 
@@ -102,10 +103,10 @@ export function AppSidebar() {
                                         <SidebarMenuButton
                                             tooltip={group.title}
                                         >
-                                            <group.icon className="h-4 w-4" />
+                                            <group.icon className="w-4 h-4" />
                                             <span>{group.title}</span>
                                             {hasItems && (
-                                                <ChevronRight className="ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                                                <ChevronRight className="ml-auto w-4 h-4 group-data-[state=open]/collapsible:rotate-90 transition-transform duration-200" />
                                             )}
                                         </SidebarMenuButton>
                                     </CollapsibleTrigger>
@@ -123,7 +124,7 @@ export function AppSidebar() {
                                                     }
                                                 >
                                                     <Link href={group.baseHref}>
-                                                        <Plus className="mr-16 h-4 w-4" />
+                                                        <Plus className="mr-16 w-4 h-4" />
                                                     </Link>
                                                 </SidebarMenuAction>
                                             </TooltipTrigger>
