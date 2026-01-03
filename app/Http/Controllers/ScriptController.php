@@ -166,9 +166,9 @@ class ScriptController extends Controller
             // Decode JSON safely
             $decodedIdeas = json_decode($rawIdeas, true, 512, JSON_THROW_ON_ERROR);
 
-            if (!is_array($decodedIdeas) || count($decodedIdeas) === 0 || !isset($decodedIdeas[0]['Title'])) {
-                throw new Exception('AI returned invalid idea structure');
-            }
+            // if (!is_array($decodedIdeas) || count($decodedIdeas) === 0 || !isset($decodedIdeas[0]['Title'])) {
+            //     throw new Exception('AI returned invalid idea structure');
+            // }
 
             $script = Script::create([
                 'user_id' => Auth::id(),
