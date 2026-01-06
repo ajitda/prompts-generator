@@ -10,7 +10,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 
 class ScriptController extends Controller
@@ -135,8 +134,7 @@ class ScriptController extends Controller
     public function generateIdeas(Request $request): JsonResponse
     {
         $isAuthenticated = Auth::check();
-        $user = Auth::user();
-        $footprint = Session::get('browser_fingerprint');
+        $fingerprint = request()->fingerprint();
 
         // Credit check
         if ($isAuthenticated) {
@@ -176,7 +174,7 @@ class ScriptController extends Controller
 
             $script = Script::create([
                 'user_id' => $isAuthenticated ? $user->id : null,
-                'footprint' => $isAuthenticated ? null : $footprint,
+                'fingerprint' => $isAuthenticated ? null : $fingerprint,
                 'keyword' => $validated['keyword'],
                 'idea'    => $decodedIdeas,
             ]);
@@ -224,7 +222,7 @@ class ScriptController extends Controller
     {
         $isAuthenticated = Auth::check();
         $user = Auth::user();
-        $footprint = Session::get('browser_fingerprint');
+        $fingerprint = request()->fingerprint();
 
         // Credit check
         if ($isAuthenticated) {
@@ -249,7 +247,7 @@ class ScriptController extends Controller
             if ($isAuthenticated) {
                 $scriptQuery->where('user_id', $user->id);
             } else {
-                $scriptQuery->where('footprint', $footprint);
+                $scriptQuery->where('fingerprint', $fingerprint);
             }
 
             $script = $scriptQuery->firstOrFail();
@@ -286,7 +284,7 @@ class ScriptController extends Controller
     {
         $isAuthenticated = Auth::check();
         $user = Auth::user();
-        $footprint = Session::get('browser_fingerprint');
+        $fingerprint = request()->fingerprint();
 
         // Credit check
         if ($isAuthenticated) {
@@ -311,7 +309,7 @@ class ScriptController extends Controller
             if ($isAuthenticated) {
                 $scriptQuery->where('user_id', $user->id);
             } else {
-                $scriptQuery->where('footprint', $footprint);
+                $scriptQuery->where('fingerprint', $fingerprint);
             }
 
             $script = $scriptQuery->firstOrFail();

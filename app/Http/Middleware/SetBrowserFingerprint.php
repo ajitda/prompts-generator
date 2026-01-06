@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
 
-class SetBrowserFootprint
+class SetBrowserFingerprint
 {
     /**
      * Handle an incoming request.
@@ -17,17 +17,9 @@ class SetBrowserFootprint
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $fingerprint = $request->header('X-Browser-Fingerprint');
-
-        if ($fingerprint) {
-            // We'll store the fingerprint in the session so it's easily accessible throughout the request lifecycle.
-            Session::put('browser_fingerprint', $fingerprint);
-            Log::info('Browser fingerprint from header: ' . $fingerprint);
-        } else {
-            Log::warning('X-Browser-Fingerprint header missing.');
-            // Optionally, you could fall back to a session ID or generate one if the header is always expected.
-            // For now, if missing, the footprint won't be set in the session, which will result in null being stored.
-        }
+        // This middleware now only initializes guest credits.
+        // The browser fingerprint is retrieved directly via request()->fingerprint()
+        // where it's needed (e.g., in controllers, actions).
 
         if (!Session::has('guest_credits')) {
             Session::put('guest_credits', 5);
