@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,6 +10,7 @@ import LoadingState from "@/components/LoadingState";
 import toast from "react-hot-toast";
 import { usePage } from "@inertiajs/react";
 import { SharedData } from "@/types";
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 interface Idea {
     Title: string;
@@ -20,11 +21,16 @@ interface Idea {
 
 type AppStep = "input" | "ideas" | "story" | "script";
 
+interface ScriptFormProps {
+    initialGuestCredits: number | null;
+    isAuthenticated: boolean;
+    userCredits: number | null;
+}
+
 const ScriptForm = () => {
     const { props } = usePage<SharedData & ScriptFormProps>();
     const { auth, initialGuestCredits, isAuthenticated, userCredits } = props;
 
-    // Use userCredits if authenticated, otherwise use initialGuestCredits (which will be updated by session)
     const currentCredits = isAuthenticated ? (userCredits ?? 0) : (initialGuestCredits ?? 0);
 
     const [step, setStep] = useState<AppStep>("input");
@@ -36,12 +42,22 @@ const ScriptForm = () => {
     const [script, setScript] = useState("");
     const [tone, setTone] = useState("Conversational & Educational");
     const [isLoading, setIsLoading] = useState(false);
+    const [fingerprint, setFingerprint] = useState<string | null>(null);
+
+    useEffect(() => {
+        const getFingerprint = async () => {
+            const fp = await FingerprintJS.load();
+            const result = await fp.get();
+            setFingerprint(result.visitorId);
+        };
+        getFingerprint();
+    }, []);
 
     // Helper for CSRF and Headers
     const requestHeaders = {
         'Content-Type': 'application/json',
         'X-CSRF-TOKEN': (document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') as string) || '',
-        // 'X-CSRF-TOKEN': (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content || '',
+        'X-Browser-Fingerprint': fingerprint || '', // Include fingerprint in headers
     };
 
     const handleSaveIdeas = async (scriptId: number, ideas: string[]) => {

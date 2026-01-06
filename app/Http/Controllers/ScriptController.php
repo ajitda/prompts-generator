@@ -9,8 +9,8 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 
 class ScriptController extends Controller
@@ -136,7 +136,7 @@ class ScriptController extends Controller
     {
         $isAuthenticated = Auth::check();
         $user = Auth::user();
-        $footprint = $request->cookie('browser_footprint');
+        $footprint = Session::get('browser_fingerprint');
 
         // Credit check
         if ($isAuthenticated) {
@@ -224,7 +224,7 @@ class ScriptController extends Controller
     {
         $isAuthenticated = Auth::check();
         $user = Auth::user();
-        $footprint = $request->cookie('browser_footprint');
+        $footprint = Session::get('browser_fingerprint');
 
         // Credit check
         if ($isAuthenticated) {
@@ -286,7 +286,7 @@ class ScriptController extends Controller
     {
         $isAuthenticated = Auth::check();
         $user = Auth::user();
-        $footprint = $request->cookie('browser_footprint');
+        $footprint = Session::get('browser_fingerprint');
 
         // Credit check
         if ($isAuthenticated) {

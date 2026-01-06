@@ -7,7 +7,6 @@ use App\Models\Script;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
-use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
 
 class CreateNewUser implements CreatesNewUsers
@@ -41,7 +40,7 @@ class CreateNewUser implements CreatesNewUsers
         ]);
 
         // Sync guest data
-        $footprint = Cookie::get('browser_footprint');
+        $footprint = Session::get('browser_fingerprint');
 
         if ($footprint) {
             Script::where('footprint', $footprint)
