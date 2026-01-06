@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Script;
+use App\Models\User;
 use App\Services\AIService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
@@ -132,10 +134,20 @@ class ScriptController extends Controller
      */
     public function generateIdeas(Request $request): JsonResponse
     {
+        $isAuthenticated = Auth::check();
         $user = Auth::user();
+        $footprint = $request->cookie('browser_footprint');
 
-        if (!$user || $user->credits <= 0) {
-            return response()->json(['success' => false, 'message' => 'Insufficient credits.'], 403);
+        // Credit check
+        if ($isAuthenticated) {
+            if ($user->credits <= 0) {
+                return response()->json(['success' => false, 'message' => 'You have no credits left.'], 403);
+            }
+        } else {
+            $guestCredits = session('guest_credits', 5);
+            if ($guestCredits <= 0) {
+                return response()->json(['success' => false, 'message' => 'You have no guest credits left. Please sign up to get more.'], 403);
+            }
         }
 
         $validated = $request->validate([
@@ -143,7 +155,6 @@ class ScriptController extends Controller
         ]);
 
         try {
-            /** @var \App\Models\User $user */
             $rawIdeas = $this->aiService->generateIdeas($validated['keyword']);
 
             // Trim whitespace
@@ -163,18 +174,19 @@ class ScriptController extends Controller
             // Decode JSON safely
             $decodedIdeas = json_decode($rawIdeas, true, 512, JSON_THROW_ON_ERROR);
 
-            // if (!is_array($decodedIdeas) || count($decodedIdeas) === 0 || !isset($decodedIdeas[0]['Title'])) {
-            //     throw new Exception('AI returned invalid idea structure');
-            // }
-
             $script = Script::create([
-                'user_id' => Auth::id(),
+                'user_id' => $isAuthenticated ? $user->id : null,
+                'footprint' => $isAuthenticated ? null : $footprint,
                 'keyword' => $validated['keyword'],
                 'idea'    => $decodedIdeas,
             ]);
 
             // credit deduction here, before return
-            $user->decrement('credits');
+            if ($isAuthenticated) {
+                $user->decrement('credits');
+            } else {
+                session(['guest_credits' => $guestCredits - 1]);
+            }
 
             return response()->json([
                 'success'   => true,
@@ -210,7 +222,21 @@ class ScriptController extends Controller
      */
     public function generateStory(Request $request): JsonResponse
     {
-        // Log::info('Request Data:', $request->all());
+        $isAuthenticated = Auth::check();
+        $user = Auth::user();
+        $footprint = $request->cookie('browser_footprint');
+
+        // Credit check
+        if ($isAuthenticated) {
+            if ($user->credits <= 0) {
+                return response()->json(['success' => false, 'message' => 'You have no credits left.'], 403);
+            }
+        } else {
+            $guestCredits = session('guest_credits', 5);
+            if ($guestCredits <= 0) {
+                return response()->json(['success' => false, 'message' => 'You have no guest credits left. Please sign up to get more.'], 403);
+            }
+        }
 
         $validated = $request->validate([
             'script_id' => 'required|exists:scripts,id',
@@ -218,13 +244,17 @@ class ScriptController extends Controller
         ]);
 
         try {
-            $script = Script::where('id', $validated['script_id']) // Use validated data
-                ->where('user_id', Auth::id())
-                ->firstOrFail();
+            $scriptQuery = Script::where('id', $validated['script_id']);
 
-            // 2. Use $validated['title'] to ensure it's not null
+            if ($isAuthenticated) {
+                $scriptQuery->where('user_id', $user->id);
+            } else {
+                $scriptQuery->where('footprint', $footprint);
+            }
+
+            $script = $scriptQuery->firstOrFail();
+
             $rawStory = $this->aiService->generateStory($validated['title']);
-
             $decodedStory = json_decode($rawStory, true);
 
             $script->update([
@@ -232,12 +262,18 @@ class ScriptController extends Controller
                 'story' => $decodedStory,
             ]);
 
+            // Credit deduction
+            if ($isAuthenticated) {
+                $user->decrement('credits');
+            } else {
+                session(['guest_credits' => $guestCredits - 1]);
+            }
+
             return response()->json([
                 'success' => true,
                 'story' => $decodedStory['sections'] ?? [],
             ]);
         } catch (Exception $e) {
-            // This will now catch structural errors or AI failures
             Log::error('Story generation failed: ' . $e->getMessage());
             return response()->json(['success' => false, 'message' => 'Failed to generate story.'], 500);
         }
@@ -248,15 +284,37 @@ class ScriptController extends Controller
      */
     public function generateScript(Request $request): JsonResponse
     {
+        $isAuthenticated = Auth::check();
+        $user = Auth::user();
+        $footprint = $request->cookie('browser_footprint');
+
+        // Credit check
+        if ($isAuthenticated) {
+            if ($user->credits <= 0) {
+                return response()->json(['success' => false, 'message' => 'You have no credits left.'], 403);
+            }
+        } else {
+            $guestCredits = session('guest_credits', 5);
+            if ($guestCredits <= 0) {
+                return response()->json(['success' => false, 'message' => 'You have no guest credits left. Please sign up to get more.'], 403);
+            }
+        }
+
         $validated = $request->validate([
             'script_id' => 'required|exists:scripts,id',
             'title' => 'required|string',
         ]);
 
         try {
-            $script = Script::where('id', $validated['script_id'])
-                ->where('user_id', Auth::id())
-                ->firstOrFail();
+            $scriptQuery = Script::where('id', $validated['script_id']);
+
+            if ($isAuthenticated) {
+                $scriptQuery->where('user_id', $user->id);
+            } else {
+                $scriptQuery->where('footprint', $footprint);
+            }
+
+            $script = $scriptQuery->firstOrFail();
 
             if (empty($script->story)) {
                 return response()->json(['success' => false, 'message' => 'Story context missing.'], 422);
@@ -269,6 +327,14 @@ class ScriptController extends Controller
             $script->update([
                 'script' => $decodedScript,
             ]);
+
+            // Credit deduction
+            if ($isAuthenticated) {
+                $user->decrement('credits');
+            } else {
+                session(['guest_credits' => $guestCredits - 1]);
+            }
+
 
             if (!$decodedScript) {
                 Log::error('AI Service returned invalid JSON: ' . $rawScript);

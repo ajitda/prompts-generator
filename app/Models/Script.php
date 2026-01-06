@@ -9,6 +9,7 @@ class Script extends Model
 {
     protected $fillable = [
         'user_id',
+        'footprint',
         'keyword',
         'title',
         'idea',

@@ -24,6 +24,18 @@ Route::post('/scripts/ideas', [ScriptController::class, 'generateIdeas'])->name(
 Route::post('/scripts/story', [ScriptController::class, 'generateStory'])->name('scripts.generateStory');
 Route::post('/scripts/final', [ScriptController::class, 'generateScript'])->name('scripts.generateScript');
 
+Route::get('/scripts/create', function () {
+    $guestCredits = session('guest_credits', 5);
+    $isAuthenticated = Auth::check();
+    $userCredits = $isAuthenticated ? Auth::user()->credits : 0;
+
+    return Inertia::render('scripts/script-form', [
+        'initialGuestCredits' => $isAuthenticated ? null : $guestCredits,
+        'isAuthenticated' => $isAuthenticated,
+        'userCredits' => $isAuthenticated ? $userCredits : null,
+    ]);
+})->name('scripts.create.guest');
+
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/ai-video-generator/dashboard', function () {

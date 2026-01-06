@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::table('scripts', function (Blueprint $table) {
             $table->string('footprint')->nullable()->after('user_id');
-
-            $table->unsignedBigInteger('user_id')->nullable()->change();
+            $table->foreignId('user_id')->nullable()->change();
         });
     }
 
@@ -25,8 +24,7 @@ return new class extends Migration
     {
         Schema::table('scripts', function (Blueprint $table) {
             $table->dropColumn('footprint');
-
-            $table->unsignedBigInteger('user_id')->nullable(false)->change();
+            $table->foreignId('user_id')->change(); // Revert to not nullable
         });
     }
 };

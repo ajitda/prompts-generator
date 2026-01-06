@@ -21,9 +21,12 @@ interface Idea {
 type AppStep = "input" | "ideas" | "story" | "script";
 
 const ScriptForm = () => {
-    const { props } = usePage<SharedData>();
-    const { auth } = props;
-    const userCredits = auth?.user?.credits ?? 0;
+    const { props } = usePage<SharedData & ScriptFormProps>();
+    const { auth, initialGuestCredits, isAuthenticated, userCredits } = props;
+
+    // Use userCredits if authenticated, otherwise use initialGuestCredits (which will be updated by session)
+    const currentCredits = isAuthenticated ? (userCredits ?? 0) : (initialGuestCredits ?? 0);
+
     const [step, setStep] = useState<AppStep>("input");
     const [scriptId, setScriptId] = useState<number | null>(null);
     const [keyword, setKeyword] = useState("");
@@ -56,6 +59,10 @@ const ScriptForm = () => {
 
     const handleGenerateIdeas = async () => {
         if (!keyword.trim()) return;
+        if (currentCredits <= 0) {
+            toast.error("You have no generations left. Please sign up for more.");
+            return;
+        }
         setIsLoading(true);
         try {
             const res = await fetch('/scripts/ideas', {
@@ -150,9 +157,14 @@ const ScriptForm = () => {
                                 className="text-center text-lg h-14"
                                 onKeyDown={(e) => e.key === "Enter" && handleGenerateIdeas()}
                             />
-                            <Button onClick={handleGenerateIdeas} disabled={!keyword.trim() || userCredits <= 0} size="lg" className="w-full gap-2">
+                            <Button variant="default" onClick={handleGenerateIdeas} disabled={!keyword.trim() || currentCredits <= 0} size="lg" className="w-full gap-2">
                                 Generate video ideas <ArrowRight className="w-4 h-4" />
                             </Button>
+                            {!isAuthenticated && (
+                                <p className="text-center text-sm text-muted-foreground">
+                                    You have {currentCredits} free generations left.
+                                </p>
+                            )}
                         </div>
                    </div>
                 )}

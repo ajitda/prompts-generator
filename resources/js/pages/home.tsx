@@ -32,8 +32,8 @@ function home() {
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
-          <Link href="/ai-video-generator">
-            <Button variant="hero" size="lg" className="text-base px-8">
+          <Link href="/scripts/create">
+            <Button variant="hero" size="lg" className="text-base bg-indigo-600 text-white px-8">
               <Sparkles className="w-5 h-5 mr-2" />
               Generate Ideas Now
             </Button>
@@ -137,8 +137,8 @@ function home() {
           </div>
 
           <div className="text-center mt-12">
-            <Link href="/ai-video-generator">
-              <Button variant="hero" size="lg" className="text-base px-8">
+            <Link href="/scripts/create">
+              <Button variant="hero" size="lg" className="text-base bg-indigo-600 text-white px-8">
                 <Zap className="w-5 h-5 mr-2" />
                 Try It Free
               </Button>
