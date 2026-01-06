@@ -33,7 +33,7 @@ export default function Index() {
     const { prompts, filters = {}, perPageOptions } = props;
 
     // const currentPerPage = prompts?.per_page || 2;
-    
+
     // const [localSearch, setLocalSearch] = useState(filters.search || '');
     // const [localMinPrice, setLocalMinPrice] = useState(filters.min_price || '');
     // const [localMaxPrice, setLocalMaxPrice] = useState(filters.max_price || '');
@@ -45,7 +45,7 @@ export default function Index() {
 
     // const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    const fetchData = useCallback((        
+    const fetchData = useCallback((
         overrideParams: Partial<{
             // search: string;
             // min_price: string;
@@ -55,7 +55,7 @@ export default function Index() {
             // per_page: number;
         }> = {}
     ) => {
-        
+
         const params = {
             // search: localSearch,
             // min_price: localMinPrice,
@@ -63,7 +63,7 @@ export default function Index() {
             sort: sortConfig.field,
             direction: sortConfig.direction,
             // per_page: products?.per_page || 2,
-            ...overrideParams, 
+            ...overrideParams,
         };
 
         const queryParams: Record<string, any> = {};
@@ -84,7 +84,7 @@ export default function Index() {
 
     // const [importErrors, setImportErrors] = useState<any[]>([]);
     // const [showImportPreview, setShowImportPreview] = useState(false);
-    
+
     // const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     //     const value = e.target.value;
     //     setLocalSearch(value);
@@ -146,7 +146,7 @@ export default function Index() {
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-lg-xl p-8">
 
                 <PromptForm />
-                
+
                 {/* Filters Toolbar */}
                 {/* <div className='mb-4 flex w-full flex-wrap items-center gap-4'>
                     {/* <Input
@@ -156,7 +156,7 @@ export default function Index() {
                         type='text'
                         placeholder='Search Product ...'
                         name='search'
-                        className='w-full md:w-1/3' 
+                        className='w-full md:w-1/3'
                     /> */}
                     {/* <PriceFilter
                         min_price={localMinPrice}
@@ -177,7 +177,7 @@ export default function Index() {
                     {/* <div className='ml-auto'>
                         <Link
                             className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors"
-                            href='/prompts-generator'
+                            href='/ai-video-generator'
                             // href={promptsCreate().url}
                         >
                             Add Prompt
@@ -194,7 +194,7 @@ export default function Index() {
                     <table className='w-full table-auto'>
                         <thead className="bg-gray-100 dark:bg-gray-800">
                             <tr className='text-left text-sm font-medium text-gray-500 dark:text-gray-300'>
-                                <th className='p-4 border-b'>#</th>                                
+                                <th className='p-4 border-b'>#</th>
                                 <SortableHeader field="keyword" currentSort={sortConfig} onSort={handleSort} className='p-4 border-b'>Keyword</SortableHeader>
                                 <SortableHeader field="prompt" currentSort={sortConfig} onSort={handleSort} className='p-4 border-b'>Prompt</SortableHeader>
                                 <SortableHeader field="created_at" currentSort={sortConfig} onSort={handleSort} className='p-4 border-b'>Created Date</SortableHeader>
@@ -212,7 +212,7 @@ export default function Index() {
                             ) : (
                                 prompts?.data?.map((prompt, index) => (
                                     <tr key={prompt.id} className="hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors">
-                                        <td className='border-b px-4 py-2'>{index + 1}</td>                                        
+                                        <td className='border-b px-4 py-2'>{index + 1}</td>
                                         <td className='border-b px-4 py-2 text-gray-500 truncate max-w-xs'>{prompt.keyword}</td>
                                         <td className='break-words truncate border-b px-4 py-2'>${prompt.prompt.slice(0, 50)}...</td>
                                         <td className='border-b px-4 py-2 text-sm'>{prompt.created_at}</td>

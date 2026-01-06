@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 
-Route::get('/prompts-generator', function () {
+Route::get('/ai-video-generator', function () {
     return Inertia::render('welcome', [
         'canRegister' => Features::enabled(Features::registration()),
     ]);
@@ -20,15 +20,15 @@ Route::post('/scripts/final', [ScriptController::class, 'generateScript'])->name
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    Route::get('/prompts-generator/dashboard', function () {
+    Route::get('/ai-video-generator/dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 
-    Route::resource('prompts-generator/prompts', PromptController::class)
+    Route::resource('ai-video-generator/prompts', PromptController::class)
         ->names('prompts')
         ->parameters(['prompts' => 'prompt']);
 
-    Route::resource('prompts-generator/scripts', ScriptController::class)
+    Route::resource('ai-video-generator/scripts', ScriptController::class)
         ->names('scripts')
         ->parameters(['scripts' => 'script']);
 

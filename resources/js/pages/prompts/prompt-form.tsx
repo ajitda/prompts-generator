@@ -12,7 +12,7 @@ export default function PromptForm() {
 
     const { auth, session_data } = usePage<SharedData>().props;
 
-    const promptsCanonical = '/prompts-generator/prompts';
+    const promptsCanonical = '/ai-video-generator/prompts';
     const promptsStore = () => ({ url: promptsCanonical });
 
     const { data, setData, post, errors, processing, reset } = useForm({

@@ -55,17 +55,17 @@ export function AppSidebar() {
     const { menu_data = { prompts: [], scripts: [] } } = props;
 
     const dynamicGroups = [
+        // {
+        //     title: 'AI Prompts',
+        //     icon: LayoutGrid,
+        //     baseHref: '/ai-video-generator/prompts',
+        //     items: props?.prompts?.data,
+        //     // items: menu_data.prompts,
+        // },
         {
-            title: 'AI Prompts',
-            icon: LayoutGrid,
-            baseHref: '/prompts-generator/prompts',
-            items: props?.prompts?.data,
-            // items: menu_data.prompts,
-        },
-        {
-            title: 'AI Video Scripts',
+            title: 'AI Video Idea',
             icon: Video,
-            baseHref: '/prompts-generator/scripts',
+            baseHref: '/ai-video-generator/scripts',
             items: props?.scripts?.data,
             // items: menu_data.scripts,
         },

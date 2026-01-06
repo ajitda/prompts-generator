@@ -23,7 +23,7 @@ export default function Welcome() {
             </Head>
 
             <div className="min-h-screen bg-gradient-to-br p-6">
-                <div className="max-w-5xl mx-auto bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-8">
+                <div className="max-w-4xl mx-auto bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-8">
 
                     {/* HERO */}
                     <header className="text-center mb-12">
@@ -37,10 +37,10 @@ export default function Welcome() {
                     </header>
 
                     {/* TOOLS */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="">
 
                         {/* PROMPT GENERATOR */}
-                        <Card className="hover:shadow-lg transition">
+                        {/* <Card className="hover:shadow-lg transition">
                             <CardHeader>
                                 <CardTitle>AI Prompt Generator</CardTitle>
                             </CardHeader>
@@ -57,16 +57,16 @@ export default function Welcome() {
                                 </ul>
 
                                 <Link
-                                    href="/prompts-generator/prompts"
+                                    href="/ai-video-generator/prompts"
                                     className="inline-block mt-4 bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition"
                                 >
                                     Generate Prompts →
                                 </Link>
                             </CardContent>
-                        </Card>
+                        </Card> */}
 
                         {/* VIDEO SCRIPT GENERATOR */}
-                        <Card className="hover:shadow-lg transition">
+                        <Card className="hover:shadow-lg transition flex items-center justify-center flex-col">
                             <CardHeader>
                                 <CardTitle className='flex items-center gap-2'>
                                     <Video />
@@ -75,20 +75,20 @@ export default function Welcome() {
                                     </span>
                                 </CardTitle>
                             </CardHeader>
-                            <CardContent className="space-y-4">
+                            <CardContent className="space-y-4 flex flex-col items-center justify-center">
                                 <p className="text-gray-600 dark:text-gray-300">
                                     Generate professional YouTube video scripts from a single keyword
                                     using a proven storytelling framework.
                                 </p>
 
-                                <ul className="list-disc list-inside text-sm text-gray-500 dark:text-gray-400 space-y-1">
+                                <ul className="list-disc flex items-center justify-center  gap-4 list-inside text-sm text-gray-500 dark:text-gray-400 space-y-1">
                                     <li>Ideas → Story → Final Script</li>
                                     <li>Built for working professionals</li>
                                     <li>60–90 second optimized scripts</li>
                                 </ul>
 
                                 <Link
-                                    href="/prompts-generator/scripts"
+                                    href="/ai-video-generator/scripts"
                                     className="inline-block mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg transition"
                                 >
                                     Create Video Scripts →
