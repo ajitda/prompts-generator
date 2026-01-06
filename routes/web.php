@@ -6,11 +6,17 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 
+Route::get('/', function () { // Changed path from '/ai-video-generator' to '/'
+    return Inertia::render('home', [ // Changed component from 'welcome' to 'home'
+        'canRegister' => Features::enabled(Features::registration()),
+    ]);
+})->name('home');
+
 Route::get('/ai-video-generator', function () {
     return Inertia::render('welcome', [
         'canRegister' => Features::enabled(Features::registration()),
     ]);
-})->name('home');
+})->name('welcome');
 
 Route::post('/prompts/generate', [PromptController::class, 'generate'])->name('prompts.generate');
 

@@ -23,7 +23,7 @@ export default function Welcome() {
             </Head>
 
             <div className="min-h-screen bg-gradient-to-br p-6">
-                <div className="max-w-4xl mx-auto bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-8">
+                <div className="max-w-4xl mx-auto bg-white dark:bg-gray-900 rounded-xl shadow-xl p-8">
 
                     {/* HERO */}
                     <header className="text-center mb-12">
