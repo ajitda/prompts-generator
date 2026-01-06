@@ -131,10 +131,17 @@ class ScriptController extends Controller
     /**
      * STEP 2 – Generate ideas from keyword
      */
-    public function generateIdeas(Request $request): JsonResponse
+   public function generateIdeas(Request $request): JsonResponse
     {
         $isAuthenticated = Auth::check();
+        $user = Auth::user(); // Defined here for consistent access
         $fingerprint = request()->fingerprint();
+        Log::info('Fingerprint from request()->fingerprint(): ' . $fingerprint);
+        Log::info('Is Authenticated: ' . ($isAuthenticated ? 'true' : 'false'));
+        if ($isAuthenticated) {
+            Log::info('Authenticated User ID: ' . $user->id);
+        }
+
 
         // Credit check
         if ($isAuthenticated) {
@@ -174,7 +181,7 @@ class ScriptController extends Controller
 
             $script = Script::create([
                 'user_id' => $isAuthenticated ? $user->id : null,
-                'fingerprint' => $isAuthenticated ? null : $fingerprint,
+                'fingerprint' => $fingerprint, // Always store fingerprint, regardless of authentication
                 'keyword' => $validated['keyword'],
                 'idea'    => $decodedIdeas,
             ]);

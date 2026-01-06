@@ -4,7 +4,6 @@ namespace App\Actions\Fortify;
 
 use App\Models\User;
 use App\Models\Script;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
@@ -19,7 +18,7 @@ class CreateNewUser implements CreatesNewUsers
      *
      * @param  array<string, string>  $input
      */
-    public function create(array $input, Request $request): User
+    public function create(array $input): User
     {
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
@@ -41,7 +40,7 @@ class CreateNewUser implements CreatesNewUsers
         ]);
 
         // Sync guest data
-        $fingerprint = $request->fingerprint();
+        $fingerprint = request()->fingerprint();
 
         if ($fingerprint) {
             Script::where('fingerprint', $fingerprint)
