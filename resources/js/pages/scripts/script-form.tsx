@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import { Input } from "@/components/ui/input";
 import { StorySection } from "@/types";
 import IdeaCard from "@/components/IdeaCard";
@@ -41,14 +42,36 @@ const ScriptForm = () => {
     const [script, setScript] = useState("");
     const [tone, setTone] = useState("Conversational & Educational");
     const [isLoading, setIsLoading] = useState(false);
+    const [fingerprint, setFingerprint] = useState<string | null>(null);
+
+    useEffect(() => {
+        const loadFingerprint = async () => {
+            try {
+                const fp = await FingerprintJS.load();
+                const result = await fp.get();
+                setFingerprint(result.visitorId);
+            } catch (error) {
+                console.error("Error loading FingerprintJS:", error);
+            }
+        };
+        loadFingerprint();
+    }, []);
 
     // Helper for CSRF and Headers
     const requestHeaders = {
         'Content-Type': 'application/json',
         'X-CSRF-TOKEN': (document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') as string) || '',
+        'X-Browser-Fingerprint': fingerprint,
     };
 
     const handleSaveIdeas = async (scriptId: number, ideas: string[]) => {
+
+        const requestHeaders = {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': (document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') as string) || '',
+            ...(fingerprint && { 'X-Browser-Fingerprint': fingerprint }),
+        };
+
         try {
             await fetch(`/scripts/${scriptId}`, {
                 method: 'PUT',
@@ -67,6 +90,7 @@ const ScriptForm = () => {
             toast.error("You have no generations left. Please sign up for more.");
             return;
         }
+        console.log(requestHeaders, 'requestHeaders');
         setIsLoading(true);
         try {
             const res = await fetch('/scripts/ideas', {
@@ -161,7 +185,7 @@ const ScriptForm = () => {
                                 className="text-center text-lg h-14"
                                 onKeyDown={(e) => e.key === "Enter" && handleGenerateIdeas()}
                             />
-                            <Button variant="default" onClick={handleGenerateIdeas} disabled={!keyword.trim() || currentCredits <= 0} size="lg" className="w-full gap-2">
+                            <Button variant="default" onClick={handleGenerateIdeas} disabled={!keyword.trim() || currentCredits <= 0 || !fingerprint} size="lg" className="w-full gap-2">
                                 Generate video ideas <ArrowRight className="w-4 h-4" />
                             </Button>
                             {!isAuthenticated && (

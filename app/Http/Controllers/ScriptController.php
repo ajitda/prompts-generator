@@ -22,7 +22,7 @@ class ScriptController extends Controller
     public function index(Request $request) // Inject Request to get fingerprint
     {
         $isAuthenticated = Auth::check();
-        $fingerprint = $request->fingerprint(); // Get the current fingerprint
+        $fingerprint = $request->header('X-Browser-Fingerprint'); // Use FingerprintJS ID
 
         $scriptsQuery = Script::latest();
 
@@ -146,15 +146,14 @@ class ScriptController extends Controller
    public function generateIdeas(Request $request): JsonResponse
     {
         $isAuthenticated = Auth::check();
-        $user = Auth::user(); // Defined here for consistent access
-        $fingerprint = request()->fingerprint();
-        Log::info('Fingerprint from request()->fingerprint(): ' . $fingerprint);
+        $user = Auth::user();
+        $fingerprint = $request->header('X-Browser-Fingerprint');
+
+        Log::info('Fingerprint from $request->header("X-Browser-Fingerprint"): ' . $fingerprint);
         Log::info('Is Authenticated: ' . ($isAuthenticated ? 'true' : 'false'));
         if ($isAuthenticated) {
             Log::info('Authenticated User ID: ' . $user->id);
         }
-
-
         // Credit check
         if ($isAuthenticated) {
             if ($user->credits <= 0) {
@@ -241,7 +240,7 @@ class ScriptController extends Controller
     {
         $isAuthenticated = Auth::check();
         $user = Auth::user();
-        $fingerprint = request()->fingerprint();
+        $fingerprint = $request->header('X-Browser-Fingerprint');
 
         // Credit check
         if ($isAuthenticated) {
@@ -303,7 +302,7 @@ class ScriptController extends Controller
     {
         $isAuthenticated = Auth::check();
         $user = Auth::user();
-        $fingerprint = request()->fingerprint();
+        $fingerprint = $request->header('X-Browser-Fingerprint');
 
         // Credit check
         if ($isAuthenticated) {
