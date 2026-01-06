@@ -111,7 +111,6 @@ export function AppSidebar() {
                                         </SidebarMenuButton>
                                     </CollapsibleTrigger>
 
-                                    {/* 2. Add Button: Clicking the Plus navigates to the URL */}
                                     <TooltipProvider delayDuration={0}>
                                         <Tooltip>
                                             <TooltipTrigger asChild>
@@ -128,13 +127,9 @@ export function AppSidebar() {
                                                     </Link>
                                                 </SidebarMenuAction>
                                             </TooltipTrigger>
-                                            <TooltipContent side="top">
-                                                Add New
-                                            </TooltipContent>
                                         </Tooltip>
                                     </TooltipProvider>
 
-                                    {/* 3. Sub-Items */}
                                     {hasItems && (
                                         <CollapsibleContent>
                                             <SidebarMenuSub>
@@ -170,7 +165,6 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
-                {/* <NavFooter items={footerNavItems} className="mt-auto" /> */}
                 <NavUser />
             </SidebarFooter>
         </Sidebar>
