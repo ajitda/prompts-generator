@@ -19,24 +19,36 @@ class ScriptController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request) // Inject Request to get fingerprint
     {
-        $scripts = Auth::check()
-            ? Script::where('user_id', Auth::id())
-            ->latest()
-            ->paginate(10)
+        $isAuthenticated = Auth::check();
+        $fingerprint = $request->fingerprint(); // Get the current fingerprint
+
+        $scriptsQuery = Script::latest();
+
+        if ($isAuthenticated) {
+            $user = Auth::user(); // Ensure $user is defined when authenticated
+            $scriptsQuery->where(function ($query) use ($user, $fingerprint) {
+                $query->where('user_id', $user->id)
+                      ->orWhere('fingerprint', $fingerprint);
+            });
+        } else {
+            // For non-authenticated users, only show scripts matching their current fingerprint
+            $scriptsQuery->where('fingerprint', $fingerprint);
+        }
+
+        $scripts = $scriptsQuery->paginate(10)
             ->withQueryString()
             ->through(fn($s) => [
                 'id' => $s->id,
                 'keyword' => $s->keyword,
                 'prompt' => $s->script,
                 'created_at' => $s->created_at->format('d M Y'),
-            ])
-            : null;
+            ]);
 
         return Inertia::render('scripts/index', [
             'scripts' => $scripts,
-            'isAuthenticated' => Auth::check(),
+            'isAuthenticated' => $isAuthenticated,
         ]);
     }
 

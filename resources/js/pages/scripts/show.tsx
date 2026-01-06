@@ -32,7 +32,6 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 const IdeaCardContainer = ({script}: {script: any}) => {
-    console.log("Script idea data:", script.idea);
     const ideas = script.idea ?? [];
     return <>{ideas.map((idea: any, index: number) => (
                             <IdeaCard
@@ -66,7 +65,7 @@ export default function Show({ script }: Props) {
                         script={scriptContent}
                         tone={tone}
                         onBack={() => window.history.back()}
-                        onRegenerate={() => {                        
+                        onRegenerate={() => {
                             console.log("Regenerate requested");
                         }}
                         onStartOver={() => router.get(scriptsIndex().url)}
