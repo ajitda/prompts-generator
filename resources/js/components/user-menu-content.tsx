@@ -11,6 +11,7 @@ import { edit } from '@/routes/profile';
 import { type User } from '@/types';
 import { Link, router } from '@inertiajs/react';
 import { LogOut, Settings } from 'lucide-react';
+import { Badge } from './ui/badge';
 
 interface UserMenuContentProps {
     user: User;
@@ -30,9 +31,9 @@ export function UserMenuContent({ user }: UserMenuContentProps) {
                 <div className="flex flex-col gap-1 px-2 py-2">
                     <div className="flex items-center justify-between px-1 py-1 text-sm text-muted-foreground">
                         <span>Credits remaining</span>
-                        <span className="font-medium text-foreground">
+                        <Badge variant="outline" className="font-semibold text-red-500">
                             {user.credits}
-                        </span>
+                        </Badge>
                     </div>
                     <DropdownMenuSeparator className="my-1" />
                     <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
