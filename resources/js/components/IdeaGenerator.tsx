@@ -176,7 +176,7 @@ const IdeaGenerator = ({
             {/* INPUT */}
             {step === 'input' && !isLoading && (
                 <div className="mb-8 rounded-2xl border bg-card p-6 shadow-card">
-                    <div className="flex gap-4">
+                    <div className="flex flex-col items-center gap-4 md:flex-row md:justify-between">
                         <Input
                             value={keyword}
                             onChange={(e) => setKeyword(e.target.value)}
