@@ -104,7 +104,6 @@ PROMPT;
             $firstBracket = strpos($rawResponse, '{');
             $lastBracket = strrpos($rawResponse, '}');
             if ($firstBracket === false || $lastBracket === false) {
-                Log::error("AI Service returned no JSON: " . substr($rawResponse, 0, 100));
                 throw new Exception('AI response format invalid');
             }
             $rawResponse = substr($rawResponse, $firstBracket, $lastBracket - $firstBracket + 1);
@@ -135,7 +134,7 @@ PROMPT;
 
             } catch (Exception $e) {
                 Log::warning("AI_FALLBACK: {$providerName} failed ({$method}). Error: " . $e->getMessage());
-                continue; // Move to the next provider in the array
+                continue;
             }
         }
 

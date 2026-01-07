@@ -155,12 +155,6 @@ class ScriptController extends Controller
         $isAuthenticated = Auth::check();
         $user = Auth::user();
         $fingerprint = $request->header('X-Browser-Fingerprint');
-
-        Log::info('Fingerprint from $request->header("X-Browser-Fingerprint"): ' . $fingerprint);
-        Log::info('Is Authenticated: ' . ($isAuthenticated ? 'true' : 'false'));
-        if ($isAuthenticated) {
-            Log::info('Authenticated User ID: ' . $user->id);
-        }
         // Credit check
         if ($isAuthenticated) {
             if ($user->credits <= 0) {
