@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Head, Link } from '@inertiajs/react';
-import { ArrowLeft, Calendar, Sparkles } from 'lucide-react';
+import { Calendar, Sparkles } from 'lucide-react';
 
 interface PublicPost {
     title: string;
@@ -12,7 +12,7 @@ interface PublicPost {
 export default function ShowPublic({ post }: { post: PublicPost }) {
     return (
         <div className="min-h-screen bg-background">
-            <Head title={`${post.title} - AI Video Idea Generator`} />
+            <Head title={`${post.title} - Video Idea Generator`} />
 
             {/* Header - Matching Home */}
             <header className="sticky top-0 z-50 border-b border-border/50 bg-card/50 backdrop-blur-sm">
@@ -22,7 +22,7 @@ export default function ShowPublic({ post }: { post: PublicPost }) {
                             <Sparkles className="text-primary-foreground h-4 w-4" />
                         </div>
                         <span className="text-lg font-bold">
-                            AI Video Idea Generator
+                            Video Idea Generator
                         </span>
                     </div>
                     <nav className="hidden items-center gap-6 text-sm md:flex">
@@ -48,13 +48,13 @@ export default function ShowPublic({ post }: { post: PublicPost }) {
             </header>
 
             <main className="container mx-auto max-w-4xl px-4 py-16">
-                <Link
+                {/* <Link
                     href="/blogs"
                     className="hover:text-primary mb-8 inline-flex items-center text-sm font-medium text-muted-foreground transition-colors"
                 >
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     Back to all blogs
-                </Link>
+                </Link> */}
 
                 <article>
                     <header className="mb-10">
@@ -62,7 +62,7 @@ export default function ShowPublic({ post }: { post: PublicPost }) {
                             <Calendar className="h-4 w-4" />
                             {post.created_at}
                         </div>
-                        <h1 className="mb-8 text-4xl font-extrabold tracking-tight md:text-5xl lg:text-6xl">
+                        <h1 className="mb-8 text-2xl leading-relaxed font-extrabold tracking-wide md:text-3xl lg:text-4xl">
                             {post.title}
                         </h1>
                         {post.image_url && (
@@ -78,7 +78,7 @@ export default function ShowPublic({ post }: { post: PublicPost }) {
                     </header>
 
                     <div
-                        className="prose prose-lg dark:prose-invert prose-headings:font-bold prose-a:text-primary prose-img:rounded-xl max-w-none"
+                        className="prose prose-lg dark:prose-invert prose-headings:font-bold prose-a:text-primary prose-img:rounded-xl max-w-none leading-loose"
                         dangerouslySetInnerHTML={{ __html: post.content }}
                     />
                 </article>
@@ -114,7 +114,7 @@ export default function ShowPublic({ post }: { post: PublicPost }) {
                                 <Sparkles className="text-primary-foreground h-3 w-3" />
                             </div>
                             <span className="text-sm font-semibold">
-                                AI Video Idea Generator
+                                Video Idea Generator
                             </span>
                         </div>
                         <p className="text-center text-sm text-muted-foreground">

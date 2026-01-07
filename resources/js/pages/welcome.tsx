@@ -17,7 +17,7 @@ export default function Welcome() {
                 />
                 <meta
                     name="keywords"
-                    content="AI Video Idea Generator, AI video script generator, YouTube scripts, AI productivity"
+                    content="Video Idea Generator, AI video script generator, YouTube scripts, AI productivity"
                 />
                 <link rel="canonical" href="/" />
             </Head>
@@ -41,7 +41,7 @@ export default function Welcome() {
                         {/* Video Idea Generator */}
                         {/* <Card className="hover:shadow-lg transition">
                             <CardHeader>
-                                <CardTitle>AI Video Idea Generator</CardTitle>
+                                <CardTitle>Video Idea Generator</CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <p className="text-gray-600 dark:text-gray-300">

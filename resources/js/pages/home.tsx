@@ -14,7 +14,7 @@ function home() {
                             <Sparkles className="text-primary-foreground h-4 w-4" />
                         </div>
                         <span className="text-lg font-bold">
-                            AI Video Idea Generator
+                            Video Idea Generator
                         </span>
                     </div>
                     <nav className="hidden items-center gap-6 text-sm md:flex">
@@ -207,7 +207,7 @@ function home() {
                                 <Sparkles className="text-primary-foreground h-3 w-3" />
                             </div>
                             <span className="text-sm font-semibold">
-                                AI Video Idea Generator
+                                Video Idea Generator
                             </span>
                         </div>
                         <p className="text-sm text-muted-foreground">

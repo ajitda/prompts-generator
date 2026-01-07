@@ -21,7 +21,7 @@ interface Props {
 export default function IndexPublic({ posts }: Props) {
     return (
         <div className="min-h-screen bg-background">
-            <Head title="Blog - AI Video Idea Generator" />
+            <Head title="Blog - Video Idea Generator" />
 
             {/* Header - Matching Home */}
             <header className="sticky top-0 z-50 border-b border-border/50 bg-card/50 backdrop-blur-sm">
@@ -31,7 +31,7 @@ export default function IndexPublic({ posts }: Props) {
                             <Sparkles className="text-primary-foreground h-4 w-4" />
                         </div>
                         <span className="text-lg font-bold">
-                            AI Video Idea Generator
+                            Video Idea Generator
                         </span>
                     </div>
                     <nav className="hidden items-center gap-6 text-sm md:flex">
@@ -142,7 +142,7 @@ export default function IndexPublic({ posts }: Props) {
                                 <Sparkles className="text-primary-foreground h-3 w-3" />
                             </div>
                             <span className="text-sm font-semibold">
-                                AI Video Idea Generator
+                                Video Idea Generator
                             </span>
                         </div>
                         <p className="text-center text-sm text-muted-foreground">

@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import {
     Dialog,
     DialogContent,
+    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
@@ -13,11 +14,16 @@ import postsRoutes from '@/routes/posts';
 import { BreadcrumbItem, PageProps, Post } from '@/types';
 import { useForm } from '@inertiajs/react';
 import { Editor } from '@tinymce/tinymce-react';
+import { Edit2, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Manage Posts',
+        title: 'Dashboard',
+        href: '/dashboard',
+    },
+    {
+        title: 'Blog Management',
         href: postsRoutes.index().url,
     },
 ];
@@ -81,160 +87,291 @@ export default function Index({ posts }: PageProps<{ posts: Post[] }>) {
     };
 
     const handleDelete = (id: number) => {
-        if (confirm('Are you sure?')) {
+        if (
+            confirm(
+                'Are you sure you want to delete this post? This action cannot be undone.',
+            )
+        ) {
             destroy(postsRoutes.destroy(id).url);
         }
     };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <div className="p-6">
-                <div className="mb-6 flex items-center justify-between">
-                    <h1 className="text-2xl font-bold">Manage Posts</h1>
-                    <Button onClick={openCreate}>Add New Post</Button>
+            <div className="animate-reveal space-y-8">
+                <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+                    <div>
+                        <h1 className="text-3xl font-black tracking-tight text-foreground">
+                            Blog Management
+                        </h1>
+                        <p className="mt-1 font-medium text-muted-foreground">
+                            Create and manage your articles for the community.
+                        </p>
+                    </div>
+                    <Button
+                        onClick={openCreate}
+                        className="group h-11 rounded-xl bg-indigo-600 px-6 text-white shadow-lg transition-all hover:opacity-90"
+                    >
+                        <Plus className="mr-2 h-4 w-4 transition-transform group-hover:rotate-90" />
+                        Create New Article
+                    </Button>
                 </div>
 
                 {/* Data Table */}
-                <div className="rounded-lg border">
+                <div className="shadow-elegant overflow-hidden rounded-2xl border border-border/40 bg-card/50 backdrop-blur-sm">
                     <table className="w-full text-sm">
-                        <thead className="border-b bg-muted/50">
+                        <thead className="border-b border-border/40 bg-muted/30">
                             <tr>
-                                <th className="p-4 text-left">Title</th>
-                                <th className="p-4 text-right">Actions</th>
+                                <th className="p-4 text-left text-[11px] font-bold tracking-wider text-muted-foreground uppercase">
+                                    Article Title
+                                </th>
+                                <th className="w-40 p-4 text-right text-[11px] font-bold tracking-wider text-muted-foreground uppercase">
+                                    Actions
+                                </th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y">
-                            {posts.map((p) => (
-                                <tr key={p.id}>
-                                    <td className="p-4">{p.title}</td>
-                                    <td className="space-x-2 p-4 text-right">
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={() => openEdit(p)}
-                                        >
-                                            Edit
-                                        </Button>
-                                        <Button
-                                            variant="destructive"
-                                            size="sm"
-                                            onClick={() => handleDelete(p.id)}
-                                        >
-                                            Delete
-                                        </Button>
+                        <tbody className="divide-y divide-border/40 font-medium">
+                            {posts.length > 0 ? (
+                                posts.map((p) => (
+                                    <tr
+                                        key={p.id}
+                                        className="group transition-colors hover:bg-muted/30"
+                                    >
+                                        <td className="p-4">
+                                            <div className="flex flex-col">
+                                                <span className="group-hover:text-primary text-sm font-bold text-foreground transition-colors">
+                                                    {p.title}
+                                                </span>
+                                                {/* <span className="text-xs text-muted-foreground mt-0.5">Last updated: {new Date(p.updated_at).toLocaleDateString()}</span> */}
+                                            </div>
+                                        </td>
+                                        <td className="p-4 text-right">
+                                            <div className="flex items-center justify-end gap-2">
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    className="hover:text-primary h-8 w-8 rounded-lg text-muted-foreground transition-colors"
+                                                    onClick={() => openEdit(p)}
+                                                >
+                                                    <Edit2 className="h-4 w-4" />
+                                                </Button>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    className="h-8 w-8 rounded-lg text-destructive/60 transition-colors hover:bg-destructive/10 hover:text-destructive"
+                                                    onClick={() =>
+                                                        handleDelete(p.id)
+                                                    }
+                                                >
+                                                    <Trash2 className="h-4 w-4" />
+                                                </Button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td
+                                        colSpan={2}
+                                        className="p-12 text-center text-muted-foreground italic"
+                                    >
+                                        No articles found. Start by creating
+                                        your first post!
                                     </td>
                                 </tr>
-                            ))}
+                            )}
                         </tbody>
                     </table>
                 </div>
 
                 {/* Single Modal for Create & Update */}
                 <Dialog open={isOpen} onOpenChange={setIsOpen}>
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>
-                                {editingPost ? 'Edit Post' : 'Create Post'}
+                    <DialogContent className="overflow-hidden rounded-[32px] border-border/40 p-0 sm:max-w-[700px]">
+                        <DialogHeader className="border-b border-border/10 bg-muted/10 p-6 pb-2">
+                            <DialogTitle className="text-2xl font-black">
+                                {editingPost
+                                    ? 'Edit Article'
+                                    : 'Compose New Article'}
                             </DialogTitle>
+                            <DialogDescription>
+                                {editingPost
+                                    ? 'Refine your article content and updates.'
+                                    : 'Draft a new blog post for your audience.'}
+                            </DialogDescription>
                         </DialogHeader>
-                        <form onSubmit={submit} className="space-y-4">
-                            <div className="grid gap-2">
-                                <Label htmlFor="title">Title</Label>
+                        <form
+                            onSubmit={submit}
+                            className="max-h-[85vh] space-y-6 overflow-y-auto p-6 pt-4"
+                        >
+                            <div className="group space-y-2">
+                                <Label
+                                    htmlFor="title"
+                                    className="px-1 text-xs font-black tracking-widest text-muted-foreground uppercase"
+                                >
+                                    Title
+                                </Label>
                                 <Input
                                     id="title"
+                                    placeholder="Enter a catchy title..."
+                                    className="focus:ring-primary/20 h-12 rounded-xl border-border/40 bg-muted/20"
                                     value={data.title}
                                     onChange={(e) =>
                                         setData('title', e.target.value)
                                     }
                                 />
                                 {errors.title && (
-                                    <p className="text-xs text-red-500">
+                                    <p className="px-1 text-xs font-bold text-destructive">
                                         {errors.title}
                                     </p>
                                 )}
                             </div>
-                            <div className="grid gap-2">
-                                <Label htmlFor="content">Content</Label>
-                                <Editor
-                                    tinymceScriptSrc="/build/tinymce/tinymce.min.js"
-                                    onEditorChange={(newValue) =>
-                                        setData('content', newValue)
-                                    }
-                                    value={data.content}
-                                    licenseKey="gpl"
-                                    init={{
-                                        height: 300,
-                                        menubar: true,
-                                        base_url: '/build/tinymce',
-                                        suffix: '.min',
-                                        plugins: [
-                                            'advlist',
-                                            'autolink',
-                                            'lists',
-                                            'link',
-                                            'image',
-                                            'charmap',
-                                            'anchor',
-                                            'searchreplace',
-                                            'visualblocks',
-                                            'code',
-                                            'fullscreen',
-                                            'insertdatetime',
-                                            'media',
-                                            'table',
-                                            'preview',
-                                            'help',
-                                            'wordcount',
-                                        ],
-                                        toolbar:
-                                            'undo redo | blocks | bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
-                                        content_style:
-                                            'body { font-family:Inter,Arial,sans-serif; font-size:14px }',
-                                    }}
-                                />
+
+                            <div className="space-y-2">
+                                <Label
+                                    htmlFor="content"
+                                    className="px-1 text-xs font-black tracking-widest text-muted-foreground uppercase"
+                                >
+                                    Content
+                                </Label>
+                                <div className="overflow-hidden rounded-xl border border-border/40">
+                                    <Editor
+                                        key={editingPost?.id || 'new'}
+                                        onEditorChange={(newValue) =>
+                                            setData('content', newValue)
+                                        }
+                                        value={data.content}
+                                        licenseKey="gpl"
+                                        init={{
+                                            height: 400,
+                                            menubar: true,
+                                            base_url: '/tinymce',
+                                            suffix: '.min',
+                                            plugins: [
+                                                'advlist',
+                                                'autolink',
+                                                'lists',
+                                                'link',
+                                                'image',
+                                                'charmap',
+                                                'anchor',
+                                                'searchreplace',
+                                                'visualblocks',
+                                                'code',
+                                                'fullscreen',
+                                                'insertdatetime',
+                                                'media',
+                                                'table',
+                                                'preview',
+                                                'help',
+                                                'wordcount',
+                                            ],
+                                            toolbar:
+                                                'undo redo | blocks | bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+                                            content_style:
+                                                'body { font-family:Inter,Arial,sans-serif; font-size:14px; background-color: #fcfdfe; }',
+                                            skin: 'oxide',
+                                        }}
+                                    />
+                                </div>
                                 {errors.content && (
-                                    <p className="text-xs text-red-500">
+                                    <p className="px-1 text-xs font-bold text-destructive">
                                         {errors.content}
                                     </p>
                                 )}
                             </div>
-                            <div className="grid gap-2">
-                                <Label htmlFor="image">Featured Image</Label>
-                                <Input
-                                    id="image"
-                                    type="file"
-                                    onChange={(e) =>
-                                        setData(
-                                            'image',
-                                            e.target.files
-                                                ? e.target.files[0]
-                                                : null,
-                                        )
-                                    }
-                                />
-                                {editingPost?.image_original_name &&
-                                    !data.image && (
-                                        <p className="text-xs text-muted-foreground italic">
-                                            Current file:{' '}
-                                            {editingPost.image_original_name}
-                                        </p>
+
+                            <div className="space-y-6">
+                                <Label
+                                    htmlFor="image"
+                                    className="px-1 text-xs font-black tracking-widest text-muted-foreground uppercase"
+                                >
+                                    Featured Image
+                                </Label>
+
+                                <div className="space-y-4">
+                                    {(data.image || editingPost?.image) && (
+                                        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-border/40 bg-muted/20">
+                                            <img
+                                                src={
+                                                    data.image
+                                                        ? URL.createObjectURL(
+                                                              data.image,
+                                                          )
+                                                        : editingPost?.image
+                                                }
+                                                alt="Preview"
+                                                className="h-full w-full object-cover"
+                                            />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                                            <div className="absolute bottom-3 left-4">
+                                                <p className="mb-0.5 text-[10px] font-black tracking-[0.2em] text-white/80 uppercase">
+                                                    Preview Mode
+                                                </p>
+                                                <p className="max-w-[250px] truncate text-sm font-bold text-white">
+                                                    {data.image
+                                                        ? data.image.name
+                                                        : editingPost?.image_original_name ||
+                                                          'Current Asset'}
+                                                </p>
+                                            </div>
+                                        </div>
                                     )}
+
+                                    <div className="hover:border-primary/40 group relative flex flex-col gap-4 overflow-hidden rounded-[2rem] border border-dashed border-border/60 bg-muted/5 p-8 transition-all hover:bg-muted/10">
+                                        <div className="bg-primary/5 absolute inset-0 opacity-0 transition-opacity group-hover:opacity-100" />
+                                        <div className="relative flex flex-col items-center justify-center space-y-2 text-center">
+                                            <div className="bg-primary/10 text-primary mb-1 rounded-full p-3 transition-transform group-hover:scale-110">
+                                                <Plus className="h-6 w-6" />
+                                            </div>
+                                            <p className="text-sm font-bold text-foreground">
+                                                Click to upload or drag & drop
+                                            </p>
+                                            <p className="text-[11px] font-medium text-muted-foreground">
+                                                PNG, JPG or WEBP up to 2MB
+                                            </p>
+                                        </div>
+                                        <Input
+                                            id="image"
+                                            type="file"
+                                            className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                                            onChange={(e) =>
+                                                setData(
+                                                    'image',
+                                                    e.target.files
+                                                        ? e.target.files[0]
+                                                        : null,
+                                                )
+                                            }
+                                        />
+                                    </div>
+                                </div>
+
                                 {errors.image && (
-                                    <p className="text-xs text-red-500">
+                                    <p className="px-1 text-xs font-bold text-destructive">
                                         {errors.image}
                                     </p>
                                 )}
                             </div>
-                            <DialogFooter>
+
+                            <DialogFooter className="border-t border-border/10 pt-6">
                                 <Button
                                     type="button"
                                     variant="ghost"
+                                    className="h-12 rounded-xl px-8 text-[11px] font-black tracking-widest uppercase"
                                     onClick={closeModal}
                                 >
                                     Cancel
                                 </Button>
-                                <Button type="submit" disabled={processing}>
-                                    Save Changes
+                                <Button
+                                    type="submit"
+                                    className="h-12 rounded-xl bg-indigo-600 px-10 text-[11px] font-black tracking-widest text-white uppercase transition-all hover:scale-[1.02]"
+                                    disabled={processing}
+                                >
+                                    {processing
+                                        ? 'Processing...'
+                                        : editingPost
+                                          ? 'Update Article'
+                                          : 'Publish Article'}
                                 </Button>
                             </DialogFooter>
                         </form>
