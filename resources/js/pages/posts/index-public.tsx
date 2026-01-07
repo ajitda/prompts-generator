@@ -26,14 +26,14 @@ export default function IndexPublic({ posts }: Props) {
             {/* Header - Matching Home */}
             <header className="sticky top-0 z-50 border-b border-border/50 bg-card/50 backdrop-blur-sm">
                 <div className="container mx-auto flex h-16 items-center justify-between px-4">
-                    <div className="flex items-center gap-2">
+                    <Link href="/" className="flex items-center gap-2">
                         <div className="bg-gradient-hero flex h-8 w-8 items-center justify-center rounded-lg">
                             <Sparkles className="text-primary-foreground h-4 w-4" />
                         </div>
                         <span className="text-lg font-bold">
                             Video Idea Generator
                         </span>
-                    </div>
+                    </Link>
                     <nav className="hidden items-center gap-6 text-sm md:flex">
                         <Link
                             href="/"
@@ -59,10 +59,10 @@ export default function IndexPublic({ posts }: Props) {
             <main className="container mx-auto px-4 py-16">
                 {/* Hero Section */}
                 <div className="mb-20 text-center">
-                    <h1 className="mb-4 text-4xl font-extrabold tracking-tight md:text-6xl">
+                    <h1 className="mb-4 text-2xl font-extrabold tracking-tight md:text-4xl">
                         Our <span className="text-gradient">Blog</span>
                     </h1>
-                    <p className="mx-auto max-w-2xl text-xl text-muted-foreground">
+                    <p className="mx-auto max-w-2xl text-sm text-muted-foreground md:text-xl">
                         Stay ahead of the competition with the latest tips,
                         tricks, and insights on AI-driven content creation and
                         YouTube growth.

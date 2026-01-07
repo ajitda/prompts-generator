@@ -17,14 +17,14 @@ export default function ShowPublic({ post }: { post: PublicPost }) {
             {/* Header - Matching Home */}
             <header className="sticky top-0 z-50 border-b border-border/50 bg-card/50 backdrop-blur-sm">
                 <div className="container mx-auto flex h-16 items-center justify-between px-4">
-                    <div className="flex items-center gap-2">
+                    <Link href="/" className="flex items-center gap-2">
                         <div className="bg-gradient-hero flex h-8 w-8 items-center justify-center rounded-lg">
                             <Sparkles className="text-primary-foreground h-4 w-4" />
                         </div>
                         <span className="text-lg font-bold">
                             Video Idea Generator
                         </span>
-                    </div>
+                    </Link>
                     <nav className="hidden items-center gap-6 text-sm md:flex">
                         <Link
                             href="/"
