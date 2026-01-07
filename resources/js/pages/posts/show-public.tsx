@@ -1,7 +1,8 @@
 import { Button } from '@/components/ui/button';
+import PublicLayout from '@/layouts/public-layout';
 import { Head, Link } from '@inertiajs/react';
 import { Calendar, Sparkles } from 'lucide-react';
-import Logo from '/public/images/logo.png';
+
 interface PublicPost {
     title: string;
     content: string;
@@ -11,46 +12,10 @@ interface PublicPost {
 
 export default function ShowPublic({ post }: { post: PublicPost }) {
     return (
-        <div className="min-h-screen bg-background">
+        <PublicLayout>
             <Head title={`${post.title} - Video Idea Generator`} />
 
-            {/* Header - Matching Home */}
-            <header className="sticky top-0 z-50 border-b border-border/50 bg-card/50 backdrop-blur-sm">
-                <div className="container mx-auto flex h-16 items-center justify-between px-4">
-                    <Link href="/" className="flex items-center gap-2">
-                        <img src={Logo} alt="" width="150" />
-                    </Link>
-                    <nav className="hidden items-center gap-6 text-sm md:flex">
-                        <Link
-                            href="/"
-                            className="text-muted-foreground transition-colors hover:text-foreground"
-                        >
-                            Home
-                        </Link>
-                        <Link
-                            href="/blogs"
-                            className="text-muted-foreground transition-colors hover:text-foreground"
-                        >
-                            Blogs
-                        </Link>
-                    </nav>
-                    <Link href="/youtube">
-                        <Button variant="default" size="sm">
-                            Get Started
-                        </Button>
-                    </Link>
-                </div>
-            </header>
-
             <main className="container mx-auto max-w-4xl px-4 py-16">
-                {/* <Link
-                    href="/blogs"
-                    className="hover:text-primary mb-8 inline-flex items-center text-sm font-medium text-muted-foreground transition-colors"
-                >
-                    <ArrowLeft className="mr-2 h-4 w-4" />
-                    Back to all blogs
-                </Link> */}
-
                 <article>
                     <header className="mb-10">
                         <div className="mb-4 flex items-center gap-2 text-sm font-medium text-muted-foreground">
@@ -99,36 +64,6 @@ export default function ShowPublic({ post }: { post: PublicPost }) {
                     </div>
                 </div>
             </main>
-
-            {/* Footer - Matching Home */}
-            <footer className="mt-20 border-t border-border/50">
-                <div className="container mx-auto px-4 py-8">
-                    <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-                        <div className="flex items-center gap-2">
-                            <Link href="/" className="flex items-center gap-2">
-                                <img src={Logo} alt="" width="150" />
-                            </Link>
-                        </div>
-                        <p className="text-center text-sm text-muted-foreground">
-                            Helping creators publish with clarity since 2025
-                        </p>
-                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                            <a
-                                href="#"
-                                className="transition-colors hover:text-foreground"
-                            >
-                                Privacy
-                            </a>
-                            <a
-                                href="#"
-                                className="transition-colors hover:text-foreground"
-                            >
-                                Terms
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </footer>
-        </div>
+        </PublicLayout>
     );
 }

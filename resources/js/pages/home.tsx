@@ -2,45 +2,12 @@ import { Lightbulb, Sparkles, Target, TrendingUp, Zap } from 'lucide-react';
 
 import Hero from '@/components/Hero';
 import { Button } from '@/components/ui/button';
+import PublicLayout from '@/layouts/public-layout';
 import { Link } from '@inertiajs/react';
-import Logo from '/public/images/logo.png';
+
 function home() {
     return (
-        <div className="min-h-screen bg-background">
-            {/* Header */}
-            <header className="sticky top-0 z-50 border-b border-border/50 bg-card/50 backdrop-blur-sm">
-                <div className="container mx-auto flex h-16 items-center justify-between px-4">
-                    <Link href="/" className="flex items-center gap-2">
-                        <img src={Logo} alt="" width="150" />
-                    </Link>
-                    <nav className="hidden items-center gap-6 text-sm md:flex">
-                        <a
-                            href="#features"
-                            className="text-muted-foreground transition-colors hover:text-foreground"
-                        >
-                            Features
-                        </a>
-                        <a
-                            href="#how-it-works"
-                            className="text-muted-foreground transition-colors hover:text-foreground"
-                        >
-                            How it works
-                        </a>
-                        <Link
-                            href="/blogs"
-                            className="text-muted-foreground transition-colors hover:text-foreground"
-                        >
-                            Blogs
-                        </Link>
-                    </nav>
-                    <Link href="/youtube">
-                        <Button variant="default" size="sm">
-                            Get Started
-                        </Button>
-                    </Link>
-                </div>
-            </header>
-
+        <PublicLayout>
             {/* Hero Section */}
             <main className="container mx-auto px-4 py-16 md:py-24">
                 <Hero />
@@ -193,35 +160,7 @@ function home() {
                     </div>
                 </section>
             </main>
-
-            {/* Footer */}
-            <footer className="mt-20 border-t border-border/50">
-                <div className="container mx-auto px-4 py-8">
-                    <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-                        <Link href="/" className="flex items-center gap-2">
-                            <img src={Logo} alt="" width="150" />
-                        </Link>
-                        <p className="text-sm text-muted-foreground">
-                            Helping creators publish with clarity since 2025
-                        </p>
-                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                            <a
-                                href="#"
-                                className="transition-colors hover:text-foreground"
-                            >
-                                Privacy
-                            </a>
-                            <a
-                                href="#"
-                                className="transition-colors hover:text-foreground"
-                            >
-                                Terms
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </footer>
-        </div>
+        </PublicLayout>
     );
 }
 
