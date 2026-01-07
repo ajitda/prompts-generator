@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button';
 import postsRoutes from '@/routes/posts';
 import { Head, Link } from '@inertiajs/react';
-import { ArrowRight, BookOpen, Calendar, Sparkles } from 'lucide-react';
-
+import { ArrowRight, BookOpen, Calendar } from 'lucide-react';
+import Logo from '/public/images/logo.png';
 interface PostSummary {
     id: number;
     title: string;
@@ -27,12 +27,7 @@ export default function IndexPublic({ posts }: Props) {
             <header className="sticky top-0 z-50 border-b border-border/50 bg-card/50 backdrop-blur-sm">
                 <div className="container mx-auto flex h-16 items-center justify-between px-4">
                     <Link href="/" className="flex items-center gap-2">
-                        <div className="bg-gradient-hero flex h-8 w-8 items-center justify-center rounded-lg">
-                            <Sparkles className="text-primary-foreground h-4 w-4" />
-                        </div>
-                        <span className="text-lg font-bold">
-                            Video Idea Generator
-                        </span>
+                        <img src={Logo} alt="" width="150" />
                     </Link>
                     <nav className="hidden items-center gap-6 text-sm md:flex">
                         <Link
@@ -138,12 +133,9 @@ export default function IndexPublic({ posts }: Props) {
                 <div className="container mx-auto px-4 py-8">
                     <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
                         <div className="flex items-center gap-2">
-                            <div className="bg-gradient-hero flex h-6 w-6 items-center justify-center rounded-md">
-                                <Sparkles className="text-primary-foreground h-3 w-3" />
-                            </div>
-                            <span className="text-sm font-semibold">
-                                Video Idea Generator
-                            </span>
+                            <Link href="/" className="flex items-center gap-2">
+                                <img src={Logo} alt="" width="150" />
+                            </Link>
                         </div>
                         <p className="text-center text-sm text-muted-foreground">
                             Helping creators publish with clarity since 2025
