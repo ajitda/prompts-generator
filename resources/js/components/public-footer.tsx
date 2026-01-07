@@ -4,7 +4,7 @@ import Logo from '/public/images/logo.png';
 export default function PublicFooter() {
     return (
         <footer className="mt-20 border-t border-border/50">
-            <div className="container mx-auto px-4 py-8">
+            <div className="container mx-auto px-4 py-6">
                 <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
                     <Link href="/" className="flex items-center gap-2">
                         <img src={Logo} alt="" width="150" />
