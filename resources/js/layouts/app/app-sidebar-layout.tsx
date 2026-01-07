@@ -10,19 +10,14 @@ export default function AppSidebarLayout({
     children,
     breadcrumbs = [],
 }: PropsWithChildren<{ breadcrumbs?: BreadcrumbItem[] }>) {
-    
     const { auth } = usePage<SharedData>().props;
-    
+
     return (
         <AppShell variant="sidebar">
-            {auth?.user &&
-                <AppSidebar />
-            }
+            <AppSidebar />
             <AppContent variant="sidebar" className="overflow-x-hidden">
-                {auth?.user &&
-                    <AppSidebarHeader breadcrumbs={breadcrumbs} />
-                }
-                {children}
+                <AppSidebarHeader breadcrumbs={breadcrumbs} />
+                <div className="p-4 pt-10">{children}</div>
             </AppContent>
         </AppShell>
     );

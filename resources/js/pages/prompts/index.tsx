@@ -3,21 +3,15 @@ import {
     // destroy as productsDestroy,
     // edit as productsEdit,
     index as promptsIndex,
-    show as promptsShow
 } from '@/actions/App/Http/Controllers/PromptController';
-import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 // import { ExportImportButtons } from '@/components/ui/export-import-buttons';
 // import { ImportPreviewModal } from '@/components/ui/import-preview-modal';
-import { Input } from '@/components/ui/input';
 // import { Pagination } from '@/components/ui/pagination';
 // import { PriceFilter } from '@/components/ui/price-filter';
-import { SortableHeader } from '@/components/ui/sortable-header';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem, SortField, SortProps } from '@/types';
-import { Head, Link, router, usePage } from '@inertiajs/react';
-import { Eye, MoreHorizontal, Pencil, Trash, X } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { Head, router, usePage } from '@inertiajs/react';
+import { useCallback, useState } from 'react';
 import PromptForm from './prompt-form';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -45,42 +39,48 @@ export default function Index() {
 
     // const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    const fetchData = useCallback((
-        overrideParams: Partial<{
-            // search: string;
-            // min_price: string;
-            // max_price: string;
-            sort: SortField;
-            direction: 'asc' | 'desc';
-            // per_page: number;
-        }> = {}
-    ) => {
+    const fetchData = useCallback(
+        (
+            overrideParams: Partial<{
+                // search: string;
+                // min_price: string;
+                // max_price: string;
+                sort: SortField;
+                direction: 'asc' | 'desc';
+                // per_page: number;
+            }> = {},
+        ) => {
+            const params = {
+                // search: localSearch,
+                // min_price: localMinPrice,
+                // max_price: localMaxPrice,
+                sort: sortConfig.field,
+                direction: sortConfig.direction,
+                // per_page: products?.per_page || 2,
+                ...overrideParams,
+            };
 
-        const params = {
-            // search: localSearch,
-            // min_price: localMinPrice,
-            // max_price: localMaxPrice,
-            sort: sortConfig.field,
-            direction: sortConfig.direction,
-            // per_page: products?.per_page || 2,
-            ...overrideParams,
-        };
-
-        const queryParams: Record<string, any> = {};
-        Object.keys(params).forEach((key) => {
-            // @ts-ignore
-            if (params[key] !== '' && params[key] !== undefined && params[key] !== null) {
+            const queryParams: Record<string, any> = {};
+            Object.keys(params).forEach((key) => {
                 // @ts-ignore
-                queryParams[key] = params[key];
-            }
-        });
+                if (
+                    params[key] !== '' &&
+                    params[key] !== undefined &&
+                    params[key] !== null
+                ) {
+                    // @ts-ignore
+                    queryParams[key] = params[key];
+                }
+            });
 
-        router.get(promptsIndex().url, {
-            preserveScroll: true,
-            preserveState: true,
-            replace: true,
-        });
-    }, [sortConfig]);
+            router.get(promptsIndex().url, {
+                preserveScroll: true,
+                preserveState: true,
+                replace: true,
+            });
+        },
+        [sortConfig],
+    );
 
     // const [importErrors, setImportErrors] = useState<any[]>([]);
     // const [showImportPreview, setShowImportPreview] = useState(false);
@@ -143,8 +143,7 @@ export default function Index() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="AI Prompts Generator" />
-            <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-lg-xl p-8">
-
+            <div className="rounded-lg-xl flex h-full flex-1 flex-col gap-4 overflow-x-auto p-8">
                 <PromptForm />
 
                 {/* Filters Toolbar */}
@@ -158,13 +157,13 @@ export default function Index() {
                         name='search'
                         className='w-full md:w-1/3'
                     /> */}
-                    {/* <PriceFilter
+                {/* <PriceFilter
                         min_price={localMinPrice}
                         max_price={localMaxPrice}
                         onPriceChange={handlePriceChange}
                     /> */}
 
-                    {/* {(localSearch || localMinPrice || localMaxPrice) && (
+                {/* {(localSearch || localMinPrice || localMaxPrice) && (
                         <Button
                             variant="destructive"
                             className='cursor-pointer'
@@ -174,10 +173,10 @@ export default function Index() {
                         </Button>
                     )} */}
 
-                    {/* <div className='ml-auto'>
+                {/* <div className='ml-auto'>
                         <Link
                             className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors"
-                            href='/ai-video-generator'
+                            href='/video-idea-generator'
                             // href={promptsCreate().url}
                         >
                             Add Prompt
@@ -186,7 +185,7 @@ export default function Index() {
                 {/* </div> */}
 
                 {/* <div className='ml-auto flex items-center gap-2'> */}
-                    {/* <ExportImportButtons filters={filters} /> */}
+                {/* <ExportImportButtons filters={filters} /> */}
                 {/* </div> */}
 
                 {/* Table */}
@@ -236,7 +235,7 @@ export default function Index() {
                                                             <Pencil className="mr-2 h-4 w-4" /> Edit
                                                         </Link>
                                                     </DropdownMenuItem> */}
-                                                    {/* <DropdownMenuItem
+                {/* <DropdownMenuItem
                                                         className="text-red-600 focus:text-red-600 cursor-pointer"
                                                         onClick={() => {
                                                             if (confirm('Are you sure you want to delete this product?')) {
@@ -246,9 +245,9 @@ export default function Index() {
                                                             }
                                                         }}
                                                     > */}
-                                                        {/* <Trash className="mr-2 h-4 w-4" /> Delete */}
-                                                    {/* </DropdownMenuItem> */}
-                                                {/* </DropdownMenuContent>
+                {/* <Trash className="mr-2 h-4 w-4" /> Delete */}
+                {/* </DropdownMenuItem> */}
+                {/* </DropdownMenuContent>
                                             </DropdownMenu>
                                         </td>
                                     </tr>

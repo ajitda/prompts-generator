@@ -80,12 +80,11 @@ class ScriptController extends Controller
      */
     public function show(Script $script)
     {
-        if ($script->user_id !== Auth::id()) {
-            abort(403);
-        }
+        $isAuthenticated = Auth::check();
 
         return Inertia::render('scripts/show', [
-            'script' => $script
+            'script' => $script,
+            'isAuthenticated' => $isAuthenticated,
         ]);
     }
 

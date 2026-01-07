@@ -31,7 +31,7 @@ function home() {
                             How it works
                         </a>
                     </nav>
-                    <Link href="/ai-video-generator">
+                    <Link href="/video-idea-generator">
                         <Button variant="default" size="sm">
                             Get Started
                         </Button>
@@ -45,7 +45,7 @@ function home() {
 
                 {/* CTA Buttons */}
                 <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-                    <Link href="/ai-video-generator/scripts">
+                    <Link href="video-idea-generator">
                         <Button
                             variant="hero"
                             size="lg"
@@ -178,7 +178,7 @@ function home() {
                     </div>
 
                     <div className="mt-12 text-center">
-                        <Link href="/ai-video-generator">
+                        <Link href="/video-idea-generator">
                             <Button
                                 variant="hero"
                                 size="lg"
