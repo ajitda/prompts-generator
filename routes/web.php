@@ -17,10 +17,10 @@ Route::get('/', function () {
 Route::post('/scripts/story', [ScriptController::class, 'generateStory'])->name('scripts.generateStory');
 Route::post('/scripts/final', [ScriptController::class, 'generateScript'])->name('scripts.generateScript');
 
-Route::get('/all-blogs/{post:slug}', [PostController::class, 'showPublic'])
+Route::get('/blogs/{post:slug}', [PostController::class, 'showPublic'])
     ->name('posts.showPublic');
 
-Route::get('/all-blogs', [PostController::class, 'indexPublic'])
+Route::get('/blogs', [PostController::class, 'indexPublic'])
     ->name('posts.indexPublic');
 
 Route::post('/prompts/generate', [PromptController::class, 'generate'])->name('prompts.generate');

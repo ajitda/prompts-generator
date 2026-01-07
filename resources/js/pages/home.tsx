@@ -30,6 +30,12 @@ function home() {
                         >
                             How it works
                         </a>
+                        <Link
+                            href="/blogs"
+                            className="text-muted-foreground transition-colors hover:text-foreground"
+                        >
+                            Blogs
+                        </Link>
                     </nav>
                     <Link href="/video-idea-generator">
                         <Button variant="default" size="sm">

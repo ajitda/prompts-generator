@@ -77,7 +77,12 @@ export function AppSidebar() {
                   }
                 : null,
         },
-    ];
+    ].filter((group) => {
+        if (group.title === 'Blog') {
+            return isPostAdmin;
+        }
+        return true;
+    });
 
     return (
         <Sidebar collapsible="icon" variant="inset">
