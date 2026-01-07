@@ -14,7 +14,9 @@ use Inertia\Inertia;
 
 class ScriptController extends Controller
 {
-    public function __construct(protected AIService $aiService) {}
+    public function __construct(protected AIService $aiService)
+    {
+    }
 
     /**
      * Display a listing of the resource.
@@ -30,12 +32,15 @@ class ScriptController extends Controller
             $user = Auth::user(); // Ensure $user is defined when authenticated
             $scriptsQuery->where(function ($query) use ($user, $fingerprint) {
                 $query->where('user_id', $user->id)
-                      ->orWhere('fingerprint', $fingerprint);
+                    ->orWhere('fingerprint', $fingerprint);
             });
         } else {
             // For non-authenticated users, only show scripts matching their current fingerprint
             $scriptsQuery->where('fingerprint', $fingerprint);
         }
+
+        $guestCredits = session('guest_credits', 5);
+        $userCredits = $isAuthenticated ? Auth::user()->credits : 0;
 
         $scripts = $scriptsQuery->paginate(10)
             ->withQueryString()
@@ -49,6 +54,8 @@ class ScriptController extends Controller
         return Inertia::render('scripts/index', [
             'scripts' => $scripts,
             'isAuthenticated' => $isAuthenticated,
+            'initialGuestCredits' => $isAuthenticated ? null : $guestCredits,
+            'userCredits' => $isAuthenticated ? $userCredits : null,
         ]);
     }
 
@@ -143,7 +150,7 @@ class ScriptController extends Controller
     /**
      * STEP 2 – Generate ideas from keyword
      */
-   public function generateIdeas(Request $request): JsonResponse
+    public function generateIdeas(Request $request): JsonResponse
     {
         $isAuthenticated = Auth::check();
         $user = Auth::user();
@@ -194,7 +201,7 @@ class ScriptController extends Controller
                 'user_id' => $isAuthenticated ? $user->id : null,
                 'fingerprint' => $fingerprint, // Always store fingerprint, regardless of authentication
                 'keyword' => $validated['keyword'],
-                'idea'    => $decodedIdeas,
+                'idea' => $decodedIdeas,
             ]);
 
             // credit deduction here, before return
@@ -205,9 +212,9 @@ class ScriptController extends Controller
             }
 
             return response()->json([
-                'success'   => true,
+                'success' => true,
                 'script_id' => $script->id,
-                'ideas'     => $decodedIdeas,
+                'ideas' => $decodedIdeas,
             ]);
         } catch (\JsonException $e) {
             Log::error('JSON decode failed', [

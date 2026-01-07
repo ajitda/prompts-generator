@@ -5,6 +5,7 @@ use App\Http\Controllers\ScriptController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () { // Changed path from '/ai-video-generator' to '/'
     return Inertia::render('home', [ // Changed component from 'welcome' to 'home'
@@ -13,18 +14,6 @@ Route::get('/', function () { // Changed path from '/ai-video-generator' to '/'
 })->name('home');
 
 Route::get('/ai-video-generator', function () {
-    return Inertia::render('welcome', [
-        'canRegister' => Features::enabled(Features::registration()),
-    ]);
-})->name('welcome');
-
-Route::post('/prompts/generate', [PromptController::class, 'generate'])->name('prompts.generate');
-
-Route::post('/scripts/ideas', [ScriptController::class, 'generateIdeas'])->name('scripts.generateIdeas');
-Route::post('/scripts/story', [ScriptController::class, 'generateStory'])->name('scripts.generateStory');
-Route::post('/scripts/final', [ScriptController::class, 'generateScript'])->name('scripts.generateScript');
-
-Route::get('/scripts/create', function () {
     $guestCredits = session('guest_credits', 5);
     $isAuthenticated = Auth::check();
     $userCredits = $isAuthenticated ? Auth::user()->credits : 0;
@@ -34,8 +23,16 @@ Route::get('/scripts/create', function () {
         'isAuthenticated' => $isAuthenticated,
         'userCredits' => $isAuthenticated ? $userCredits : null,
     ]);
-})->name('scripts.create.guest');
+})->name('script-generator');
 
+Route::post('/prompts/generate', [PromptController::class, 'generate'])->name('prompts.generate');
+
+Route::post('/scripts/ideas', [ScriptController::class, 'generateIdeas'])->name('scripts.generateIdeas');
+Route::post('/scripts/story', [ScriptController::class, 'generateStory'])->name('scripts.generateStory');
+Route::post('/scripts/final', [ScriptController::class, 'generateScript'])->name('scripts.generateScript');
+
+
+Route::get('ai-video-generator/scripts', [ScriptController::class, 'index'])->name('scripts.index');
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/ai-video-generator/dashboard', function () {
@@ -48,7 +45,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('ai-video-generator/scripts', ScriptController::class)
         ->names('scripts')
-        ->parameters(['scripts' => 'script']);
+        ->parameters(['scripts' => 'script'])
+        ->except(['index']);
 
     Route::get('/user/credits', [ScriptController::class, 'getCredits'])->name('user.credits');
 });
