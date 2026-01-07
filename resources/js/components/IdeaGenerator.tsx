@@ -1,7 +1,7 @@
 import { StorySection } from '@/types';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
-import { router } from '@inertiajs/react';
-import { Sparkles } from 'lucide-react';
+import { Link, router } from '@inertiajs/react';
+import { ArrowLeft, RotateCcw, Sparkles } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import IdeaCard from './IdeaCard';
@@ -200,9 +200,31 @@ const IdeaGenerator = ({
                 </div>
             )}
             {!isAuthenticated && step === 'input' && !isLoading && (
-                <p className="mt-[-20px] mb-8 text-center text-sm text-muted-foreground">
-                    You have {currentCredits} free generations left.
-                </p>
+                <div className="mt-[-20px] mb-8 text-center">
+                    <p className="text-sm text-muted-foreground">
+                        You have {currentCredits} free generations left.
+                    </p>
+                    <p className="mt-1 text-sm font-bold">
+                        Please{' '}
+                        <Link
+                            href="/login"
+                            className="text-primary hover:underline"
+                        >
+                            Login
+                        </Link>
+                        <span className="mx-1 text-muted-foreground">/</span>
+                        <Link
+                            href="/register"
+                            className="text-primary hover:underline"
+                        >
+                            Signup
+                        </Link>
+                        <span className="text-muted-foreground">
+                            {' '}
+                            for 10 more credit
+                        </span>
+                    </p>
+                </div>
             )}
 
             {isLoading && (
@@ -220,14 +242,45 @@ const IdeaGenerator = ({
             {/* IDEAS */}
             {step === 'ideas' && hasGenerated && !isLoading && (
                 <div className="space-y-6">
-                    {ideas.map((idea, index) => (
-                        <IdeaCard
-                            key={index}
-                            idea={idea}
-                            index={index}
-                            onSelect={() => handleSelectIdea(idea)}
-                        />
-                    ))}
+                    <div className="mb-8 text-start">
+                        <h2 className="text-2xl font-black tracking-tight">
+                            Your Generated Ideas for{' '}
+                            <span className="text-gradient">"{keyword}"</span>
+                        </h2>
+                    </div>
+
+                    <div className="grid gap-6">
+                        {ideas.map((idea, index) => (
+                            <IdeaCard
+                                key={index}
+                                idea={idea}
+                                index={index}
+                                onSelect={() => handleSelectIdea(idea)}
+                            />
+                        ))}
+                    </div>
+
+                    <div className="mt-12 flex flex-col items-center justify-center gap-4 border-t border-border/10 pt-8 md:flex-row">
+                        <Button
+                            variant="outline"
+                            size="lg"
+                            className="h-14 w-full rounded-2xl border-border/40 px-8 text-[11px] font-black tracking-widest uppercase transition-all hover:bg-muted/50 md:w-auto"
+                            onClick={() => setStep('input')}
+                        >
+                            <ArrowLeft className="mr-3 h-4 w-4" />
+                            Change Topic
+                        </Button>
+                        <Button
+                            variant="default"
+                            size="lg"
+                            className="h-14 w-full rounded-2xl bg-indigo-600 px-10 text-[11px] font-black tracking-widest text-white uppercase shadow-xl shadow-indigo-500/20 transition-all hover:scale-[1.02] hover:opacity-90 md:w-auto"
+                            onClick={handleGenerateIdeas}
+                            disabled={currentCredits <= 0}
+                        >
+                            <RotateCcw className="mr-3 h-4 w-4" />
+                            Regenerate Ideas
+                        </Button>
+                    </div>
                 </div>
             )}
 
