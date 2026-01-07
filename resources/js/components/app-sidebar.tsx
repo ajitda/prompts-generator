@@ -48,6 +48,8 @@ import { Tooltip, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 
 export function AppSidebar() {
     const { props } = usePage<any>();
+    const { auth } = props;
+    const isPostAdmin = auth.user?.role === 'admin';
 
     const { menu_data = { prompts: [], scripts: [] } } = props;
     const dynamicGroups = [
@@ -68,6 +70,12 @@ export function AppSidebar() {
             title: 'Blog',
             href: postsRoutes.indexPublic().url,
             icon: BookOpen,
+            action: isPostAdmin
+                ? {
+                      icon: Plus,
+                      href: postsRoutes.index().url,
+                  }
+                : null,
         },
     ];
 
@@ -156,6 +164,13 @@ export function AppSidebar() {
                                         <span>{group.title}</span>
                                     </Link>
                                 </SidebarMenuButton>
+                                {group.action && (
+                                    <SidebarMenuAction asChild>
+                                        <Link href={group.action.href}>
+                                            <group.action.icon />
+                                        </Link>
+                                    </SidebarMenuAction>
+                                )}
                             </SidebarMenuItem>
                         );
                     })}
