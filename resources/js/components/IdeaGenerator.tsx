@@ -188,6 +188,7 @@ const IdeaGenerator = ({
                         />
                         <Button
                             size="xl"
+                            variant="hero"
                             onClick={handleGenerateIdeas}
                             disabled={
                                 !keyword || currentCredits <= 0 || !fingerprint
