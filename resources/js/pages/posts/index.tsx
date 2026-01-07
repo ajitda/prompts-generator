@@ -156,7 +156,7 @@ export default function Index({ posts }: PageProps<{ posts: Post[] }>) {
                             <div className="grid gap-2">
                                 <Label htmlFor="content">Content</Label>
                                 <Editor
-                                    tinymceScriptSrc="/build/tinymce/tinymce.min.js"
+                                    tinymceScriptSrc="/tinymce/tinymce.min.js"
                                     onEditorChange={(newValue) =>
                                         setData('content', newValue)
                                     }
@@ -165,7 +165,7 @@ export default function Index({ posts }: PageProps<{ posts: Post[] }>) {
                                     init={{
                                         height: 300,
                                         menubar: true,
-                                        base_url: '/build/tinymce',
+                                        base_url: '/tinymce',
                                         suffix: '.min',
                                         plugins: [
                                             'advlist',
