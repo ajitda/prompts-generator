@@ -39,7 +39,7 @@ export default function ShowPublic({ post }: { post: PublicPost }) {
                             Blogs
                         </Link>
                     </nav>
-                    <Link href="/video-idea-generator">
+                    <Link href="/youtube">
                         <Button variant="default" size="sm">
                             Get Started
                         </Button>
@@ -92,7 +92,7 @@ export default function ShowPublic({ post }: { post: PublicPost }) {
                             Join thousands of creators using our AI to generate
                             high-performing video ideas and scripts.
                         </p>
-                        <Link href="/video-idea-generator">
+                        <Link href="/youtube">
                             <Button
                                 size="lg"
                                 className="bg-primary text-primary-foreground"

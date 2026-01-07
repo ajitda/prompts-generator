@@ -56,14 +56,14 @@ export function AppSidebar() {
         // {
         //     title: 'AI Prompts',
         //     icon: LayoutGrid,
-        //     baseHref: '/video-idea-generator/prompts',
+        //     baseHref: '/youtube/prompts',
         //     items: props?.prompts?.data,
         //     // items: menu_data.prompts,
         // },
         {
             title: 'AI Video Idea',
             icon: Video,
-            baseHref: '/video-idea-generator',
+            baseHref: '/youtube',
             items: menu_data?.scripts,
         },
         {

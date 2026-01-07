@@ -48,7 +48,7 @@ export default function IndexPublic({ posts }: Props) {
                             Blogs
                         </Link>
                     </nav>
-                    <Link href="/video-idea-generator">
+                    <Link href="/youtube">
                         <Button variant="default" size="sm">
                             Get Started
                         </Button>
