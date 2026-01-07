@@ -23,7 +23,7 @@ Route::post('/scripts/final', [ScriptController::class, 'generateScript'])->name
 
 
 Route::get('video-idea-generator', [ScriptController::class, 'index'])->name('scripts.index');
-Route::get('video-idea-generator/{script}', [ScriptController::class, 'show'])->name('scripts.show');
+Route::get('video-idea-generator/{script}', [ScriptController::class, 'show'])->name('scripts.show')->whereNumber('script');
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/video-idea-generator/dashboard', function () {

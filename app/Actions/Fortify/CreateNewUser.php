@@ -42,11 +42,12 @@ class CreateNewUser implements CreatesNewUsers
         ]);
 
         // Sync guest data
-        $fingerprint = $request->header('X-Browser-Fingerprint');
+        $fingerprint = $request->cookie('browser_fingerprint') ?? $request->header('X-Browser-Fingerprint');
 
         if ($fingerprint) {
             Script::where('fingerprint', $fingerprint)
-                ->update(['user_id' => $user->id, 'fingerprint' => null]);
+                ->whereNull('user_id')
+                ->update(['user_id' => $user->id]);
 
             // Optionally, clear the guest credits from the session
             Session::forget('guest_credits');

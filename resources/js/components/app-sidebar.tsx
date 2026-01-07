@@ -48,7 +48,6 @@ export function AppSidebar() {
     const { props } = usePage<any>();
 
     const { menu_data = { prompts: [], scripts: [] } } = props;
-
     const dynamicGroups = [
         // {
         //     title: 'AI Prompts',
@@ -61,8 +60,7 @@ export function AppSidebar() {
             title: 'AI Video Idea',
             icon: Video,
             baseHref: '/video-idea-generator',
-            items: props?.scripts?.data,
-            // items: menu_data.scripts,
+            items: menu_data?.scripts,
         },
     ];
 
@@ -84,7 +82,6 @@ export function AppSidebar() {
                 <SidebarMenu>
                     {dynamicGroups.map((group) => {
                         const hasItems = group.items?.length > 0;
-
                         return (
                             <Collapsible
                                 key={group.title}
@@ -93,7 +90,6 @@ export function AppSidebar() {
                                 className="group/collapsible"
                             >
                                 <SidebarMenuItem>
-                                    {/* 1. Main Toggle: Clicking the Text toggles the menu */}
                                     <CollapsibleTrigger asChild>
                                         <SidebarMenuButton
                                             tooltip={group.title}

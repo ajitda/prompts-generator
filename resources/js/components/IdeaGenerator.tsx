@@ -1,5 +1,6 @@
 import { StorySection } from '@/types';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import { router } from '@inertiajs/react';
 import { Sparkles } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -40,6 +41,8 @@ const IdeaGenerator = ({
                 const fp = await FingerprintJS.load();
                 const result = await fp.get();
                 setFingerprint(result.visitorId);
+                // Set cookie for server-side access (sidebar, initial props)
+                document.cookie = `browser_fingerprint=${result.visitorId}; path=/; max-age=31536000`;
             } catch (error) {
                 console.error('Error loading FingerprintJS:', error);
             }
@@ -92,6 +95,9 @@ const IdeaGenerator = ({
             setIdeas(data.ideas);
             setScriptId(data.script_id);
             setStep('ideas');
+
+            // Reload sidebar menu
+            router.reload({ only: ['menu_data'] });
         } catch (err: any) {
             toast.error(err.message);
         } finally {

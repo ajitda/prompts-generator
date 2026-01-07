@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 
 class ScriptController extends Controller
@@ -208,6 +209,13 @@ class ScriptController extends Controller
                 $user->decrement('credits');
             } else {
                 session(['guest_credits' => $guestCredits - 1]);
+            }
+
+            // Invalidate cache
+            if ($isAuthenticated) {
+                Cache::forget("sidebar_menu_user_{$user->id}");
+            } else {
+                Cache::forget("sidebar_menu_guest_{$fingerprint}");
             }
 
             return response()->json([

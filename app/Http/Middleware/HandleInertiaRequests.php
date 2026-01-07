@@ -3,9 +3,11 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Foundation\Inspiring;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Middleware;
+use App\Models\Script;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -55,6 +57,22 @@ class HandleInertiaRequests extends Middleware
                     'scripts' => $user->scripts()->latest()->limit(10)->get(['id', 'keyword']),
                 ];
             });
+        } else {
+            // Try to get fingerprint for guest
+            $fingerprint = $request->cookie('browser_fingerprint') ?? $request->header('X-Browser-Fingerprint');
+
+            if ($fingerprint) {
+                // For guests, we can't cache by user ID. 
+                // We could cache by fingerprint, but simpler to just query for now or short cache.
+                $cacheKey = "sidebar_menu_guest_{$fingerprint}";
+
+                $menuData['scripts'] = Cache::remember($cacheKey, now()->addMinutes(10), function () use ($fingerprint) {
+                    return Script::where('fingerprint', $fingerprint)
+                        ->latest()
+                        ->limit(10)
+                        ->get(['id', 'keyword']);
+                });
+            }
         }
 
         return [
@@ -69,7 +87,7 @@ class HandleInertiaRequests extends Middleware
                     'credits' => $request->user()->credits,
                 ] : null,
             ],
-            'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'sidebarOpen' => !$request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'session_data' => [
                 'savedKeyword' => $request->session()->get('last_keyword'),
                 'savedPrompt' => $request->session()->get('ai_response'),
