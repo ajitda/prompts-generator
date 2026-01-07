@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Http\Request;
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -20,6 +21,7 @@ class CreateNewUser implements CreatesNewUsers
      */
     public function create(array $input): User
     {
+        $request = app(Request::class); // Manually resolve Request instance
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
             'email' => [
@@ -40,11 +42,12 @@ class CreateNewUser implements CreatesNewUsers
         ]);
 
         // Sync guest data
-        $fingerprint = request()->fingerprint();
+        $fingerprint = $request->cookie('browser_fingerprint') ?? $request->header('X-Browser-Fingerprint');
 
         if ($fingerprint) {
             Script::where('fingerprint', $fingerprint)
-                ->update(['user_id' => $user->id, 'fingerprint' => null]);
+                ->whereNull('user_id')
+                ->update(['user_id' => $user->id]);
 
             // Optionally, clear the guest credits from the session
             Session::forget('guest_credits');

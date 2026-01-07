@@ -1,6 +1,8 @@
 import { StorySection } from '@/types';
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import { router } from '@inertiajs/react';
 import { Sparkles } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import IdeaCard from './IdeaCard';
 import LoadingState from './LoadingState';
@@ -16,7 +18,37 @@ interface Idea {
     Hook_Script: string;
     Difficulty: string;
 }
-const IdeaGenerator = () => {
+
+interface IdeaGeneratorProps {
+    initialGuestCredits?: number | null;
+    isAuthenticated?: boolean;
+    userCredits?: number | null;
+}
+
+const IdeaGenerator = ({
+    initialGuestCredits,
+    isAuthenticated,
+    userCredits,
+}: IdeaGeneratorProps) => {
+    const currentCredits = isAuthenticated
+        ? (userCredits ?? 0)
+        : (initialGuestCredits ?? 0);
+    const [fingerprint, setFingerprint] = useState<string | null>(null);
+
+    useEffect(() => {
+        const loadFingerprint = async () => {
+            try {
+                const fp = await FingerprintJS.load();
+                const result = await fp.get();
+                setFingerprint(result.visitorId);
+                // Set cookie for server-side access (sidebar, initial props)
+                document.cookie = `browser_fingerprint=${result.visitorId}; path=/; max-age=31536000`;
+            } catch (error) {
+                console.error('Error loading FingerprintJS:', error);
+            }
+        };
+        loadFingerprint();
+    }, []);
     const [step, setStep] = useState<AppStep>('input');
     const [keyword, setKeyword] = useState('');
     const [ideas, setIdeas] = useState<Idea[]>([]);
@@ -34,12 +66,17 @@ const IdeaGenerator = () => {
             document
                 .querySelector('meta[name="csrf-token"]')
                 ?.getAttribute('content') || '',
+        ...(fingerprint && { 'X-Browser-Fingerprint': fingerprint }),
     };
 
     /* ---------------- IDEAS ---------------- */
 
     const handleGenerateIdeas = async () => {
         if (!keyword.trim()) return;
+        if (currentCredits <= 0) {
+            toast.error('You have no generations left.');
+            return;
+        }
 
         setIsLoading(true);
         setHasGenerated(true);
@@ -58,7 +95,10 @@ const IdeaGenerator = () => {
             setIdeas(data.ideas);
             setScriptId(data.script_id);
             setStep('ideas');
-        } catch (err:any) {
+
+            // Reload sidebar menu
+            router.reload({ only: ['menu_data'] });
+        } catch (err: any) {
             toast.error(err.message);
         } finally {
             setIsLoading(false);
@@ -149,13 +189,20 @@ const IdeaGenerator = () => {
                         <Button
                             size="xl"
                             onClick={handleGenerateIdeas}
-                            disabled={!keyword}
+                            disabled={
+                                !keyword || currentCredits <= 0 || !fingerprint
+                            }
                         >
                             <Sparkles className="h-5 w-5" />
                             Generate Ideas
                         </Button>
                     </div>
                 </div>
+            )}
+            {!isAuthenticated && step === 'input' && !isLoading && (
+                <p className="mt-[-20px] mb-8 text-center text-sm text-muted-foreground">
+                    You have {currentCredits} free generations left.
+                </p>
             )}
 
             {isLoading && (
@@ -178,7 +225,7 @@ const IdeaGenerator = () => {
                             key={index}
                             idea={idea}
                             index={index}
-                            // onSelect={() => handleSelectIdea(idea)}
+                            onSelect={() => handleSelectIdea(idea)}
                         />
                     ))}
                 </div>

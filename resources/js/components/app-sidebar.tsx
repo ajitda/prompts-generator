@@ -14,19 +14,14 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import { Link, usePage } from '@inertiajs/react';
-import { ChevronRight, LayoutGrid, Plus, Video } from 'lucide-react';
+import { ChevronRight, Plus, Video } from 'lucide-react';
 import AppLogo from './app-logo';
 import {
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger,
 } from './ui/collapsible';
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from './ui/tooltip';
+import { Tooltip, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 
 // const mainNavItems: NavItem[] = [
 // {
@@ -53,21 +48,19 @@ export function AppSidebar() {
     const { props } = usePage<any>();
 
     const { menu_data = { prompts: [], scripts: [] } } = props;
-
     const dynamicGroups = [
         // {
         //     title: 'AI Prompts',
         //     icon: LayoutGrid,
-        //     baseHref: '/ai-video-generator/prompts',
+        //     baseHref: '/video-idea-generator/prompts',
         //     items: props?.prompts?.data,
         //     // items: menu_data.prompts,
         // },
         {
             title: 'AI Video Idea',
             icon: Video,
-            baseHref: '/ai-video-generator/scripts',
-            items: props?.scripts?.data,
-            // items: menu_data.scripts,
+            baseHref: '/video-idea-generator',
+            items: menu_data?.scripts,
         },
     ];
 
@@ -89,7 +82,6 @@ export function AppSidebar() {
                 <SidebarMenu>
                     {dynamicGroups.map((group) => {
                         const hasItems = group.items?.length > 0;
-
                         return (
                             <Collapsible
                                 key={group.title}
@@ -98,15 +90,14 @@ export function AppSidebar() {
                                 className="group/collapsible"
                             >
                                 <SidebarMenuItem>
-                                    {/* 1. Main Toggle: Clicking the Text toggles the menu */}
                                     <CollapsibleTrigger asChild>
                                         <SidebarMenuButton
                                             tooltip={group.title}
                                         >
-                                            <group.icon className="w-4 h-4" />
+                                            <group.icon className="h-4 w-4" />
                                             <span>{group.title}</span>
                                             {hasItems && (
-                                                <ChevronRight className="ml-auto w-4 h-4 group-data-[state=open]/collapsible:rotate-90 transition-transform duration-200" />
+                                                <ChevronRight className="ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                                             )}
                                         </SidebarMenuButton>
                                     </CollapsibleTrigger>
@@ -123,7 +114,7 @@ export function AppSidebar() {
                                                     }
                                                 >
                                                     <Link href={group.baseHref}>
-                                                        <Plus className="mr-16 w-4 h-4" />
+                                                        <Plus className="mr-16 h-4 w-4" />
                                                     </Link>
                                                 </SidebarMenuAction>
                                             </TooltipTrigger>

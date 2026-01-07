@@ -52,7 +52,18 @@ export function NavUser() {
                                   : 'bottom'
                         }
                     >
-                        <UserMenuContent user={auth.user} />
+                        {auth.user ? (
+                            <UserMenuContent user={auth.user} />
+                        ) : (
+                            <div className="p-2">
+                                <SidebarMenuButton
+                                    asChild
+                                    className="w-full justify-start"
+                                >
+                                    <a href="/login">Sign in</a>
+                                </SidebarMenuButton>
+                            </div>
+                        )}
                     </DropdownMenuContent>
                 </DropdownMenu>
             </SidebarMenuItem>

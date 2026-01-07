@@ -3,15 +3,13 @@ import {
     // destroy as productsDestroy,
     // edit as productsEdit,
     index as scriptsIndex,
-    show as promptsShow
 } from '@/actions/App/Http/Controllers/ScriptController';
-import AppLayout from '@/layouts/app-layout';
-import { Head, router, usePage } from '@inertiajs/react';
-import { BreadcrumbItem, SortField, SortProps } from '@/types';
-import { useCallback, useState } from 'react';
-import { Sparkles } from 'lucide-react';
 import Hero from '@/components/Hero';
 import IdeaGenerator from '@/components/IdeaGenerator';
+import AppLayout from '@/layouts/app-layout';
+import { BreadcrumbItem, SortField, SortProps } from '@/types';
+import { Head, router, usePage } from '@inertiajs/react';
+import { useCallback, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -21,108 +19,124 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function VideoScripts() {
+    const { props } = usePage<any>();
 
-  const { props } = usePage<any>();
+    const {
+        scripts,
+        filters = {},
+        perPageOptions,
+        initialGuestCredits,
+        isAuthenticated,
+        userCredits,
+    } = props;
 
-      const { scripts, filters = {}, perPageOptions } = props;
+    // const currentPerPage = prompts?.per_page || 2;
 
-      // const currentPerPage = prompts?.per_page || 2;
+    // const [localSearch, setLocalSearch] = useState(filters.search || '');
+    // const [localMinPrice, setLocalMinPrice] = useState(filters.min_price || '');
+    // const [localMaxPrice, setLocalMaxPrice] = useState(filters.max_price || '');
 
-      // const [localSearch, setLocalSearch] = useState(filters.search || '');
-      // const [localMinPrice, setLocalMinPrice] = useState(filters.min_price || '');
-      // const [localMaxPrice, setLocalMaxPrice] = useState(filters.max_price || '');
+    const [sortConfig, setSortConfig] = useState<SortProps>({
+        field: filters?.sort as SortField,
+        direction: filters?.direction as SortProps['direction'],
+    });
 
-      const [sortConfig, setSortConfig] = useState<SortProps>({
-          field: filters?.sort as SortField,
-          direction: filters?.direction as SortProps['direction'],
-      });
+    // const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-      // const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const fetchData = useCallback(
+        (
+            overrideParams: Partial<{
+                // search: string;
+                // min_price: string;
+                // max_price: string;
+                sort: SortField;
+                direction: 'asc' | 'desc';
+                // per_page: number;
+            }> = {},
+        ) => {
+            const params = {
+                // search: localSearch,
+                // min_price: localMinPrice,
+                // max_price: localMaxPrice,
+                sort: sortConfig.field,
+                direction: sortConfig.direction,
+                // per_page: products?.per_page || 2,
+                ...overrideParams,
+            };
 
-      const fetchData = useCallback((
-          overrideParams: Partial<{
-              // search: string;
-              // min_price: string;
-              // max_price: string;
-              sort: SortField;
-              direction: 'asc' | 'desc';
-              // per_page: number;
-          }> = {}
-      ) => {
+            const queryParams: Record<string, any> = {};
+            Object.keys(params).forEach((key) => {
+                // @ts-ignore
+                if (
+                    params[key] !== '' &&
+                    params[key] !== undefined &&
+                    params[key] !== null
+                ) {
+                    // @ts-ignore
+                    queryParams[key] = params[key];
+                }
+            });
 
-          const params = {
-              // search: localSearch,
-              // min_price: localMinPrice,
-              // max_price: localMaxPrice,
-              sort: sortConfig.field,
-              direction: sortConfig.direction,
-              // per_page: products?.per_page || 2,
-              ...overrideParams,
-          };
+            router.get(scriptsIndex().url, {
+                preserveScroll: true,
+                preserveState: true,
+                replace: true,
+            });
+        },
+        [sortConfig],
+    );
 
-          const queryParams: Record<string, any> = {};
-          Object.keys(params).forEach((key) => {
-              // @ts-ignore
-              if (params[key] !== '' && params[key] !== undefined && params[key] !== null) {
-                  // @ts-ignore
-                  queryParams[key] = params[key];
-              }
-          });
+    // const [importErrors, setImportErrors] = useState<any[]>([]);
+    // const [showImportPreview, setShowImportPreview] = useState(false);
 
-          router.get(scriptsIndex().url, {
-              preserveScroll: true,
-              preserveState: true,
-              replace: true,
-          });
-      }, [sortConfig]);
+    // const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     const value = e.target.value;
+    //     setLocalSearch(value);
 
-      // const [importErrors, setImportErrors] = useState<any[]>([]);
-      // const [showImportPreview, setShowImportPreview] = useState(false);
+    //     if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
 
-      // const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      //     const value = e.target.value;
-      //     setLocalSearch(value);
+    //     searchTimeoutRef.current = setTimeout(() => {
+    //         fetchData({ search: value });
+    //     }, 500);
+    // };
 
-      //     if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
+    // const handlePriceChange = (min: string, max: string) => {
+    //     setLocalMinPrice(min);
+    //     setLocalMaxPrice(max);
+    //     fetchData({ min_price: min, max_price: max });
+    // };
 
-      //     searchTimeoutRef.current = setTimeout(() => {
-      //         fetchData({ search: value });
-      //     }, 500);
-      // };
+    const handleSort = (field: SortField) => {
+        let newDirection: SortProps['direction'] = 'asc';
+        if (sortConfig.field === field) {
+            newDirection = sortConfig.direction === 'asc' ? 'desc' : 'asc';
+        }
 
-      // const handlePriceChange = (min: string, max: string) => {
-      //     setLocalMinPrice(min);
-      //     setLocalMaxPrice(max);
-      //     fetchData({ min_price: min, max_price: max });
-      // };
+        const newSort = { field, direction: newDirection };
+        setSortConfig(newSort);
 
-      const handleSort = (field: SortField) => {
-          let newDirection: SortProps['direction'] = 'asc';
-          if (sortConfig.field === field) {
-              newDirection = sortConfig.direction === 'asc' ? 'desc' : 'asc';
-          }
+        fetchData({ sort: field, direction: newDirection });
+    };
 
-          const newSort = { field, direction: newDirection };
-          setSortConfig(newSort);
-
-          fetchData({ sort: field, direction: newDirection });
-      };
-
-  return (
-    <AppLayout breadcrumbs={breadcrumbs}>
-      <Head>
-        <title>AI Video Scripts Generator</title>
-        <meta
-          name="description"
-          content="Generate professional YouTube video scripts using AI. Keyword to script in minutes."
-        />
-      </Head>
-      <div className="min-h-screen bg-background">
-      <main className="container mx-auto px-4 py-12 md:py-20">
-        <Hero />
-        <IdeaGenerator/>
-      </main>
-    </div>
-    </AppLayout>
-  );
+    return (
+        <AppLayout breadcrumbs={breadcrumbs}>
+            <Head>
+                <title>AI Video Scripts Generator</title>
+                <meta
+                    name="description"
+                    content="Generate professional YouTube video scripts using AI. Keyword to script in minutes."
+                />
+            </Head>
+            <div className="min-h-screen bg-background">
+                <main className="container mx-auto px-4 py-12 md:py-20">
+                    <Hero />
+                    <IdeaGenerator
+                        initialGuestCredits={initialGuestCredits}
+                        isAuthenticated={isAuthenticated}
+                        userCredits={userCredits}
+                    />
+                </main>
+            </div>
+        </AppLayout>
+    );
 }

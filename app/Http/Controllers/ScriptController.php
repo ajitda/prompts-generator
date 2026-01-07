@@ -10,11 +10,14 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 
 class ScriptController extends Controller
 {
-    public function __construct(protected AIService $aiService) {}
+    public function __construct(protected AIService $aiService)
+    {
+    }
 
     /**
      * Display a listing of the resource.
@@ -22,7 +25,7 @@ class ScriptController extends Controller
     public function index(Request $request) // Inject Request to get fingerprint
     {
         $isAuthenticated = Auth::check();
-        $fingerprint = $request->fingerprint(); // Get the current fingerprint
+        $fingerprint = $request->header('X-Browser-Fingerprint'); // Use FingerprintJS ID
 
         $scriptsQuery = Script::latest();
 
@@ -30,12 +33,15 @@ class ScriptController extends Controller
             $user = Auth::user(); // Ensure $user is defined when authenticated
             $scriptsQuery->where(function ($query) use ($user, $fingerprint) {
                 $query->where('user_id', $user->id)
-                      ->orWhere('fingerprint', $fingerprint);
+                    ->orWhere('fingerprint', $fingerprint);
             });
         } else {
             // For non-authenticated users, only show scripts matching their current fingerprint
             $scriptsQuery->where('fingerprint', $fingerprint);
         }
+
+        $guestCredits = session('guest_credits', 5);
+        $userCredits = $isAuthenticated ? Auth::user()->credits : 0;
 
         $scripts = $scriptsQuery->paginate(10)
             ->withQueryString()
@@ -49,6 +55,8 @@ class ScriptController extends Controller
         return Inertia::render('scripts/index', [
             'scripts' => $scripts,
             'isAuthenticated' => $isAuthenticated,
+            'initialGuestCredits' => $isAuthenticated ? null : $guestCredits,
+            'userCredits' => $isAuthenticated ? $userCredits : null,
         ]);
     }
 
@@ -73,12 +81,11 @@ class ScriptController extends Controller
      */
     public function show(Script $script)
     {
-        if ($script->user_id !== Auth::id()) {
-            abort(403);
-        }
+        $isAuthenticated = Auth::check();
 
         return Inertia::render('scripts/show', [
-            'script' => $script
+            'script' => $script,
+            'isAuthenticated' => $isAuthenticated,
         ]);
     }
 
@@ -143,18 +150,17 @@ class ScriptController extends Controller
     /**
      * STEP 2 – Generate ideas from keyword
      */
-   public function generateIdeas(Request $request): JsonResponse
+    public function generateIdeas(Request $request): JsonResponse
     {
         $isAuthenticated = Auth::check();
-        $user = Auth::user(); // Defined here for consistent access
-        $fingerprint = request()->fingerprint();
-        Log::info('Fingerprint from request()->fingerprint(): ' . $fingerprint);
+        $user = Auth::user();
+        $fingerprint = $request->header('X-Browser-Fingerprint');
+
+        Log::info('Fingerprint from $request->header("X-Browser-Fingerprint"): ' . $fingerprint);
         Log::info('Is Authenticated: ' . ($isAuthenticated ? 'true' : 'false'));
         if ($isAuthenticated) {
             Log::info('Authenticated User ID: ' . $user->id);
         }
-
-
         // Credit check
         if ($isAuthenticated) {
             if ($user->credits <= 0) {
@@ -195,7 +201,7 @@ class ScriptController extends Controller
                 'user_id' => $isAuthenticated ? $user->id : null,
                 'fingerprint' => $fingerprint, // Always store fingerprint, regardless of authentication
                 'keyword' => $validated['keyword'],
-                'idea'    => $decodedIdeas,
+                'idea' => $decodedIdeas,
             ]);
 
             // credit deduction here, before return
@@ -205,10 +211,17 @@ class ScriptController extends Controller
                 session(['guest_credits' => $guestCredits - 1]);
             }
 
+            // Invalidate cache
+            if ($isAuthenticated) {
+                Cache::forget("sidebar_menu_user_{$user->id}");
+            } else {
+                Cache::forget("sidebar_menu_guest_{$fingerprint}");
+            }
+
             return response()->json([
-                'success'   => true,
+                'success' => true,
                 'script_id' => $script->id,
-                'ideas'     => $decodedIdeas,
+                'ideas' => $decodedIdeas,
             ]);
         } catch (\JsonException $e) {
             Log::error('JSON decode failed', [
@@ -241,7 +254,7 @@ class ScriptController extends Controller
     {
         $isAuthenticated = Auth::check();
         $user = Auth::user();
-        $fingerprint = request()->fingerprint();
+        $fingerprint = $request->header('X-Browser-Fingerprint');
 
         // Credit check
         if ($isAuthenticated) {
@@ -303,7 +316,7 @@ class ScriptController extends Controller
     {
         $isAuthenticated = Auth::check();
         $user = Auth::user();
-        $fingerprint = request()->fingerprint();
+        $fingerprint = $request->header('X-Browser-Fingerprint');
 
         // Credit check
         if ($isAuthenticated) {
