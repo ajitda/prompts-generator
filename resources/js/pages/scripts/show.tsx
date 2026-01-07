@@ -26,21 +26,25 @@ interface Props {
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'AI Video Scripts',
+        title: 'Youtube Video Idea Generator',
         href: scriptsIndex().url,
     },
 ];
 
-const IdeaCardContainer = ({script}: {script: any}) => {
+const IdeaCardContainer = ({ script }: { script: any }) => {
     const ideas = script.idea ?? [];
-    return <>{ideas.map((idea: any, index: number) => (
-                            <IdeaCard
-                                key={index}
-                                index={index}
-                                idea={idea}
-                                // onSelect={() => handleSelectIdea(idea)}
-                            />
-                        ))}</>;
+    return (
+        <>
+            {ideas.map((idea: any, index: number) => (
+                <IdeaCard
+                    key={index}
+                    index={index}
+                    idea={idea}
+                    // onSelect={() => handleSelectIdea(idea)}
+                />
+            ))}
+        </>
+    );
 };
 
 export default function Show({ script }: Props) {
@@ -52,10 +56,13 @@ export default function Show({ script }: Props) {
             <AppLayout breadcrumbs={breadcrumbs}>
                 <Head title={`Script - ${script.keyword}`} />
 
-                <div className="mx-auto sm:px-6 lg:px-8 py-12 max-w-5xl">
+                <div className="mx-auto max-w-5xl py-12 sm:px-6 lg:px-8">
                     <div className="space-y-6">
                         <h2 className="text-xl font-bold">
-                        Your Video Ideas for <span className="text-primary">"{script.keyword}"</span>
+                            Your Video Ideas for{' '}
+                            <span className="text-primary">
+                                "{script.keyword}"
+                            </span>
                         </h2>
                         <IdeaCardContainer script={script} />
                     </div>

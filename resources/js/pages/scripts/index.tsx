@@ -13,7 +13,7 @@ import { useCallback, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'AI Video Scripts',
+        title: 'Youtube Video Idea Generator',
         href: scriptsIndex().url,
     },
 ];
