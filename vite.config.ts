@@ -3,6 +3,7 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import laravel from 'laravel-vite-plugin';
 import { defineConfig } from 'vite';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 export default defineConfig({
     plugins: [
@@ -19,6 +20,14 @@ export default defineConfig({
         tailwindcss(),
         wayfinder({
             formVariants: true,
+        }),
+        viteStaticCopy({
+            targets: [
+                {
+                    src: 'node_modules/tinymce/*',
+                    dest: '../../public/tinymce',
+                },
+            ],
         }),
     ],
     esbuild: {

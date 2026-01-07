@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\PromptController;
 use App\Http\Controllers\ScriptController;
 use Illuminate\Support\Facades\Route;
@@ -7,13 +8,20 @@ use Inertia\Inertia;
 use Laravel\Fortify\Features;
 use Illuminate\Support\Facades\Auth;
 
-Route::get('/', function () { // Changed path from '/video-idea-generator' to '/'
-    return Inertia::render('home', [ // Changed component from 'welcome' to 'home'
+Route::get('/', function () {
+    return Inertia::render('home', [
         'canRegister' => Features::enabled(Features::registration()),
     ]);
 })->name('home');
 
+Route::post('/scripts/story', [ScriptController::class, 'generateStory'])->name('scripts.generateStory');
+Route::post('/scripts/final', [ScriptController::class, 'generateScript'])->name('scripts.generateScript');
 
+Route::get('/all-blogs/{post:slug}', [PostController::class, 'showPublic'])
+    ->name('posts.showPublic');
+
+Route::get('/all-blogs', [PostController::class, 'indexPublic'])
+    ->name('posts.indexPublic');
 
 Route::post('/prompts/generate', [PromptController::class, 'generate'])->name('prompts.generate');
 
@@ -40,6 +48,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->except(['index', 'show']);
 
     Route::get('/user/credits', [ScriptController::class, 'getCredits'])->name('user.credits');
+
+    Route::middleware('can:admin')->group(function () {
+        Route::resource('/prompts-generator/posts', PostController::class)
+            ->names('posts')
+            ->parameters(['posts' => 'post']);
+    });
+
 });
 
 require __DIR__ . '/settings.php';

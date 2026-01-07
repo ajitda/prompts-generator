@@ -79,7 +79,7 @@ export interface WelcomeProps {
     canRegister?: boolean;
     prompts?: { data: Prompt[] } | null;
     isAuthenticated?: boolean;
-};
+}
 
 type SortDirection = 'asc' | 'desc';
 type SortField = 'name' | 'description' | 'price' | 'created_at' | 'tag';
@@ -90,7 +90,21 @@ export interface SortProps {
 }
 
 export interface StorySection {
-  title: string;
-  content: string;
-  icon: string;
+    title: string;
+    content: string;
+    icon: string;
 }
+
+export interface Post {
+    id: number;
+    title: string;
+    content: string;
+    created_at: string;
+    updated_at: string;
+    image: string;
+    image_original_name: string;
+}
+
+export type PageProps<
+    T extends Record<string, unknown> = Record<string, unknown>,
+> = T & SharedData;
