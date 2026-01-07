@@ -1,6 +1,7 @@
+import Meta from '@/components/meta';
 import PublicLayout from '@/layouts/public-layout';
 import postsRoutes from '@/routes/posts';
-import { Head, Link } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import { ArrowRight, BookOpen, Calendar } from 'lucide-react';
 
 interface PostSummary {
@@ -21,7 +22,10 @@ interface Props {
 export default function IndexPublic({ posts }: Props) {
     return (
         <PublicLayout>
-            <Head title="Blog - Video Idea Generator" />
+            <Meta
+                title="Blog"
+                description="Insights, tips, and strategies for YouTube growth and AI-powered content creation."
+            />
 
             <main className="container mx-auto px-4 py-16">
                 {/* Hero Section */}

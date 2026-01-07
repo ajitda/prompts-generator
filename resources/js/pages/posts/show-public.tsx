@@ -1,6 +1,7 @@
+import Meta from '@/components/meta';
 import { Button } from '@/components/ui/button';
 import PublicLayout from '@/layouts/public-layout';
-import { Head, Link } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import { Calendar, Sparkles } from 'lucide-react';
 
 interface PublicPost {
@@ -11,9 +12,20 @@ interface PublicPost {
 }
 
 export default function ShowPublic({ post }: { post: PublicPost }) {
+    // Basic HTML stripping for description
+    const description = post.content
+        .replace(/<[^>]*>?/gm, '')
+        .substring(0, 160)
+        .trim();
+
     return (
         <PublicLayout>
-            <Head title={`${post.title} - Video Idea Generator`} />
+            <Meta
+                title={post.title}
+                description={description}
+                image={post.image_url || undefined}
+                type="article"
+            />
 
             <main className="container mx-auto max-w-4xl px-4 py-16">
                 <article>

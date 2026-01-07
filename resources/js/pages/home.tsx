@@ -1,6 +1,7 @@
 import { Lightbulb, Sparkles, Target, TrendingUp, Zap } from 'lucide-react';
 
 import Hero from '@/components/Hero';
+import Meta from '@/components/meta';
 import { Button } from '@/components/ui/button';
 import PublicLayout from '@/layouts/public-layout';
 import { Link } from '@inertiajs/react';
@@ -8,6 +9,10 @@ import { Link } from '@inertiajs/react';
 function home() {
     return (
         <PublicLayout>
+            <Meta
+                title="AI YouTube Video Idea Generator"
+                description="Beat creator's block with our AI YouTube strategist. Generate viral-worthy video ideas, high-CTR titles, and engaging scripts in seconds."
+            />
             {/* Hero Section */}
             <main className="container mx-auto px-4 py-16 md:py-24">
                 <Hero />
