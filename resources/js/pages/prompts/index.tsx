@@ -176,7 +176,7 @@ export default function Index() {
                 {/* <div className='ml-auto'>
                         <Link
                             className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors"
-                            href='/video-idea-generator'
+                            href='/youtube'
                             // href={promptsCreate().url}
                         >
                             Add Prompt

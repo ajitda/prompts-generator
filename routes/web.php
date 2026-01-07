@@ -30,19 +30,19 @@ Route::post('/scripts/story', [ScriptController::class, 'generateStory'])->name(
 Route::post('/scripts/final', [ScriptController::class, 'generateScript'])->name('scripts.generateScript');
 
 
-Route::get('video-idea-generator', [ScriptController::class, 'index'])->name('scripts.index');
-Route::get('video-idea-generator/{script}', [ScriptController::class, 'show'])->name('scripts.show')->whereNumber('script');
+Route::get('youtube', [ScriptController::class, 'index'])->name('scripts.index');
+Route::get('youtube/{script}', [ScriptController::class, 'show'])->name('scripts.show')->whereNumber('script');
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    Route::get('/video-idea-generator/dashboard', function () {
+    Route::get('/youtube/dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 
-    Route::resource('video-idea-generator/prompts', PromptController::class)
+    Route::resource('youtube/prompts', PromptController::class)
         ->names('prompts')
         ->parameters(['prompts' => 'prompt']);
 
-    Route::resource('video-idea-generator/scripts', ScriptController::class)
+    Route::resource('youtube/scripts', ScriptController::class)
         ->names('scripts')
         ->parameters(['scripts' => 'script'])
         ->except(['index', 'show']);

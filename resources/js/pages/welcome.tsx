@@ -56,7 +56,7 @@ export default function Welcome() {
                                 </ul>
 
                                 <Link
-                                    href="/video-idea-generator/prompts"
+                                    href="/youtube/prompts"
                                     className="inline-block mt-4 bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition"
                                 >
                                     Generate Prompts →
@@ -86,7 +86,7 @@ export default function Welcome() {
                                 </ul>
 
                                 <Link
-                                    href="video-idea-generator"
+                                    href="youtube"
                                     className="mt-4 inline-block rounded-lg bg-indigo-600 px-6 py-3 font-semibold text-white transition hover:bg-indigo-700"
                                 >
                                     Create Video Scripts →
