@@ -10,7 +10,7 @@ function home() {
     return (
         <PublicLayout>
             <Meta
-                title="AI YouTube Video Idea Generator"
+                title="Free Idea Generator Hub: YouTube, Business & Social"
                 description="Beat creator's block with our AI YouTube strategist. Generate viral-worthy video ideas, high-CTR titles, and engaging scripts in seconds."
             />
             {/* Hero Section */}

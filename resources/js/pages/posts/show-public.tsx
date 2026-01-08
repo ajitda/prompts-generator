@@ -1,3 +1,4 @@
+import Meta from '@/components/meta';
 import { Button } from '@/components/ui/button';
 import PublicLayout from '@/layouts/public-layout';
 import { Head, Link } from '@inertiajs/react';
@@ -32,6 +33,11 @@ export default function ShowPublic({ post }: { post: PublicPost }) {
                 )}
                 <meta name="type" content="article" />
             </Head>
+            <Meta
+                title={post.meta_title || post.title}
+                description={post.meta_description || description.slice(0, 160)}
+                image={post.image_url || ''}
+            />
             <main className="container mx-auto max-w-4xl px-4 py-16">
                 <article>
                     <header className="mb-10">
