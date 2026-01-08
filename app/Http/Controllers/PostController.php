@@ -59,6 +59,9 @@ class PostController extends Controller
             $file = $request->file('image');
             $validated['image'] = $file->store('posts', 'public');
             $validated['image_original_name'] = $file->getClientOriginalName();
+        } else {
+            // Remove image from validated data so it's not updated to null
+            unset($validated['image']);
         }
 
         $post->update($validated);
