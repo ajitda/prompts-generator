@@ -121,7 +121,7 @@ function home() {
                             </p>
                         </div>
 
-                        <div className="hidden h-0.5 w-12 bg-border md:block"></div>
+                        <div className="hidden h-0.5 w-12 bg-primary/80 md:block"></div>
 
                         <div className="flex-1 text-center">
                             <div className="bg-gradient-hero mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full text-2xl font-bold text-primary-foreground">
@@ -136,7 +136,7 @@ function home() {
                             </p>
                         </div>
 
-                        <div className="hidden h-0.5 w-12 bg-border md:block"></div>
+                        <div className="hidden h-0.5 w-12 bg-primary/80 md:block"></div>
 
                         <div className="flex-1 text-center">
                             <div className="bg-gradient-hero mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full text-2xl font-bold text-primary-foreground">
