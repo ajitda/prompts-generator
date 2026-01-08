@@ -9,6 +9,8 @@ interface PublicPost {
     content: string;
     image_url: string | null;
     created_at: string;
+    meta_title?: string;
+    meta_description?: string;
 }
 
 export default function ShowPublic({ post }: { post: PublicPost }) {
@@ -21,8 +23,8 @@ export default function ShowPublic({ post }: { post: PublicPost }) {
     return (
         <PublicLayout>
             <Meta
-                title={post.title}
-                description={description}
+                title={post.meta_title || post.title}
+                description={post.meta_description || description}
                 image={post.image_url || undefined}
                 type="article"
             />

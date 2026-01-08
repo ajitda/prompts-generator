@@ -13,6 +13,8 @@ class Post extends Model
         'content',
         'image',
         'image_original_name',
+        'meta_title',
+        'meta_description',
     ];
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo

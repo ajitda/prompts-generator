@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import postsRoutes from '@/routes/posts';
 import { BreadcrumbItem, PageProps, Post } from '@/types';
@@ -44,6 +45,8 @@ export default function Index({ posts }: PageProps<{ posts: Post[] }>) {
         title: '',
         content: '',
         image: null as File | null,
+        meta_title: '',
+        meta_description: '',
         _method: 'POST', // Default to POST
     });
 
@@ -61,6 +64,8 @@ export default function Index({ posts }: PageProps<{ posts: Post[] }>) {
             title: item.title,
             content: item.content,
             image: null,
+            meta_title: item.meta_title || '',
+            meta_description: item.meta_description || '',
             _method: 'PATCH',
         });
         setIsOpen(true);
@@ -276,6 +281,55 @@ export default function Index({ posts }: PageProps<{ posts: Post[] }>) {
                                 {errors.content && (
                                     <p className="px-1 text-xs font-bold text-destructive">
                                         {errors.content}
+                                    </p>
+                                )}
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label
+                                    htmlFor="meta_title"
+                                    className="px-1 text-xs font-black tracking-widest text-muted-foreground uppercase"
+                                >
+                                    Meta Title
+                                </Label>
+                                <Input
+                                    id="meta_title"
+                                    placeholder="SEO optimized title..."
+                                    className="h-12 rounded-xl border-border/40 bg-muted/20 focus:ring-primary/20"
+                                    value={data.meta_title}
+                                    onChange={(e) =>
+                                        setData('meta_title', e.target.value)
+                                    }
+                                />
+                                {errors.meta_title && (
+                                    <p className="px-1 text-xs font-bold text-destructive">
+                                        {errors.meta_title}
+                                    </p>
+                                )}
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label
+                                    htmlFor="meta_description"
+                                    className="px-1 text-xs font-black tracking-widest text-muted-foreground uppercase"
+                                >
+                                    Meta Description
+                                </Label>
+                                <Textarea
+                                    id="meta_description"
+                                    placeholder="Short summary for SEO..."
+                                    className="min-h-[100px] rounded-xl border-border/40 bg-muted/20 focus:ring-primary/20"
+                                    value={data.meta_description}
+                                    onChange={(e) =>
+                                        setData(
+                                            'meta_description',
+                                            e.target.value,
+                                        )
+                                    }
+                                />
+                                {errors.meta_description && (
+                                    <p className="px-1 text-xs font-bold text-destructive">
+                                        {errors.meta_description}
                                     </p>
                                 )}
                             </div>

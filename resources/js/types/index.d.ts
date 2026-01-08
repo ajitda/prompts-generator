@@ -103,6 +103,8 @@ export interface Post {
     updated_at: string;
     image: string;
     image_original_name: string;
+    meta_title?: string;
+    meta_description?: string;
 }
 
 export type PageProps<

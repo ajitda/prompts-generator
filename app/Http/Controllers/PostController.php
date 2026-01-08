@@ -18,6 +18,8 @@ class PostController extends Controller
                 'content' => $post->content,
                 'image' => $post->image ? Storage::url($post->image) : null,
                 'image_original_name' => $post->image_original_name,
+                'meta_title' => $post->meta_title,
+                'meta_description' => $post->meta_description,
             ];
         });
 
@@ -30,6 +32,8 @@ class PostController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048', // 2MB Max
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string',
         ]);
 
         if ($request->hasFile('image')) {
@@ -49,6 +53,8 @@ class PostController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string',
         ]);
 
         if ($request->hasFile('image')) {
@@ -99,6 +105,8 @@ class PostController extends Controller
             'post' => [
                 'title' => $post->title,
                 'content' => $post->content,
+                'meta_title' => $post->meta_title,
+                'meta_description' => $post->meta_description,
                 // Changed $post->image_path to $post->image
                 'image_url' => $post->image ? asset('storage/' . $post->image) : null,
                 'created_at' => $post->created_at->format('M d, Y'),
