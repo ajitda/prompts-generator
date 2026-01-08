@@ -8,9 +8,10 @@ use Exception;
 class AIService
 {
     protected $providers = [
+        \App\Services\AI\GroqProvider::class,
         \App\Services\AI\GeminiProvider::class,
         \App\Services\AI\OpenRouterProvider::class,
-        // \App\Services\AI\GroqProvider::class,
+        \App\Services\AI\HuggingFaceProvider::class,
     ];
 
 

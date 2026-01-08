@@ -10,20 +10,24 @@ class HuggingFaceProvider implements AIProviderInterface
 {
     public function generate(string $keyword): string
     {
-        // Replace with your preferred model path from Hugging Face
+        $apiKey = config('services.huggingface.key');
+        if (!$apiKey) {
+            throw new Exception('Hugging Face API key not found.');
+        }
+
         $model = "mistralai/Mistral-7B-Instruct-v0.3";
-        $url = "https://api-inference.huggingface.co/models/" . $model;
+        $url = "https://router.huggingface.co/models/" . $model;
 
         $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . config('services.huggingface.key'),
+            'Authorization' => 'Bearer ' . $apiKey,
             'Content-Type' => 'application/json',
         ])->timeout(15)->post($url, [
-            'inputs' => "<s>[INST] Generate a creative prompt for: $keyword [/INST]",
-            'parameters' => [
-                'max_new_tokens' => 500,
-                'return_full_text' => false,
-            ],
-        ]);
+                    'inputs' => "<s>[INST] Generate a creative prompt for: $keyword [/INST]",
+                    'parameters' => [
+                        'max_new_tokens' => 500,
+                        'return_full_text' => false,
+                    ],
+                ]);
 
         if (!$response->successful()) {
             throw new Exception('Hugging Face Error: ' . $response->body());

@@ -11,9 +11,13 @@ class OpenRouterProvider implements AIProviderInterface
 
     public function generate(string $prompt): string
     {
+        $apiKey = config('services.openrouter.key');
+        if (!$apiKey) {
+            throw new Exception('OpenRouter API key not found.');
+        }
         try {
             $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . config('services.openrouter.key'),
+                'Authorization' => 'Bearer ' . $apiKey,
                 'HTTP-Referer' => config('app.url'),
                 'X-Title' => config('app.name'), // Recommended by OpenRouter
             ])->timeout(120) //(2 minutes) Increased timeout for free models

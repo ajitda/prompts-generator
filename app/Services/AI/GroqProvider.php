@@ -10,18 +10,23 @@ class GroqProvider implements AIProviderInterface
 {
     public function generate(string $keyword): string
     {
+        $apiKey = config('services.groq.key');
+        if (!$apiKey) {
+            throw new Exception('Groq API key not found.');
+        }
+
         $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . config('services.groq.key'),
+            'Authorization' => 'Bearer ' . $apiKey,
             'Content-Type' => 'application/json',
         ])->timeout(10)->post('https://api.groq.com/openai/v1/chat/completions', [
-            'model' => 'llama-3.3-70b-versatile', 
-            'messages' => [
-                ['role' => 'system', 'content' => 'You are a creative prompt engineer.'],
-                ['role' => 'user', 'content' => "Create a detailed prompt for: $keyword"]
-            ],
-            'temperature' => 0.7,
-            'max_tokens' => 500,
-        ]);
+                    'model' => 'llama-3.3-70b-versatile',
+                    'messages' => [
+                        ['role' => 'system', 'content' => 'You are a creative prompt engineer.'],
+                        ['role' => 'user', 'content' => "Create a detailed prompt for: $keyword"]
+                    ],
+                    'temperature' => 0.7,
+                    'max_tokens' => 500,
+                ]);
 
         if (!$response->successful()) {
             throw new Exception('Groq API Error: ' . ($response->json('error.message') ?? 'Unknown error'));
