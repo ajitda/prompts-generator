@@ -13,18 +13,18 @@ export default function PublicFooter() {
                         Helping creators publish with clarity since 2025
                     </p>
                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                        <a
-                            href="#"
+                        <Link
+                            href="/privacy"
                             className="transition-colors hover:text-foreground"
                         >
                             Privacy
-                        </a>
-                        <a
-                            href="#"
+                        </Link>
+                        <Link
+                            href="/terms"
                             className="transition-colors hover:text-foreground"
                         >
                             Terms
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>

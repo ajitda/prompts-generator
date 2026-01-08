@@ -14,6 +14,14 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
+Route::get('/privacy', function () {
+    return Inertia::render('privacy');
+})->name('privacy');
+
+Route::get('/terms', function () {
+    return Inertia::render('terms');
+})->name('terms');
+
 Route::post('/scripts/story', [ScriptController::class, 'generateStory'])->name('scripts.generateStory');
 Route::post('/scripts/final', [ScriptController::class, 'generateScript'])->name('scripts.generateScript');
 
