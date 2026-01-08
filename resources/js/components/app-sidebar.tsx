@@ -15,7 +15,13 @@ import {
     SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, ChevronRight, Plus, Video } from 'lucide-react';
+import {
+    BookOpen,
+    ChevronRight,
+    MessageSquare,
+    Plus,
+    Video,
+} from 'lucide-react';
 import AppLogo from './app-logo';
 import {
     Collapsible,
@@ -64,6 +70,12 @@ export function AppSidebar() {
             icon: Video,
             baseHref: '/youtube',
             items: menu_data?.scripts,
+        },
+        {
+            title: 'Caption Generator',
+            icon: MessageSquare,
+            baseHref: '/captions',
+            items: menu_data?.captions,
         },
         {
             title: 'Blog',

@@ -1,5 +1,12 @@
 import { Button } from '@/components/ui/button';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Link, usePage } from '@inertiajs/react';
+import { ChevronDown } from 'lucide-react';
 import Logo from '/public/images/logo.png';
 
 export default function PublicHeader() {
@@ -47,6 +54,24 @@ export default function PublicHeader() {
                     >
                         Blogs
                     </Link>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger className="flex cursor-pointer items-center gap-1 text-muted-foreground outline-hidden transition-colors hover:text-foreground">
+                            More Tools <ChevronDown className="h-4 w-4" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent
+                            align="end"
+                            className="w-56 border-border/50 bg-card backdrop-blur-xl"
+                        >
+                            <DropdownMenuItem asChild>
+                                <Link
+                                    href="/captions"
+                                    className="w-full cursor-pointer"
+                                >
+                                    TikTok/Instagram Captions
+                                </Link>
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </nav>
                 <Link href="/youtube">
                     <Button variant="default" size="sm">

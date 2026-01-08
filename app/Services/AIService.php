@@ -83,6 +83,37 @@ PROMPT;
         return $this->cleanAndRun('generate', $prompt);
     }
 
+    public function generateCaptions(string $topic): string
+    {
+        $prompt = <<<PROMPT
+You are a world-class Social Media Manager expert in TikTok and Instagram engagement.
+
+Task:
+Generate 5 unique, high-engagement captions for a TikTok or Instagram post about: "{$topic}".
+
+Constraints:
+- Include relevant emojis.
+- Include a mix of styles (e.g., Short & Punchy, Storytelling, Call to Action, Question-based, Humorous).
+- Include 3-5 trending and relevant hashtags for each.
+- Tone must be trendy and platform-appropriate.
+
+Output Format:
+You must output STRICT JSON ONLY.
+No explanations. No markdown. No extra text.
+
+JSON Structure (Array of 5 objects):
+[
+  {
+    "Style": "Short & Punchy | Storytelling | CTA | Question | Humorous",
+    "Content": "string (the caption body with emojis)",
+    "Hashtags": "string (space-separated hashtags)"
+  }
+]
+PROMPT;
+
+        return $this->cleanAndRun('generate', $prompt);
+    }
+
     /**
      * The Logic: Clean the AI response before returning it to the Controller
      */
