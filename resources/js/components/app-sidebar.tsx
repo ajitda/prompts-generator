@@ -14,7 +14,6 @@ import {
     SidebarMenuSubButton,
     SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
-import { dashboard } from '@/routes';
 import { Link, usePage } from '@inertiajs/react';
 import { BookOpen, ChevronRight, Plus, Video } from 'lucide-react';
 import AppLogo from './app-logo';
@@ -90,7 +89,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href={dashboard()} prefetch>
+                            <Link href="/" prefetch>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>
