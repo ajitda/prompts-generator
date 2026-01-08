@@ -1,7 +1,6 @@
-import Meta from '@/components/meta';
 import { Button } from '@/components/ui/button';
 import PublicLayout from '@/layouts/public-layout';
-import { Link } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { Calendar, Sparkles } from 'lucide-react';
 
 interface PublicPost {
@@ -22,13 +21,17 @@ export default function ShowPublic({ post }: { post: PublicPost }) {
 
     return (
         <PublicLayout>
-            <Meta
-                title={post.meta_title || post.title}
-                description={post.meta_description || description}
-                image={post.image_url || undefined}
-                type="article"
-            />
-
+            <Head>
+                <title>{post.meta_title || post.title}</title>
+                <meta
+                    name="description"
+                    content={post.meta_description || description}
+                />
+                {post.image_url && (
+                    <meta name="image" content={post.image_url} />
+                )}
+                <meta name="type" content="article" />
+            </Head>
             <main className="container mx-auto max-w-4xl px-4 py-16">
                 <article>
                     <header className="mb-10">
