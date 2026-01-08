@@ -56,26 +56,33 @@ export function AppSidebar() {
     const { auth } = props;
     const isPostAdmin = auth.user?.role === 'admin';
 
-    const { menu_data = { prompts: [], scripts: [] } } = props;
+    const menu_data = props.menu_data || {};
+    const prompts = menu_data.prompts || [];
+    const scripts = menu_data.scripts || [];
+    const captions = menu_data.captions || [];
+
     const dynamicGroups = [
-        // {
-        //     title: 'AI Prompts',
-        //     icon: LayoutGrid,
-        //     baseHref: '/youtube/prompts',
-        //     items: props?.prompts?.data,
-        //     // items: menu_data.prompts,
-        // },
         {
             title: 'AI Video Idea',
             icon: Video,
             baseHref: '/youtube',
-            items: menu_data?.scripts,
+            href: '/youtube',
+            items: scripts,
+            action: {
+                icon: Plus,
+                href: '/youtube',
+            },
         },
         {
             title: 'Caption Generator',
             icon: MessageSquare,
             baseHref: '/captions',
-            items: menu_data?.captions,
+            href: '/captions',
+            items: captions,
+            action: {
+                icon: Plus,
+                href: '/captions',
+            },
         },
         {
             title: 'Blog',
