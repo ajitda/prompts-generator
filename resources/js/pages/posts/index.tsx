@@ -364,7 +364,7 @@ export default function Index({ posts }: PageProps<{ posts: Post[] }>) {
                                 </Button>
                                 <Button
                                     type="submit"
-                                    className="h-12 rounded-xl bg-indigo-600 px-10 text-[11px] font-black tracking-widest text-white uppercase transition-all hover:scale-[1.02]"
+                                    className="h-12 rounded-xl px-10 text-[11px] font-black tracking-widest uppercase transition-all hover:scale-[1.02]"
                                     disabled={processing}
                                 >
                                     {processing
