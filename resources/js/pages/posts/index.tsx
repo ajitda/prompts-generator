@@ -110,7 +110,7 @@ export default function Index({ posts }: PageProps<{ posts: Post[] }>) {
                     </div>
                     <Button
                         onClick={openCreate}
-                        className="group h-11 rounded-xl bg-indigo-600 px-6 text-white shadow-lg transition-all hover:opacity-90"
+                        className="group h-11 rounded-xl px-6 shadow-lg transition-all hover:opacity-90"
                     >
                         <Plus className="mr-2 h-4 w-4 transition-transform group-hover:rotate-90" />
                         Create New Article
@@ -139,7 +139,7 @@ export default function Index({ posts }: PageProps<{ posts: Post[] }>) {
                                     >
                                         <td className="p-4">
                                             <div className="flex flex-col">
-                                                <span className="group-hover:text-primary text-sm font-bold text-foreground transition-colors">
+                                                <span className="text-sm font-bold text-foreground transition-colors group-hover:text-primary">
                                                     {p.title}
                                                 </span>
                                                 {/* <span className="text-xs text-muted-foreground mt-0.5">Last updated: {new Date(p.updated_at).toLocaleDateString()}</span> */}
@@ -150,7 +150,7 @@ export default function Index({ posts }: PageProps<{ posts: Post[] }>) {
                                                 <Button
                                                     variant="ghost"
                                                     size="icon"
-                                                    className="hover:text-primary h-8 w-8 rounded-lg text-muted-foreground transition-colors"
+                                                    className="h-8 w-8 rounded-lg text-muted-foreground transition-colors hover:text-primary"
                                                     onClick={() => openEdit(p)}
                                                 >
                                                     <Edit2 className="h-4 w-4" />
@@ -213,7 +213,7 @@ export default function Index({ posts }: PageProps<{ posts: Post[] }>) {
                                 <Input
                                     id="title"
                                     placeholder="Enter a catchy title..."
-                                    className="focus:ring-primary/20 h-12 rounded-xl border-border/40 bg-muted/20"
+                                    className="h-12 rounded-xl border-border/40 bg-muted/20 focus:ring-primary/20"
                                     value={data.title}
                                     onChange={(e) =>
                                         setData('title', e.target.value)
@@ -317,10 +317,10 @@ export default function Index({ posts }: PageProps<{ posts: Post[] }>) {
                                         </div>
                                     )}
 
-                                    <div className="hover:border-primary/40 group relative flex flex-col gap-4 overflow-hidden rounded-[2rem] border border-dashed border-border/60 bg-muted/5 p-8 transition-all hover:bg-muted/10">
-                                        <div className="bg-primary/5 absolute inset-0 opacity-0 transition-opacity group-hover:opacity-100" />
+                                    <div className="group relative flex flex-col gap-4 overflow-hidden rounded-[2rem] border border-dashed border-border/60 bg-muted/5 p-8 transition-all hover:border-primary/40 hover:bg-muted/10">
+                                        <div className="absolute inset-0 bg-primary/5 opacity-0 transition-opacity group-hover:opacity-100" />
                                         <div className="relative flex flex-col items-center justify-center space-y-2 text-center">
-                                            <div className="bg-primary/10 text-primary mb-1 rounded-full p-3 transition-transform group-hover:scale-110">
+                                            <div className="mb-1 rounded-full bg-primary/10 p-3 text-primary transition-transform group-hover:scale-110">
                                                 <Plus className="h-6 w-6" />
                                             </div>
                                             <p className="text-sm font-bold text-foreground">

@@ -188,7 +188,6 @@ const IdeaGenerator = ({
                         />
                         <Button
                             size="xl"
-                            variant="hero"
                             onClick={handleGenerateIdeas}
                             disabled={
                                 !keyword || currentCredits <= 0 || !fingerprint
@@ -274,7 +273,6 @@ const IdeaGenerator = ({
                         <Button
                             variant="default"
                             size="lg"
-                            className="h-14 w-full rounded-2xl bg-indigo-600 px-10 text-[11px] font-black tracking-widest text-white uppercase shadow-xl shadow-indigo-500/20 transition-all hover:scale-[1.02] hover:opacity-90 md:w-auto"
                             onClick={handleGenerateIdeas}
                             disabled={currentCredits <= 0}
                         >

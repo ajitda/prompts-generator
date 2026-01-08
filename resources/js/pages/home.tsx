@@ -21,9 +21,9 @@ function home() {
                 <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
                     <Link href="youtube">
                         <Button
-                            variant="hero"
+                            variant="default"
                             size="lg"
-                            className="bg-indigo-600 px-8 text-base text-white"
+                            className="px-8 text-base"
                         >
                             <Sparkles className="mr-2 h-5 w-5" />
                             Generate Ideas Now
@@ -57,8 +57,8 @@ function home() {
 
                     <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-3">
                         <div className="hover:shadow-elegant rounded-xl border border-border/50 bg-card p-6 transition-shadow">
-                            <div className="bg-primary/10 mb-4 flex h-12 w-12 items-center justify-center rounded-lg">
-                                <Target className="text-primary h-6 w-6" />
+                            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                                <Target className="h-6 w-6 text-primary" />
                             </div>
                             <h3 className="mb-2 text-lg font-semibold">
                                 High-CTR Titles
@@ -71,7 +71,7 @@ function home() {
 
                         <div className="hover:shadow-elegant rounded-xl border border-border/50 bg-card p-6 transition-shadow">
                             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-accent/10">
-                                <Lightbulb className="text-primary h-6 w-6" />
+                                <Lightbulb className="h-6 w-6 text-primary" />
                             </div>
                             <h3 className="mb-2 text-lg font-semibold">
                                 Thumbnail Concepts
@@ -83,8 +83,8 @@ function home() {
                         </div>
 
                         <div className="hover:shadow-elegant rounded-xl border border-border/50 bg-card p-6 transition-shadow">
-                            <div className="bg-primary/10 mb-4 flex h-12 w-12 items-center justify-center rounded-lg">
-                                <TrendingUp className="text-primary h-6 w-6" />
+                            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                                <TrendingUp className="h-6 w-6 text-primary" />
                             </div>
                             <h3 className="mb-2 text-lg font-semibold">
                                 Hook Scripts
@@ -110,7 +110,7 @@ function home() {
 
                     <div className="mx-auto flex max-w-4xl flex-col items-center justify-center gap-8 md:flex-row">
                         <div className="flex-1 text-center">
-                            <div className="bg-gradient-hero text-primary-foreground mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full text-2xl font-bold">
+                            <div className="bg-gradient-hero mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full text-2xl font-bold text-primary-foreground">
                                 1
                             </div>
                             <h3 className="mb-2 text-lg font-semibold">
@@ -124,7 +124,7 @@ function home() {
                         <div className="hidden h-0.5 w-12 bg-border md:block"></div>
 
                         <div className="flex-1 text-center">
-                            <div className="bg-gradient-hero text-primary-foreground mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full text-2xl font-bold">
+                            <div className="bg-gradient-hero mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full text-2xl font-bold text-primary-foreground">
                                 2
                             </div>
                             <h3 className="mb-2 text-lg font-semibold">
@@ -139,7 +139,7 @@ function home() {
                         <div className="hidden h-0.5 w-12 bg-border md:block"></div>
 
                         <div className="flex-1 text-center">
-                            <div className="bg-gradient-hero text-primary-foreground mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full text-2xl font-bold">
+                            <div className="bg-gradient-hero mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full text-2xl font-bold text-primary-foreground">
                                 3
                             </div>
                             <h3 className="mb-2 text-lg font-semibold">
@@ -153,11 +153,7 @@ function home() {
 
                     <div className="mt-12 text-center">
                         <Link href="/youtube">
-                            <Button
-                                variant="hero"
-                                size="lg"
-                                className="bg-indigo-600 px-8 text-base text-white"
-                            >
+                            <Button variant="default" size="lg">
                                 <Zap className="mr-2 h-5 w-5" />
                                 Try It Free
                             </Button>
