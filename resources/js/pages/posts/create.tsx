@@ -52,7 +52,7 @@ export default function Create() {
                         <ArrowLeft className="h-5 w-5" />
                     </Button>
                     <div>
-                        <h1 className="text-3xl font-black tracking-tight text-foreground">
+                        <h1 className="text-2xl font-black tracking-tight text-foreground md:text-3xl">
                             Compose New Article
                         </h1>
                         <p className="mt-1 font-medium text-muted-foreground">
@@ -101,7 +101,7 @@ export default function Create() {
                                     value={data.content}
                                     licenseKey="gpl"
                                     init={{
-                                        height: 500,
+                                        height: 800,
                                         menubar: true,
                                         base_url: '/tinymce',
                                         suffix: '.min',

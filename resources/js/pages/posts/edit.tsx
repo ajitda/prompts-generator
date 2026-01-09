@@ -44,7 +44,7 @@ export default function Edit({ post: postData }: { post: Post }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`Edit: ${postData.title}`} />
-            <div className="animate-reveal mx-auto max-w-5xl space-y-8 pb-20">
+            <div className="animate-reveal space-y-8 space-x-4 pb-20">
                 <div className="flex items-center gap-4">
                     <Button
                         variant="ghost"
@@ -55,7 +55,7 @@ export default function Edit({ post: postData }: { post: Post }) {
                         <ArrowLeft className="h-5 w-5" />
                     </Button>
                     <div>
-                        <h1 className="text-3xl font-black tracking-tight text-foreground">
+                        <h1 className="text-2xl font-black tracking-tight text-foreground md:text-3xl">
                             Edit Article
                         </h1>
                         <p className="mt-1 font-medium text-muted-foreground">
@@ -104,7 +104,7 @@ export default function Edit({ post: postData }: { post: Post }) {
                                     value={data.content}
                                     licenseKey="gpl"
                                     init={{
-                                        height: 500,
+                                        height: 800,
                                         menubar: true,
                                         base_url: '/tinymce',
                                         suffix: '.min',
