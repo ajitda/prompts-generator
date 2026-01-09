@@ -1,8 +1,7 @@
 import { a as usePage, r as reactExports, b as router3, j as jsxRuntimeExports, H as Head_default } from "../ssr.js";
 import { i as index } from "./PromptController-BWYLHRJD.js";
 import { A as AppLayout } from "./app-layout-DgUhOw1Y.js";
-import PromptForm from "./prompt-form-DUhD8cKi.js";
-import "lodash-es";
+import PromptForm from "./prompt-form-DwSLq-C4.js";
 import "qs";
 import "axios";
 import "laravel-precognition";

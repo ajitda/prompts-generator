@@ -37,6 +37,7 @@ export default defineConfig({
         noExternal: [
             'react',
             'react-dom',
+            'lodash-es',
             '@inertiajs/react',
             '@inertiajs/core',
             '@inertiajs/server' 

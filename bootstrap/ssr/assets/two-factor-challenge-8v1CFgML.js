@@ -6,7 +6,6 @@ import { I as InputOTP, O as OTP_MAX_LENGTH, a as InputOTPGroup, b as InputOTPSl
 import { A as AuthLayout } from "./auth-layout-yP9LyPXA.js";
 import { s as store } from "./index-BKq0lOP8.js";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
-import "lodash-es";
 import "qs";
 import "axios";
 import "laravel-precognition";

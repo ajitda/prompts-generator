@@ -6,7 +6,6 @@ import { L as Label } from "./label-BGQd_FCH.js";
 import { S as Spinner } from "./spinner-ZfimL0Vg.js";
 import { A as AuthLayout } from "./auth-layout-yP9LyPXA.js";
 import { s as store } from "./index-DFfij-Hh.js";
-import "lodash-es";
 import "qs";
 import "axios";
 import "laravel-precognition";

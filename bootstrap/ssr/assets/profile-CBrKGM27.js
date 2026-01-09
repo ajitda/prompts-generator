@@ -9,7 +9,6 @@ import { D as Dialog, a as DialogTrigger, b as DialogContent, c as DialogTitle, 
 import { I as Input } from "./input-BjgwYVx7.js";
 import { L as Label } from "./label-BGQd_FCH.js";
 import { A as AppLayout, e as edit$1 } from "./app-layout-DgUhOw1Y.js";
-import "lodash-es";
 import "qs";
 import "axios";
 import "laravel-precognition";

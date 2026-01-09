@@ -1,7 +1,6 @@
 import { j as jsxRuntimeExports } from "../ssr.js";
 import { P as PublicLayout, M as Meta } from "./public-layout-CVdJgUC6.js";
 import { Clock, ShieldCheck, UserCheck, Cpu, Cookie, Lock, Mail } from "lucide-react";
-import "lodash-es";
 import "qs";
 import "axios";
 import "laravel-precognition";

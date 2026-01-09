@@ -5,7 +5,6 @@ import { S as Spinner } from "./spinner-ZfimL0Vg.js";
 import { A as AuthLayout } from "./auth-layout-yP9LyPXA.js";
 import { a as logout } from "./index-Cm2O5opL.js";
 import { s as send } from "./index-BVZoIs4X.js";
-import "lodash-es";
 import "qs";
 import "axios";
 import "laravel-precognition";

@@ -5,7 +5,6 @@ import { C as Card, a as CardHeader, b as CardTitle, c as CardContent } from "./
 import { L as Label } from "./label-BGQd_FCH.js";
 import { Sparkles, Check, Copy, Save } from "lucide-react";
 import toast from "react-hot-toast";
-import "lodash-es";
 import "qs";
 import "axios";
 import "laravel-precognition";

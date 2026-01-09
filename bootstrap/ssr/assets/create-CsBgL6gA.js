@@ -6,8 +6,7 @@ import { T as Textarea } from "./textarea-Du8ce-Bq.js";
 import { A as AppLayout } from "./app-layout-DgUhOw1Y.js";
 import { p as posts } from "./index-B6anorhi.js";
 import { Editor } from "@tinymce/tinymce-react";
-import { ArrowLeft, Plus, Save } from "lucide-react";
-import "lodash-es";
+import { ArrowLeft, Plus } from "lucide-react";
 import "qs";
 import "axios";
 import "laravel-precognition";
@@ -40,28 +39,25 @@ const breadcrumbs = [
     href: posts.index().url
   },
   {
-    title: "Edit Article",
-    href: "#"
+    title: "Compose Article",
+    href: posts.create().url
   }
 ];
-function Edit({ post: postData }) {
+function Create() {
   const { data, setData, post, processing, errors } = useForm({
-    title: postData.title,
-    content: postData.content,
+    title: "",
+    content: "",
     image: null,
-    meta_title: postData.meta_title || "",
-    meta_description: postData.meta_description || "",
-    _method: "PATCH"
+    meta_title: "",
+    meta_description: ""
   });
   const submit = (e) => {
     e.preventDefault();
-    post(posts.update(postData.id).url, {
-      forceFormData: true
-    });
+    post(posts.store().url);
   };
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(AppLayout, { breadcrumbs, children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(Head_default, { title: `Edit: ${postData.title}` }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "animate-reveal space-y-8 space-x-4 pb-20", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Head_default, { title: "Compose New Article" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "animate-reveal space-y-8 pb-20", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-4", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(
           Button,
@@ -74,8 +70,8 @@ function Edit({ post: postData }) {
           }
         ),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-2xl font-black tracking-tight text-foreground md:text-3xl", children: "Edit Article" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-1 font-medium text-muted-foreground", children: "Refine your article content and metadata." })
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-2xl font-black tracking-tight text-foreground md:text-3xl", children: "Compose New Article" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-1 font-medium text-muted-foreground", children: "Draft a new blog post for your audience." })
         ] })
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "shadow-elegant overflow-hidden rounded-[32px] border border-border/40 bg-card/50 p-8 backdrop-blur-sm", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: submit, className: "space-y-8", children: [
@@ -208,13 +204,13 @@ function Edit({ post: postData }) {
               }
             ),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
-              (data.image || postData.image) && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-border/40 bg-muted/20", children: [
+              data.image && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-border/40 bg-muted/20", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx(
                   "img",
                   {
-                    src: data.image ? URL.createObjectURL(
+                    src: URL.createObjectURL(
                       data.image
-                    ) : postData.image || void 0,
+                    ),
                     alt: "Preview",
                     className: "h-full w-full object-cover"
                   }
@@ -222,14 +218,14 @@ function Edit({ post: postData }) {
                 /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" }),
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "absolute bottom-3 left-4", children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mb-0.5 text-[10px] font-black tracking-[0.2em] text-white/80 uppercase", children: "Preview Mode" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "max-w-[250px] truncate text-sm font-bold text-white", children: data.image ? data.image.name : postData.image_original_name || "Current Image" })
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "max-w-[250px] truncate text-sm font-bold text-white", children: data.image.name })
                 ] })
               ] }),
               /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "group relative flex flex-col gap-4 overflow-hidden rounded-[2rem] border border-dashed border-border/60 bg-muted/5 p-8 transition-all hover:border-primary/40 hover:bg-muted/10", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 bg-primary/5 opacity-0 transition-opacity group-hover:opacity-100" }),
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative flex flex-col items-center justify-center space-y-2 text-center", children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-1 rounded-full bg-primary/10 p-3 text-primary transition-transform group-hover:scale-110", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { className: "h-6 w-6" }) }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-bold text-foreground", children: "Click to upload a new image" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-bold text-foreground", children: "Click to upload or drag & drop" }),
                   /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[11px] font-medium text-muted-foreground", children: "PNG, JPG or WEBP up to 2MB" })
                 ] }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -260,16 +256,13 @@ function Edit({ post: postData }) {
               children: "Cancel"
             }
           ),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
             Button,
             {
               type: "submit",
               className: "h-12 rounded-xl px-10 text-[11px] font-black tracking-widest uppercase transition-all hover:scale-[1.02]",
               disabled: processing,
-              children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Save, { className: "mr-2 h-4 w-4" }),
-                processing ? "Updating..." : "Save Changes"
-              ]
+              children: processing ? "Processing..." : "Publish Article"
             }
           )
         ] })
@@ -278,5 +271,5 @@ function Edit({ post: postData }) {
   ] });
 }
 export {
-  Edit as default
+  Create as default
 };

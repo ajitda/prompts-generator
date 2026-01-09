@@ -11,7 +11,6 @@ import { A as AuthLayout } from "./auth-layout-yP9LyPXA.js";
 import { r as register } from "./index-Cm2O5opL.js";
 import { q as queryParams } from "./index--D7ld9AJ.js";
 import { r as request } from "./index-BxjRhtqJ.js";
-import "lodash-es";
 import "qs";
 import "axios";
 import "laravel-precognition";

@@ -2,7 +2,6 @@ import { j as jsxRuntimeExports, L as Link_default } from "../ssr.js";
 import { P as PublicLayout, M as Meta } from "./public-layout-CVdJgUC6.js";
 import { p as posts } from "./index-B6anorhi.js";
 import { BookOpen, Calendar, ArrowRight } from "lucide-react";
-import "lodash-es";
 import "qs";
 import "axios";
 import "laravel-precognition";

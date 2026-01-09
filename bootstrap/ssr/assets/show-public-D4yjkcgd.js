@@ -2,7 +2,6 @@ import { j as jsxRuntimeExports, H as Head_default, L as Link_default } from "..
 import { P as PublicLayout, M as Meta } from "./public-layout-CVdJgUC6.js";
 import { B as Button } from "./button-TIWYqyVf.js";
 import { Calendar, Sparkles } from "lucide-react";
-import "lodash-es";
 import "qs";
 import "axios";
 import "laravel-precognition";

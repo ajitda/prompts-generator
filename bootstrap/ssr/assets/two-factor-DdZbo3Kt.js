@@ -11,7 +11,6 @@ import { I as InputOTP, O as OTP_MAX_LENGTH, a as InputOTPGroup, b as InputOTPSl
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { S as Spinner } from "./spinner-ZfimL0Vg.js";
 import { A as AppLayout, B as Badge } from "./app-layout-DgUhOw1Y.js";
-import "lodash-es";
 import "qs";
 import "axios";
 import "laravel-precognition";

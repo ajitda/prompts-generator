@@ -3,7 +3,6 @@ import { Sparkles, Target, Lightbulb, TrendingUp, Zap } from "lucide-react";
 import { H as Hero } from "./Hero-q9kHZ9gv.js";
 import { P as PublicLayout, M as Meta } from "./public-layout-CVdJgUC6.js";
 import { B as Button } from "./button-TIWYqyVf.js";
-import "lodash-es";
 import "qs";
 import "axios";
 import "laravel-precognition";

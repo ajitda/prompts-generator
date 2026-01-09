@@ -2,7 +2,6 @@ import { j as jsxRuntimeExports, H as Head_default } from "../ssr.js";
 import { i as index } from "./ScriptController-DN8f1sXF.js";
 import { I as IdeaCard } from "./IdeaCard-D7JaeDyx.js";
 import { A as AppLayout } from "./app-layout-DgUhOw1Y.js";
-import "lodash-es";
 import "qs";
 import "axios";
 import "laravel-precognition";

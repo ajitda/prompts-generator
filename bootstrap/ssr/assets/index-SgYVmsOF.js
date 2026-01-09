@@ -3,7 +3,6 @@ import { B as Button } from "./button-TIWYqyVf.js";
 import { A as AppLayout } from "./app-layout-DgUhOw1Y.js";
 import { p as posts } from "./index-B6anorhi.js";
 import { Plus, Edit2, Trash2 } from "lucide-react";
-import "lodash-es";
 import "qs";
 import "axios";
 import "laravel-precognition";
