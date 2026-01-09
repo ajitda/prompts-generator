@@ -33,4 +33,7 @@ export default defineConfig({
     esbuild: {
         jsx: 'automatic',
     },
+    ssr: {
+        noExternal: ['react', 'react-dom', '@inertiajs/react'],
+    },
 });
