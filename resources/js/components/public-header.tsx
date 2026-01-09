@@ -13,7 +13,7 @@ export default function PublicHeader() {
     const { url } = usePage();
 
     const isHome = url === '/';
-    const isBlogs = url.startsWith('/blogs');
+    const isBlogs = url.startsWith('/blog');
 
     return (
         <header className="sticky top-0 z-50 border-b border-border/50 bg-card/50 backdrop-blur-sm">
@@ -45,7 +45,7 @@ export default function PublicHeader() {
                         How it works
                     </Link>
                     <Link
-                        href="/blogs"
+                        href="/blog"
                         className={`transition-colors hover:text-foreground ${
                             isBlogs
                                 ? 'font-medium text-foreground'

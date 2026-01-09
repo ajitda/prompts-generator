@@ -46,7 +46,7 @@ export default function CaptionShow({ caption }: ShowProps) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`Captions: ${caption.topic}`} />
-            <div className="min-h-screen bg-background py-16">
+            <div className="min-h-screen bg-background py-8">
                 <div className="container mx-auto max-w-4xl px-4 font-sans">
                     <div className="mb-8">
                         <Link href="/captions">

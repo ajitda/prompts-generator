@@ -26,10 +26,10 @@ Route::get('/terms', function () {
 Route::post('/scripts/story', [ScriptController::class, 'generateStory'])->name('scripts.generateStory');
 Route::post('/scripts/final', [ScriptController::class, 'generateScript'])->name('scripts.generateScript');
 
-Route::get('/blogs/{post:slug}', [PostController::class, 'showPublic'])
+Route::get('/blog/{post:slug}', [PostController::class, 'showPublic'])
     ->name('posts.showPublic');
 
-Route::get('/blogs', [PostController::class, 'indexPublic'])
+Route::get('/blog', [PostController::class, 'indexPublic'])
     ->name('posts.indexPublic');
 
 Route::post('/prompts/generate', [PromptController::class, 'generate'])->name('prompts.generate');
