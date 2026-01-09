@@ -67,7 +67,7 @@ export function AppSidebar() {
         },
         {
             title: 'Blog',
-            href: postsRoutes.indexPublic().url,
+            href: '/posts',
             icon: BookOpen,
             action: isPostAdmin
                 ? {

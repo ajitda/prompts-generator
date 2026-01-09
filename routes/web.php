@@ -61,7 +61,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/user/credits', [ScriptController::class, 'getCredits'])->name('user.credits');
 
     Route::middleware('can:admin')->group(function () {
-        Route::resource('/prompts-generator/posts', PostController::class)
+        Route::resource('/posts', PostController::class)
             ->names('posts')
             ->parameters(['posts' => 'post']);
     });

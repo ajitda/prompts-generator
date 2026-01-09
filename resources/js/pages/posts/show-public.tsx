@@ -61,7 +61,7 @@ export default function ShowPublic({ post }: { post: PublicPost }) {
                     </header>
 
                     <div
-                        className="prose prose-lg dark:prose-invert prose-headings:font-bold prose-a:text-primary prose-img:rounded-xl max-w-none leading-loose"
+                        className="blog-content prose prose-lg dark:prose-invert prose-headings:font-bold prose-a:text-primary prose-img:rounded-xl max-w-none leading-loose"
                         dangerouslySetInnerHTML={{ __html: post.content }}
                     />
                 </article>

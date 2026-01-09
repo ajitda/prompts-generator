@@ -26,6 +26,11 @@ class PostController extends Controller
         return Inertia::render('posts/index', ['posts' => $posts]);
     }
 
+    public function create()
+    {
+        return Inertia::render('posts/create');
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -45,6 +50,21 @@ class PostController extends Controller
         Post::create($validated);
 
         return redirect()->route('posts.index')->with('success', 'Post created successfully.');
+    }
+
+    public function edit(Post $post)
+    {
+        return Inertia::render('posts/edit', [
+            'post' => [
+                'id' => $post->id,
+                'title' => $post->title,
+                'content' => $post->content,
+                'image' => $post->image ? Storage::url($post->image) : null,
+                'image_original_name' => $post->image_original_name,
+                'meta_title' => $post->meta_title,
+                'meta_description' => $post->meta_description,
+            ]
+        ]);
     }
 
     public function update(Request $request, Post $post)
