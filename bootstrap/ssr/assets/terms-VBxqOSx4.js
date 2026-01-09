@@ -1,7 +1,7 @@
 import { j as jsxRuntimeExports } from "../ssr.js";
 import { P as PublicLayout, M as Meta } from "./public-layout-CVdJgUC6.js";
 import { Clock, Scale, FileText, UserCheck, CreditCard, AlertTriangle, Globe } from "lucide-react";
-import "qs";
+import "side-channel";
 import "axios";
 import "laravel-precognition";
 import "http";

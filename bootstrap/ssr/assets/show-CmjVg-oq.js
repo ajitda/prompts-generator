@@ -2,7 +2,7 @@ import { j as jsxRuntimeExports, H as Head_default, b as router3 } from "../ssr.
 import { i as index } from "./PromptController-BWYLHRJD.js";
 import { S as ScriptView } from "./ScriptView-XY6c0IG4.js";
 import { A as AppLayout } from "./app-layout-DgUhOw1Y.js";
-import "qs";
+import "side-channel";
 import "axios";
 import "laravel-precognition";
 import "http";

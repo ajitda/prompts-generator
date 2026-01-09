@@ -8,7 +8,7 @@ import { I as Input } from "./input-BjgwYVx7.js";
 import { L as Label } from "./label-BGQd_FCH.js";
 import { S as Spinner } from "./spinner-ZfimL0Vg.js";
 import { A as AuthLayout } from "./auth-layout-yP9LyPXA.js";
-import "qs";
+import "side-channel";
 import "axios";
 import "laravel-precognition";
 import "http";

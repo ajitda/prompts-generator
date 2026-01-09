@@ -1,7 +1,7 @@
 import { r as reactExports, j as jsxRuntimeExports, H as Head_default } from "../ssr.js";
 import { A as AppLayout } from "./app-layout-DgUhOw1Y.js";
 import { d as dashboard } from "./index-Cm2O5opL.js";
-import "qs";
+import "side-channel";
 import "axios";
 import "laravel-precognition";
 import "http";

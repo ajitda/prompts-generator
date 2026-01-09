@@ -3,7 +3,7 @@ import { c as cn } from "./button-TIWYqyVf.js";
 import { Sun, Moon, Monitor } from "lucide-react";
 import { e as edit, S as SettingsLayout, H as HeadingSmall } from "./layout-UDwk9eZn.js";
 import { A as AppLayout } from "./app-layout-DgUhOw1Y.js";
-import "qs";
+import "side-channel";
 import "axios";
 import "laravel-precognition";
 import "http";

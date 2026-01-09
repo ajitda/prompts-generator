@@ -10,7 +10,7 @@ import { S as ScriptView } from "./ScriptView-XY6c0IG4.js";
 import { B as Button } from "./button-TIWYqyVf.js";
 import { I as Input } from "./input-BjgwYVx7.js";
 import { A as AppLayout } from "./app-layout-DgUhOw1Y.js";
-import "qs";
+import "side-channel";
 import "axios";
 import "laravel-precognition";
 import "http";

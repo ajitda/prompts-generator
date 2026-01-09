@@ -7,7 +7,7 @@ import { I as IdeaCard } from "./IdeaCard-D7JaeDyx.js";
 import { L as LoadingState, S as StoryView } from "./StoryView-C0ptjWwE.js";
 import { S as ScriptView } from "./ScriptView-XY6c0IG4.js";
 import toast from "react-hot-toast";
-import "qs";
+import "side-channel";
 import "axios";
 import "laravel-precognition";
 import "http";

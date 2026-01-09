@@ -2,7 +2,7 @@ import { a as usePage, j as jsxRuntimeExports, H as Head_default, L as Link_defa
 import { C as Card, a as CardHeader, b as CardTitle, c as CardContent } from "./card-MbFmKuYg.js";
 import { A as AppLayout } from "./app-layout-DgUhOw1Y.js";
 import { Video } from "lucide-react";
-import "qs";
+import "side-channel";
 import "axios";
 import "laravel-precognition";
 import "http";

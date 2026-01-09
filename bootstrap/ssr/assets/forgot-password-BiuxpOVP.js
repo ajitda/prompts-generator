@@ -8,7 +8,7 @@ import { B as Button } from "./button-TIWYqyVf.js";
 import { I as Input } from "./input-BjgwYVx7.js";
 import { L as Label } from "./label-BGQd_FCH.js";
 import { A as AuthLayout } from "./auth-layout-yP9LyPXA.js";
-import "qs";
+import "side-channel";
 import "axios";
 import "laravel-precognition";
 import "http";

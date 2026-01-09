@@ -36,6 +36,7 @@ export default defineConfig({
     ssr: {
         noExternal: [
             'react',
+            'qs',
             'react-dom',
             'lodash-es',
             '@inertiajs/react',

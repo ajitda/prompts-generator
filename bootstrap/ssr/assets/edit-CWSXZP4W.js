@@ -7,7 +7,7 @@ import { A as AppLayout } from "./app-layout-DgUhOw1Y.js";
 import { p as posts } from "./index-B6anorhi.js";
 import { Editor } from "@tinymce/tinymce-react";
 import { ArrowLeft, Plus, Save } from "lucide-react";
-import "qs";
+import "side-channel";
 import "axios";
 import "laravel-precognition";
 import "http";
