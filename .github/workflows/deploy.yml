@@ -14,8 +14,8 @@ jobs:
         uses: shivammathur/setup-php@v2
         with: { php-version: '8.2.29' }
         
-      - uses: npm/action-setup@v3
-        with: { version: 10 }
+      - uses: pnpm/action-setup@v3
+        with: { version: 9 }
 
       # 1. Create .env file (Artisan needs this)
       - name: 📝 Prepare Environment
@@ -32,8 +32,8 @@ jobs:
       # 4. Now install JS and Build
       - name: 📦 Install & Build (Frontend SSR)
         run: |
-          npm install --frozen-lockfile
-          npm run build:ssr
+          pnpm install --frozen-lockfile
+          pnpm run build:ssr
 
       # 5. Sync to VPS
       - name: Deploy to Server
