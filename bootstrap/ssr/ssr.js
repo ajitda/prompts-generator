@@ -1,7 +1,9 @@
-import { isUrlMethodPair, mergeDataIntoQueryString, formDataToObject, getScrollableParent, useInfiniteScroll, config as config$1, router, UseFormUtils, resetFormFields, shouldIntercept, shouldNavigate, getInitialPageFromDOM, setupProgress, createHeadManager } from "@inertiajs/core";
-import { cloneDeep, isEqual, set, has, get, escape } from "lodash-es";
+import { get, set, cloneDeep, isEqual, has, escape } from "lodash-es";
+import * as qs from "qs";
+import axios from "axios";
 import { createValidator, toSimpleValidationErrors, resolveName } from "laravel-precognition";
-import createServer from "@inertiajs/core/server";
+import { createServer } from "http";
+import * as process$1 from "process";
 import require$$0 from "util";
 import require$$1 from "crypto";
 import require$$2 from "async_hooks";
@@ -369,8 +371,8 @@ function requireReact_production() {
   react_production.createRef = function() {
     return { current: null };
   };
-  react_production.forwardRef = function(render) {
-    return { $$typeof: REACT_FORWARD_REF_TYPE, render };
+  react_production.forwardRef = function(render2) {
+    return { $$typeof: REACT_FORWARD_REF_TYPE, render: render2 };
   };
   react_production.isValidElement = isValidElement;
   react_production.lazy = function(ctor) {
@@ -894,11 +896,11 @@ function requireReact_development() {
         actScopeDepth = prevActScopeDepth;
       }
       function recursivelyFlushAsyncActWork(returnValue, resolve, reject) {
-        var queue = ReactSharedInternals.actQueue;
-        if (null !== queue)
-          if (0 !== queue.length)
+        var queue5 = ReactSharedInternals.actQueue;
+        if (null !== queue5)
+          if (0 !== queue5.length)
             try {
-              flushActQueue(queue);
+              flushActQueue(queue5);
               enqueueTask(function() {
                 return recursivelyFlushAsyncActWork(returnValue, resolve, reject);
               });
@@ -907,31 +909,31 @@ function requireReact_development() {
               ReactSharedInternals.thrownErrors.push(error);
             }
           else ReactSharedInternals.actQueue = null;
-        0 < ReactSharedInternals.thrownErrors.length ? (queue = aggregateErrors(ReactSharedInternals.thrownErrors), ReactSharedInternals.thrownErrors.length = 0, reject(queue)) : resolve(returnValue);
+        0 < ReactSharedInternals.thrownErrors.length ? (queue5 = aggregateErrors(ReactSharedInternals.thrownErrors), ReactSharedInternals.thrownErrors.length = 0, reject(queue5)) : resolve(returnValue);
       }
-      function flushActQueue(queue) {
+      function flushActQueue(queue5) {
         if (!isFlushing) {
           isFlushing = true;
           var i = 0;
           try {
-            for (; i < queue.length; i++) {
-              var callback = queue[i];
+            for (; i < queue5.length; i++) {
+              var callback = queue5[i];
               do {
                 ReactSharedInternals.didUsePromise = false;
                 var continuation = callback(false);
                 if (null !== continuation) {
                   if (ReactSharedInternals.didUsePromise) {
-                    queue[i] = callback;
-                    queue.splice(0, i);
+                    queue5[i] = callback;
+                    queue5.splice(0, i);
                     return;
                   }
                   callback = continuation;
                 } else break;
               } while (1);
             }
-            queue.length = 0;
+            queue5.length = 0;
           } catch (error) {
-            queue.splice(0, i + 1), ReactSharedInternals.thrownErrors.push(error);
+            queue5.splice(0, i + 1), ReactSharedInternals.thrownErrors.push(error);
           } finally {
             isFlushing = false;
           }
@@ -1078,7 +1080,7 @@ function requireReact_development() {
       exports$1.act = function(callback) {
         var prevActQueue = ReactSharedInternals.actQueue, prevActScopeDepth = actScopeDepth;
         actScopeDepth++;
-        var queue = ReactSharedInternals.actQueue = null !== prevActQueue ? prevActQueue : [], didAwaitActCall = false;
+        var queue5 = ReactSharedInternals.actQueue = null !== prevActQueue ? prevActQueue : [], didAwaitActCall = false;
         try {
           var result = callback();
         } catch (error) {
@@ -1101,7 +1103,7 @@ function requireReact_development() {
                   popActScope(prevActQueue, prevActScopeDepth);
                   if (0 === prevActScopeDepth) {
                     try {
-                      flushActQueue(queue), enqueueTask(function() {
+                      flushActQueue(queue5), enqueueTask(function() {
                         return recursivelyFlushAsyncActWork(
                           returnValue,
                           resolve,
@@ -1132,7 +1134,7 @@ function requireReact_development() {
         }
         var returnValue$jscomp$0 = result;
         popActScope(prevActQueue, prevActScopeDepth);
-        0 === prevActScopeDepth && (flushActQueue(queue), 0 !== queue.length && queueSeveralMicrotasks(function() {
+        0 === prevActScopeDepth && (flushActQueue(queue5), 0 !== queue5.length && queueSeveralMicrotasks(function() {
           didAwaitActCall || didWarnNoAwaitAct || (didWarnNoAwaitAct = true, console.error(
             "A component suspended inside an `act` scope, but the `act` call was not awaited. When testing React components that depend on asynchronous data, you must await the result:\n\nawait act(() => ...)"
           ));
@@ -1142,7 +1144,7 @@ function requireReact_development() {
         return {
           then: function(resolve, reject) {
             didAwaitActCall = true;
-            0 === prevActScopeDepth ? (ReactSharedInternals.actQueue = queue, enqueueTask(function() {
+            0 === prevActScopeDepth ? (ReactSharedInternals.actQueue = queue5, enqueueTask(function() {
               return recursivelyFlushAsyncActWork(
                 returnValue$jscomp$0,
                 resolve,
@@ -1265,20 +1267,20 @@ function requireReact_development() {
         Object.seal(refObject);
         return refObject;
       };
-      exports$1.forwardRef = function(render) {
-        null != render && render.$$typeof === REACT_MEMO_TYPE ? console.error(
+      exports$1.forwardRef = function(render2) {
+        null != render2 && render2.$$typeof === REACT_MEMO_TYPE ? console.error(
           "forwardRef requires a render function but received a `memo` component. Instead of forwardRef(memo(...)), use memo(forwardRef(...))."
-        ) : "function" !== typeof render ? console.error(
+        ) : "function" !== typeof render2 ? console.error(
           "forwardRef requires a render function but was given %s.",
-          null === render ? "null" : typeof render
-        ) : 0 !== render.length && 2 !== render.length && console.error(
+          null === render2 ? "null" : typeof render2
+        ) : 0 !== render2.length && 2 !== render2.length && console.error(
           "forwardRef render functions accept exactly two parameters: props and ref. %s",
-          1 === render.length ? "Did you forget to use the ref parameter?" : "Any additional parameter will be undefined."
+          1 === render2.length ? "Did you forget to use the ref parameter?" : "Any additional parameter will be undefined."
         );
-        null != render && null != render.defaultProps && console.error(
+        null != render2 && null != render2.defaultProps && console.error(
           "forwardRef render functions do not support defaultProps. Did you accidentally pass a React component?"
         );
-        var elementType = { $$typeof: REACT_FORWARD_REF_TYPE, render }, ownName;
+        var elementType = { $$typeof: REACT_FORWARD_REF_TYPE, render: render2 }, ownName;
         Object.defineProperty(elementType, "displayName", {
           enumerable: false,
           configurable: true,
@@ -1287,7 +1289,7 @@ function requireReact_development() {
           },
           set: function(name) {
             ownName = name;
-            render.name || render.displayName || (Object.defineProperty(render, "name", { value: name }), render.displayName = name);
+            render2.name || render2.displayName || (Object.defineProperty(render2, "name", { value: name }), render2.displayName = name);
           }
         });
         return elementType;
@@ -1720,6 +1722,3865 @@ function requireJsxRuntime() {
   return jsxRuntime.exports;
 }
 var jsxRuntimeExports = requireJsxRuntime();
+var Config = class {
+  constructor(defaults) {
+    this.config = {};
+    this.defaults = defaults;
+  }
+  extend(defaults) {
+    if (defaults) {
+      this.defaults = { ...this.defaults, ...defaults };
+    }
+    return this;
+  }
+  replace(newConfig) {
+    this.config = newConfig;
+  }
+  get(key) {
+    return has(this.config, key) ? get(this.config, key) : get(this.defaults, key);
+  }
+  set(keyOrValues, value) {
+    if (typeof keyOrValues === "string") {
+      set(this.config, keyOrValues, value);
+    } else {
+      Object.entries(keyOrValues).forEach(([key, val]) => {
+        set(this.config, key, val);
+      });
+    }
+  }
+};
+var config$1 = new Config({
+  form: {
+    recentlySuccessfulDuration: 2e3,
+    forceIndicesArrayFormatInFormData: true
+  },
+  future: {
+    preserveEqualProps: false,
+    useDataInertiaHeadAttribute: false,
+    useDialogForErrorModal: false,
+    useScriptElementForInitialPage: false
+  },
+  prefetch: {
+    cacheFor: 3e4,
+    hoverDelay: 75
+  }
+});
+function debounce(fn, delay) {
+  let timeoutID;
+  return function(...args) {
+    clearTimeout(timeoutID);
+    timeoutID = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+function fireEvent(name, options) {
+  return document.dispatchEvent(new CustomEvent(`inertia:${name}`, options));
+}
+var fireBeforeEvent = (visit) => {
+  return fireEvent("before", { cancelable: true, detail: { visit } });
+};
+var fireErrorEvent = (errors) => {
+  return fireEvent("error", { detail: { errors } });
+};
+var fireExceptionEvent = (exception) => {
+  return fireEvent("exception", { cancelable: true, detail: { exception } });
+};
+var fireFinishEvent = (visit) => {
+  return fireEvent("finish", { detail: { visit } });
+};
+var fireInvalidEvent = (response) => {
+  return fireEvent("invalid", { cancelable: true, detail: { response } });
+};
+var fireBeforeUpdateEvent = (page2) => {
+  return fireEvent("beforeUpdate", { detail: { page: page2 } });
+};
+var fireNavigateEvent = (page2) => {
+  return fireEvent("navigate", { detail: { page: page2 } });
+};
+var fireProgressEvent = (progress3) => {
+  return fireEvent("progress", { detail: { progress: progress3 } });
+};
+var fireStartEvent = (visit) => {
+  return fireEvent("start", { detail: { visit } });
+};
+var fireSuccessEvent = (page2) => {
+  return fireEvent("success", { detail: { page: page2 } });
+};
+var firePrefetchedEvent = (response, visit) => {
+  return fireEvent("prefetched", { detail: { fetchedAt: Date.now(), response: response.data, visit } });
+};
+var firePrefetchingEvent = (visit) => {
+  return fireEvent("prefetching", { detail: { visit } });
+};
+var fireFlashEvent = (flash) => {
+  return fireEvent("flash", { detail: { flash } });
+};
+var SessionStorage = class {
+  static set(key, value) {
+    if (typeof window !== "undefined") {
+      window.sessionStorage.setItem(key, JSON.stringify(value));
+    }
+  }
+  static get(key) {
+    if (typeof window !== "undefined") {
+      return JSON.parse(window.sessionStorage.getItem(key) || "null");
+    }
+  }
+  static merge(key, value) {
+    const existing = this.get(key);
+    if (existing === null) {
+      this.set(key, value);
+    } else {
+      this.set(key, { ...existing, ...value });
+    }
+  }
+  static remove(key) {
+    if (typeof window !== "undefined") {
+      window.sessionStorage.removeItem(key);
+    }
+  }
+  static removeNested(key, nestedKey) {
+    const existing = this.get(key);
+    if (existing !== null) {
+      delete existing[nestedKey];
+      this.set(key, existing);
+    }
+  }
+  static exists(key) {
+    try {
+      return this.get(key) !== null;
+    } catch (error) {
+      return false;
+    }
+  }
+  static clear() {
+    if (typeof window !== "undefined") {
+      window.sessionStorage.clear();
+    }
+  }
+};
+SessionStorage.locationVisitKey = "inertiaLocationVisit";
+var encryptHistory = async (data) => {
+  if (typeof window === "undefined") {
+    throw new Error("Unable to encrypt history");
+  }
+  const iv = getIv();
+  const storedKey = await getKeyFromSessionStorage();
+  const key = await getOrCreateKey(storedKey);
+  if (!key) {
+    throw new Error("Unable to encrypt history");
+  }
+  const encrypted = await encryptData(iv, key, data);
+  return encrypted;
+};
+var historySessionStorageKeys = {
+  key: "historyKey",
+  iv: "historyIv"
+};
+var decryptHistory = async (data) => {
+  const iv = getIv();
+  const storedKey = await getKeyFromSessionStorage();
+  if (!storedKey) {
+    throw new Error("Unable to decrypt history");
+  }
+  return await decryptData(iv, storedKey, data);
+};
+var encryptData = async (iv, key, data) => {
+  if (typeof window === "undefined") {
+    throw new Error("Unable to encrypt history");
+  }
+  if (typeof window.crypto.subtle === "undefined") {
+    console.warn("Encryption is not supported in this environment. SSL is required.");
+    return Promise.resolve(data);
+  }
+  const textEncoder = new TextEncoder();
+  const str = JSON.stringify(data);
+  const encoded = new Uint8Array(str.length * 3);
+  const result = textEncoder.encodeInto(str, encoded);
+  return window.crypto.subtle.encrypt(
+    {
+      name: "AES-GCM",
+      iv
+    },
+    key,
+    encoded.subarray(0, result.written)
+  );
+};
+var decryptData = async (iv, key, data) => {
+  if (typeof window.crypto.subtle === "undefined") {
+    console.warn("Decryption is not supported in this environment. SSL is required.");
+    return Promise.resolve(data);
+  }
+  const decrypted = await window.crypto.subtle.decrypt(
+    {
+      name: "AES-GCM",
+      iv
+    },
+    key,
+    data
+  );
+  return JSON.parse(new TextDecoder().decode(decrypted));
+};
+var getIv = () => {
+  const ivString = SessionStorage.get(historySessionStorageKeys.iv);
+  if (ivString) {
+    return new Uint8Array(ivString);
+  }
+  const iv = window.crypto.getRandomValues(new Uint8Array(12));
+  SessionStorage.set(historySessionStorageKeys.iv, Array.from(iv));
+  return iv;
+};
+var createKey = async () => {
+  if (typeof window.crypto.subtle === "undefined") {
+    console.warn("Encryption is not supported in this environment. SSL is required.");
+    return Promise.resolve(null);
+  }
+  return window.crypto.subtle.generateKey(
+    {
+      name: "AES-GCM",
+      length: 256
+    },
+    true,
+    ["encrypt", "decrypt"]
+  );
+};
+var saveKey = async (key) => {
+  if (typeof window.crypto.subtle === "undefined") {
+    console.warn("Encryption is not supported in this environment. SSL is required.");
+    return Promise.resolve();
+  }
+  const keyData = await window.crypto.subtle.exportKey("raw", key);
+  SessionStorage.set(historySessionStorageKeys.key, Array.from(new Uint8Array(keyData)));
+};
+var getOrCreateKey = async (key) => {
+  if (key) {
+    return key;
+  }
+  const newKey = await createKey();
+  if (!newKey) {
+    return null;
+  }
+  await saveKey(newKey);
+  return newKey;
+};
+var getKeyFromSessionStorage = async () => {
+  const stringKey = SessionStorage.get(historySessionStorageKeys.key);
+  if (!stringKey) {
+    return null;
+  }
+  const key = await window.crypto.subtle.importKey(
+    "raw",
+    new Uint8Array(stringKey),
+    {
+      name: "AES-GCM",
+      length: 256
+    },
+    true,
+    ["encrypt", "decrypt"]
+  );
+  return key;
+};
+var objectsAreEqual = (obj1, obj2, excludeKeys) => {
+  if (obj1 === obj2) {
+    return true;
+  }
+  for (const key in obj1) {
+    if (excludeKeys.includes(key)) {
+      continue;
+    }
+    if (obj1[key] === obj2[key]) {
+      continue;
+    }
+    if (!compareValues(obj1[key], obj2[key])) {
+      return false;
+    }
+  }
+  for (const key in obj2) {
+    if (excludeKeys.includes(key)) {
+      continue;
+    }
+    if (!(key in obj1)) {
+      return false;
+    }
+  }
+  return true;
+};
+var compareValues = (value1, value2) => {
+  switch (typeof value1) {
+    case "object":
+      return objectsAreEqual(value1, value2, []);
+    case "function":
+      return value1.toString() === value2.toString();
+    default:
+      return value1 === value2;
+  }
+};
+var conversionMap = {
+  ms: 1,
+  s: 1e3,
+  m: 1e3 * 60,
+  h: 1e3 * 60 * 60,
+  d: 1e3 * 60 * 60 * 24
+};
+var timeToMs = (time) => {
+  if (typeof time === "number") {
+    return time;
+  }
+  for (const [unit, conversion] of Object.entries(conversionMap)) {
+    if (time.endsWith(unit)) {
+      return parseFloat(time) * conversion;
+    }
+  }
+  return parseInt(time);
+};
+var PrefetchedRequests = class {
+  constructor() {
+    this.cached = [];
+    this.inFlightRequests = [];
+    this.removalTimers = [];
+    this.currentUseId = null;
+  }
+  add(params, sendFunc, { cacheFor, cacheTags }) {
+    const inFlight = this.findInFlight(params);
+    if (inFlight) {
+      return Promise.resolve();
+    }
+    const existing = this.findCached(params);
+    if (!params.fresh && existing && existing.staleTimestamp > Date.now()) {
+      return Promise.resolve();
+    }
+    const [stale, prefetchExpiresIn] = this.extractStaleValues(cacheFor);
+    const promise = new Promise((resolve, reject) => {
+      sendFunc({
+        ...params,
+        onCancel: () => {
+          this.remove(params);
+          params.onCancel();
+          reject();
+        },
+        onError: (error) => {
+          this.remove(params);
+          params.onError(error);
+          reject();
+        },
+        onPrefetching(visitParams) {
+          params.onPrefetching(visitParams);
+        },
+        onPrefetched(response, visit) {
+          params.onPrefetched(response, visit);
+        },
+        onPrefetchResponse(response) {
+          resolve(response);
+        },
+        onPrefetchError(error) {
+          prefetchedRequests.removeFromInFlight(params);
+          reject(error);
+        }
+      });
+    }).then((response) => {
+      this.remove(params);
+      const pageResponse = response.getPageResponse();
+      page.mergeOncePropsIntoResponse(pageResponse);
+      this.cached.push({
+        params: { ...params },
+        staleTimestamp: Date.now() + stale,
+        expiresAt: Date.now() + prefetchExpiresIn,
+        response: promise,
+        singleUse: prefetchExpiresIn === 0,
+        timestamp: Date.now(),
+        inFlight: false,
+        tags: Array.isArray(cacheTags) ? cacheTags : [cacheTags]
+      });
+      const oncePropExpiresIn = this.getShortestOncePropTtl(pageResponse);
+      this.scheduleForRemoval(
+        params,
+        oncePropExpiresIn ? Math.min(prefetchExpiresIn, oncePropExpiresIn) : prefetchExpiresIn
+      );
+      this.removeFromInFlight(params);
+      response.handlePrefetch();
+      return response;
+    });
+    this.inFlightRequests.push({
+      params: { ...params },
+      response: promise,
+      staleTimestamp: null,
+      inFlight: true
+    });
+    return promise;
+  }
+  removeAll() {
+    this.cached = [];
+    this.removalTimers.forEach((removalTimer) => {
+      clearTimeout(removalTimer.timer);
+    });
+    this.removalTimers = [];
+  }
+  removeByTags(tags) {
+    this.cached = this.cached.filter((prefetched) => {
+      return !prefetched.tags.some((tag) => tags.includes(tag));
+    });
+  }
+  remove(params) {
+    this.cached = this.cached.filter((prefetched) => {
+      return !this.paramsAreEqual(prefetched.params, params);
+    });
+    this.clearTimer(params);
+  }
+  removeFromInFlight(params) {
+    this.inFlightRequests = this.inFlightRequests.filter((prefetching) => {
+      return !this.paramsAreEqual(prefetching.params, params);
+    });
+  }
+  extractStaleValues(cacheFor) {
+    const [stale, expires] = this.cacheForToStaleAndExpires(cacheFor);
+    return [timeToMs(stale), timeToMs(expires)];
+  }
+  cacheForToStaleAndExpires(cacheFor) {
+    if (!Array.isArray(cacheFor)) {
+      return [cacheFor, cacheFor];
+    }
+    switch (cacheFor.length) {
+      case 0:
+        return [0, 0];
+      case 1:
+        return [cacheFor[0], cacheFor[0]];
+      default:
+        return [cacheFor[0], cacheFor[1]];
+    }
+  }
+  clearTimer(params) {
+    const timer = this.removalTimers.find((removalTimer) => {
+      return this.paramsAreEqual(removalTimer.params, params);
+    });
+    if (timer) {
+      clearTimeout(timer.timer);
+      this.removalTimers = this.removalTimers.filter((removalTimer) => removalTimer !== timer);
+    }
+  }
+  scheduleForRemoval(params, expiresIn) {
+    if (typeof window === "undefined") {
+      return;
+    }
+    this.clearTimer(params);
+    if (expiresIn > 0) {
+      const timer = window.setTimeout(() => this.remove(params), expiresIn);
+      this.removalTimers.push({
+        params,
+        timer
+      });
+    }
+  }
+  get(params) {
+    return this.findCached(params) || this.findInFlight(params);
+  }
+  use(prefetched, params) {
+    const id = `${params.url.pathname}-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+    this.currentUseId = id;
+    return prefetched.response.then((response) => {
+      if (this.currentUseId !== id) {
+        return;
+      }
+      response.mergeParams({ ...params, onPrefetched: () => {
+      } });
+      this.removeSingleUseItems(params);
+      return response.handle();
+    });
+  }
+  removeSingleUseItems(params) {
+    this.cached = this.cached.filter((prefetched) => {
+      if (!this.paramsAreEqual(prefetched.params, params)) {
+        return true;
+      }
+      return !prefetched.singleUse;
+    });
+  }
+  findCached(params) {
+    return this.cached.find((prefetched) => {
+      return this.paramsAreEqual(prefetched.params, params);
+    }) || null;
+  }
+  findInFlight(params) {
+    return this.inFlightRequests.find((prefetched) => {
+      return this.paramsAreEqual(prefetched.params, params);
+    }) || null;
+  }
+  withoutPurposePrefetchHeader(params) {
+    const newParams = cloneDeep(params);
+    if (newParams.headers["Purpose"] === "prefetch") {
+      delete newParams.headers["Purpose"];
+    }
+    return newParams;
+  }
+  paramsAreEqual(params1, params2) {
+    return objectsAreEqual(
+      this.withoutPurposePrefetchHeader(params1),
+      this.withoutPurposePrefetchHeader(params2),
+      [
+        "showProgress",
+        "replace",
+        "prefetch",
+        "preserveScroll",
+        "preserveState",
+        "onBefore",
+        "onBeforeUpdate",
+        "onStart",
+        "onProgress",
+        "onFinish",
+        "onCancel",
+        "onSuccess",
+        "onError",
+        "onFlash",
+        "onPrefetched",
+        "onCancelToken",
+        "onPrefetching",
+        "async",
+        "viewTransition"
+      ]
+    );
+  }
+  updateCachedOncePropsFromCurrentPage() {
+    this.cached.forEach((prefetched) => {
+      prefetched.response.then((response) => {
+        const pageResponse = response.getPageResponse();
+        page.mergeOncePropsIntoResponse(pageResponse, { force: true });
+        for (const [group, deferredProps] of Object.entries(pageResponse.deferredProps ?? {})) {
+          const remaining = deferredProps.filter((prop) => pageResponse.props[prop] === void 0);
+          if (remaining.length > 0) {
+            pageResponse.deferredProps[group] = remaining;
+          } else {
+            delete pageResponse.deferredProps[group];
+          }
+        }
+        const oncePropExpiresIn = this.getShortestOncePropTtl(pageResponse);
+        if (oncePropExpiresIn === null) {
+          return;
+        }
+        const prefetchExpiresIn = prefetched.expiresAt - Date.now();
+        const expiresIn = Math.min(prefetchExpiresIn, oncePropExpiresIn);
+        if (expiresIn > 0) {
+          this.scheduleForRemoval(prefetched.params, expiresIn);
+        } else {
+          this.remove(prefetched.params);
+        }
+      });
+    });
+  }
+  getShortestOncePropTtl(page2) {
+    const expiryTimestamps = Object.values(page2.onceProps ?? {}).map((onceProp) => onceProp.expiresAt).filter((expiresAt) => !!expiresAt);
+    if (expiryTimestamps.length === 0) {
+      return null;
+    }
+    return Math.min(...expiryTimestamps) - Date.now();
+  }
+};
+var prefetchedRequests = new PrefetchedRequests();
+var Scroll = class {
+  static save() {
+    history.saveScrollPositions(this.getScrollRegions());
+  }
+  static getScrollRegions() {
+    return Array.from(this.regions()).map((region) => ({
+      top: region.scrollTop,
+      left: region.scrollLeft
+    }));
+  }
+  static regions() {
+    return document.querySelectorAll("[scroll-region]");
+  }
+  static reset() {
+    const anchorHash = typeof window !== "undefined" ? window.location.hash : null;
+    if (!anchorHash) {
+      window.scrollTo(0, 0);
+    }
+    this.regions().forEach((region) => {
+      if (typeof region.scrollTo === "function") {
+        region.scrollTo(0, 0);
+      } else {
+        region.scrollTop = 0;
+        region.scrollLeft = 0;
+      }
+    });
+    this.save();
+    this.scrollToAnchor();
+  }
+  static scrollToAnchor() {
+    const anchorHash = typeof window !== "undefined" ? window.location.hash : null;
+    if (anchorHash) {
+      setTimeout(() => {
+        const anchorElement = document.getElementById(anchorHash.slice(1));
+        anchorElement ? anchorElement.scrollIntoView() : window.scrollTo(0, 0);
+      });
+    }
+  }
+  static restore(scrollRegions) {
+    if (typeof window === "undefined") {
+      return;
+    }
+    window.requestAnimationFrame(() => {
+      this.restoreDocument();
+      this.restoreScrollRegions(scrollRegions);
+    });
+  }
+  static restoreScrollRegions(scrollRegions) {
+    if (typeof window === "undefined") {
+      return;
+    }
+    this.regions().forEach((region, index) => {
+      const scrollPosition = scrollRegions[index];
+      if (!scrollPosition) {
+        return;
+      }
+      if (typeof region.scrollTo === "function") {
+        region.scrollTo(scrollPosition.left, scrollPosition.top);
+      } else {
+        region.scrollTop = scrollPosition.top;
+        region.scrollLeft = scrollPosition.left;
+      }
+    });
+  }
+  static restoreDocument() {
+    const scrollPosition = history.getDocumentScrollPosition();
+    window.scrollTo(scrollPosition.left, scrollPosition.top);
+  }
+  static onScroll(event) {
+    const target = event.target;
+    if (typeof target.hasAttribute === "function" && target.hasAttribute("scroll-region")) {
+      this.save();
+    }
+  }
+  static onWindowScroll() {
+    history.saveDocumentScrollPosition({
+      top: window.scrollY,
+      left: window.scrollX
+    });
+  }
+};
+var isFile = (value) => typeof File !== "undefined" && value instanceof File || value instanceof Blob || typeof FileList !== "undefined" && value instanceof FileList && value.length > 0;
+function hasFiles(data) {
+  return isFile(data) || data instanceof FormData && Array.from(data.values()).some((value) => hasFiles(value)) || typeof data === "object" && data !== null && Object.values(data).some((value) => hasFiles(value));
+}
+var isFormData = (value) => value instanceof FormData;
+function objectToFormData(source, form = new FormData(), parentKey = null, queryStringArrayFormat = "brackets") {
+  source = source || {};
+  for (const key in source) {
+    if (Object.prototype.hasOwnProperty.call(source, key)) {
+      append(form, composeKey(parentKey, key, "indices"), source[key], queryStringArrayFormat);
+    }
+  }
+  return form;
+}
+function composeKey(parent, key, format) {
+  if (!parent) {
+    return key;
+  }
+  return format === "brackets" ? `${parent}[]` : `${parent}[${key}]`;
+}
+function append(form, key, value, format) {
+  if (Array.isArray(value)) {
+    return Array.from(value.keys()).forEach(
+      (index) => append(form, composeKey(key, index.toString(), format), value[index], format)
+    );
+  } else if (value instanceof Date) {
+    return form.append(key, value.toISOString());
+  } else if (value instanceof File) {
+    return form.append(key, value, value.name);
+  } else if (value instanceof Blob) {
+    return form.append(key, value);
+  } else if (typeof value === "boolean") {
+    return form.append(key, value ? "1" : "0");
+  } else if (typeof value === "string") {
+    return form.append(key, value);
+  } else if (typeof value === "number") {
+    return form.append(key, `${value}`);
+  } else if (value === null || value === void 0) {
+    return form.append(key, "");
+  }
+  objectToFormData(value, form, key, format);
+}
+function hrefToUrl(href) {
+  return new URL(href.toString(), typeof window === "undefined" ? void 0 : window.location.toString());
+}
+var transformUrlAndData = (href, data, method, forceFormData, queryStringArrayFormat) => {
+  let url = typeof href === "string" ? hrefToUrl(href) : href;
+  if ((hasFiles(data) || forceFormData) && !isFormData(data)) {
+    if (config$1.get("form.forceIndicesArrayFormatInFormData")) {
+      queryStringArrayFormat = "indices";
+    }
+    data = objectToFormData(data, new FormData(), null, queryStringArrayFormat);
+  }
+  if (isFormData(data)) {
+    return [url, data];
+  }
+  const [_href, _data] = mergeDataIntoQueryString(method, url, data, queryStringArrayFormat);
+  return [hrefToUrl(_href), _data];
+};
+function mergeDataIntoQueryString(method, href, data, qsArrayFormat = "brackets") {
+  const hasDataForQueryString = method === "get" && !isFormData(data) && Object.keys(data).length > 0;
+  const hasHost = urlHasProtocol(href.toString());
+  const hasAbsolutePath = hasHost || href.toString().startsWith("/") || href.toString() === "";
+  const hasRelativePath = !hasAbsolutePath && !href.toString().startsWith("#") && !href.toString().startsWith("?");
+  const hasRelativePathWithDotPrefix = /^[.]{1,2}([/]|$)/.test(href.toString());
+  const hasSearch = href.toString().includes("?") || hasDataForQueryString;
+  const hasHash = href.toString().includes("#");
+  const url = new URL(href.toString(), typeof window === "undefined" ? "http://localhost" : window.location.toString());
+  if (hasDataForQueryString) {
+    const parseOptions = { ignoreQueryPrefix: true, arrayLimit: -1 };
+    url.search = qs.stringify(
+      { ...qs.parse(url.search, parseOptions), ...data },
+      {
+        encodeValuesOnly: true,
+        arrayFormat: qsArrayFormat
+      }
+    );
+  }
+  return [
+    [
+      hasHost ? `${url.protocol}//${url.host}` : "",
+      hasAbsolutePath ? url.pathname : "",
+      hasRelativePath ? url.pathname.substring(hasRelativePathWithDotPrefix ? 0 : 1) : "",
+      hasSearch ? url.search : "",
+      hasHash ? url.hash : ""
+    ].join(""),
+    hasDataForQueryString ? {} : data
+  ];
+}
+function urlWithoutHash(url) {
+  url = new URL(url.href);
+  url.hash = "";
+  return url;
+}
+var setHashIfSameUrl = (originUrl, destinationUrl) => {
+  if (originUrl.hash && !destinationUrl.hash && urlWithoutHash(originUrl).href === destinationUrl.href) {
+    destinationUrl.hash = originUrl.hash;
+  }
+};
+var isSameUrlWithoutHash = (url1, url2) => {
+  return urlWithoutHash(url1).href === urlWithoutHash(url2).href;
+};
+function isUrlMethodPair(href) {
+  return href !== null && typeof href === "object" && href !== void 0 && "url" in href && "method" in href;
+}
+function urlHasProtocol(url) {
+  return /^([a-z][a-z0-9+.-]*:)?\/\/[^/]/i.test(url);
+}
+function urlToString(url, absolute) {
+  const urlObj = typeof url === "string" ? hrefToUrl(url) : url;
+  return absolute ? `${urlObj.protocol}//${urlObj.host}${urlObj.pathname}${urlObj.search}${urlObj.hash}` : `${urlObj.pathname}${urlObj.search}${urlObj.hash}`;
+}
+var CurrentPage = class {
+  constructor() {
+    this.componentId = {};
+    this.listeners = [];
+    this.isFirstPageLoad = true;
+    this.cleared = false;
+    this.pendingDeferredProps = null;
+  }
+  init({
+    initialPage,
+    swapComponent: swapComponent2,
+    resolveComponent,
+    onFlash
+  }) {
+    this.page = { ...initialPage, flash: initialPage.flash ?? {} };
+    this.swapComponent = swapComponent2;
+    this.resolveComponent = resolveComponent;
+    this.onFlashCallback = onFlash;
+    return this;
+  }
+  set(page2, {
+    replace = false,
+    preserveScroll = false,
+    preserveState = false,
+    viewTransition = false
+  } = {}) {
+    if (Object.keys(page2.deferredProps || {}).length) {
+      this.pendingDeferredProps = {
+        deferredProps: page2.deferredProps,
+        component: page2.component,
+        url: page2.url
+      };
+    }
+    this.componentId = {};
+    const componentId = this.componentId;
+    if (page2.clearHistory) {
+      history.clear();
+    }
+    return this.resolve(page2.component).then((component) => {
+      if (componentId !== this.componentId) {
+        return;
+      }
+      page2.rememberedState ?? (page2.rememberedState = {});
+      const isServer2 = typeof window === "undefined";
+      const location = !isServer2 ? window.location : new URL(page2.url);
+      const scrollRegions = !isServer2 && preserveScroll ? Scroll.getScrollRegions() : [];
+      replace = replace || isSameUrlWithoutHash(hrefToUrl(page2.url), location);
+      const pageForHistory = { ...page2, flash: {} };
+      return new Promise(
+        (resolve) => replace ? history.replaceState(pageForHistory, resolve) : history.pushState(pageForHistory, resolve)
+      ).then(() => {
+        const isNewComponent = !this.isTheSame(page2);
+        if (!isNewComponent && Object.keys(page2.props.errors || {}).length > 0) {
+          viewTransition = false;
+        }
+        this.page = page2;
+        this.cleared = false;
+        if (this.hasOnceProps()) {
+          prefetchedRequests.updateCachedOncePropsFromCurrentPage();
+        }
+        if (isNewComponent) {
+          this.fireEventsFor("newComponent");
+        }
+        if (this.isFirstPageLoad) {
+          this.fireEventsFor("firstLoad");
+        }
+        this.isFirstPageLoad = false;
+        return this.swap({
+          component,
+          page: page2,
+          preserveState,
+          viewTransition
+        }).then(() => {
+          if (preserveScroll) {
+            window.requestAnimationFrame(() => Scroll.restoreScrollRegions(scrollRegions));
+          } else {
+            Scroll.reset();
+          }
+          if (this.pendingDeferredProps && this.pendingDeferredProps.component === page2.component && this.pendingDeferredProps.url === page2.url) {
+            eventHandler.fireInternalEvent("loadDeferredProps", this.pendingDeferredProps.deferredProps);
+          }
+          this.pendingDeferredProps = null;
+          if (!replace) {
+            fireNavigateEvent(page2);
+          }
+        });
+      });
+    });
+  }
+  setQuietly(page2, {
+    preserveState = false
+  } = {}) {
+    return this.resolve(page2.component).then((component) => {
+      this.page = page2;
+      this.cleared = false;
+      history.setCurrent(page2);
+      return this.swap({ component, page: page2, preserveState, viewTransition: false });
+    });
+  }
+  clear() {
+    this.cleared = true;
+  }
+  isCleared() {
+    return this.cleared;
+  }
+  get() {
+    return this.page;
+  }
+  getWithoutFlashData() {
+    return { ...this.page, flash: {} };
+  }
+  hasOnceProps() {
+    return Object.keys(this.page.onceProps ?? {}).length > 0;
+  }
+  merge(data) {
+    this.page = { ...this.page, ...data };
+  }
+  setFlash(flash) {
+    this.page = { ...this.page, flash };
+    this.onFlashCallback?.(flash);
+  }
+  setUrlHash(hash) {
+    if (!this.page.url.includes(hash)) {
+      this.page.url += hash;
+    }
+  }
+  remember(data) {
+    this.page.rememberedState = data;
+  }
+  swap({
+    component,
+    page: page2,
+    preserveState,
+    viewTransition
+  }) {
+    const doSwap = () => this.swapComponent({ component, page: page2, preserveState });
+    if (!viewTransition || !document?.startViewTransition) {
+      return doSwap();
+    }
+    const viewTransitionCallback = typeof viewTransition === "boolean" ? () => null : viewTransition;
+    return new Promise((resolve) => {
+      const transitionResult = document.startViewTransition(() => doSwap().then(resolve));
+      viewTransitionCallback(transitionResult);
+    });
+  }
+  resolve(component) {
+    return Promise.resolve(this.resolveComponent(component));
+  }
+  isTheSame(page2) {
+    return this.page.component === page2.component;
+  }
+  on(event, callback) {
+    this.listeners.push({ event, callback });
+    return () => {
+      this.listeners = this.listeners.filter((listener) => listener.event !== event && listener.callback !== callback);
+    };
+  }
+  fireEventsFor(event) {
+    this.listeners.filter((listener) => listener.event === event).forEach((listener) => listener.callback());
+  }
+  mergeOncePropsIntoResponse(response, { force = false } = {}) {
+    Object.entries(response.onceProps ?? {}).forEach(([key, onceProp]) => {
+      const existingOnceProp = this.page.onceProps?.[key];
+      if (existingOnceProp === void 0) {
+        return;
+      }
+      if (force || response.props[onceProp.prop] === void 0) {
+        response.props[onceProp.prop] = this.page.props[existingOnceProp.prop];
+        response.onceProps[key].expiresAt = existingOnceProp.expiresAt;
+      }
+    });
+  }
+};
+var page = new CurrentPage();
+var Queue = class {
+  constructor() {
+    this.items = [];
+    this.processingPromise = null;
+  }
+  add(item) {
+    this.items.push(item);
+    return this.process();
+  }
+  process() {
+    this.processingPromise ?? (this.processingPromise = this.processNext().finally(() => {
+      this.processingPromise = null;
+    }));
+    return this.processingPromise;
+  }
+  processNext() {
+    const next = this.items.shift();
+    if (next) {
+      return Promise.resolve(next()).then(() => this.processNext());
+    }
+    return Promise.resolve();
+  }
+};
+var isServer = typeof window === "undefined";
+var queue = new Queue();
+var isChromeIOS = !isServer && /CriOS/.test(window.navigator.userAgent);
+var History = class {
+  constructor() {
+    this.rememberedState = "rememberedState";
+    this.scrollRegions = "scrollRegions";
+    this.preserveUrl = false;
+    this.current = {};
+    this.initialState = null;
+  }
+  remember(data, key) {
+    this.replaceState({
+      ...page.getWithoutFlashData(),
+      rememberedState: {
+        ...page.get()?.rememberedState ?? {},
+        [key]: data
+      }
+    });
+  }
+  restore(key) {
+    if (!isServer) {
+      return this.current[this.rememberedState]?.[key] !== void 0 ? this.current[this.rememberedState]?.[key] : this.initialState?.[this.rememberedState]?.[key];
+    }
+  }
+  pushState(page2, cb = null) {
+    if (isServer) {
+      return;
+    }
+    if (this.preserveUrl) {
+      cb && cb();
+      return;
+    }
+    this.current = page2;
+    queue.add(() => {
+      return this.getPageData(page2).then((data) => {
+        const doPush = () => this.doPushState({ page: data }, page2.url).then(() => cb?.());
+        if (isChromeIOS) {
+          return new Promise((resolve) => {
+            setTimeout(() => doPush().then(resolve));
+          });
+        }
+        return doPush();
+      });
+    });
+  }
+  clonePageProps(page2) {
+    try {
+      structuredClone(page2.props);
+      return page2;
+    } catch {
+      return {
+        ...page2,
+        props: cloneDeep(page2.props)
+      };
+    }
+  }
+  getPageData(page2) {
+    const pageWithClonedProps = this.clonePageProps(page2);
+    return new Promise((resolve) => {
+      return page2.encryptHistory ? encryptHistory(pageWithClonedProps).then(resolve) : resolve(pageWithClonedProps);
+    });
+  }
+  processQueue() {
+    return queue.process();
+  }
+  decrypt(page2 = null) {
+    if (isServer) {
+      return Promise.resolve(page2 ?? page.get());
+    }
+    const pageData = page2 ?? window.history.state?.page;
+    return this.decryptPageData(pageData).then((data) => {
+      if (!data) {
+        throw new Error("Unable to decrypt history");
+      }
+      if (this.initialState === null) {
+        this.initialState = data ?? void 0;
+      } else {
+        this.current = data ?? {};
+      }
+      return data;
+    });
+  }
+  decryptPageData(pageData) {
+    return pageData instanceof ArrayBuffer ? decryptHistory(pageData) : Promise.resolve(pageData);
+  }
+  saveScrollPositions(scrollRegions) {
+    queue.add(() => {
+      return Promise.resolve().then(() => {
+        if (!window.history.state?.page) {
+          return;
+        }
+        if (isEqual(this.getScrollRegions(), scrollRegions)) {
+          return;
+        }
+        return this.doReplaceState({
+          page: window.history.state.page,
+          scrollRegions
+        });
+      });
+    });
+  }
+  saveDocumentScrollPosition(scrollRegion) {
+    queue.add(() => {
+      return Promise.resolve().then(() => {
+        if (!window.history.state?.page) {
+          return;
+        }
+        if (isEqual(this.getDocumentScrollPosition(), scrollRegion)) {
+          return;
+        }
+        return this.doReplaceState({
+          page: window.history.state.page,
+          documentScrollPosition: scrollRegion
+        });
+      });
+    });
+  }
+  getScrollRegions() {
+    return window.history.state?.scrollRegions || [];
+  }
+  getDocumentScrollPosition() {
+    return window.history.state?.documentScrollPosition || { top: 0, left: 0 };
+  }
+  replaceState(page2, cb = null) {
+    page.merge(page2);
+    if (isServer) {
+      return;
+    }
+    if (this.preserveUrl) {
+      cb && cb();
+      return;
+    }
+    this.current = page2;
+    queue.add(() => {
+      return this.getPageData(page2).then((data) => {
+        const doReplace = () => this.doReplaceState({ page: data }, page2.url).then(() => cb?.());
+        if (isChromeIOS) {
+          return new Promise((resolve) => {
+            setTimeout(() => doReplace().then(resolve));
+          });
+        }
+        return doReplace();
+      });
+    });
+  }
+  doReplaceState(data, url) {
+    return Promise.resolve().then(
+      () => window.history.replaceState(
+        {
+          ...data,
+          scrollRegions: data.scrollRegions ?? window.history.state?.scrollRegions,
+          documentScrollPosition: data.documentScrollPosition ?? window.history.state?.documentScrollPosition
+        },
+        "",
+        url
+      )
+    );
+  }
+  doPushState(data, url) {
+    return Promise.resolve().then(() => window.history.pushState(data, "", url));
+  }
+  getState(key, defaultValue) {
+    return this.current?.[key] ?? defaultValue;
+  }
+  deleteState(key) {
+    if (this.current[key] !== void 0) {
+      delete this.current[key];
+      this.replaceState(this.current);
+    }
+  }
+  clearInitialState(key) {
+    if (this.initialState && this.initialState[key] !== void 0) {
+      delete this.initialState[key];
+    }
+  }
+  hasAnyState() {
+    return !!this.getAllState();
+  }
+  clear() {
+    SessionStorage.remove(historySessionStorageKeys.key);
+    SessionStorage.remove(historySessionStorageKeys.iv);
+  }
+  setCurrent(page2) {
+    this.current = page2;
+  }
+  isValidState(state) {
+    return !!state.page;
+  }
+  getAllState() {
+    return this.current;
+  }
+};
+if (typeof window !== "undefined" && window.history.scrollRestoration) {
+  window.history.scrollRestoration = "manual";
+}
+var history = new History();
+var EventHandler = class {
+  constructor() {
+    this.internalListeners = [];
+  }
+  init() {
+    if (typeof window !== "undefined") {
+      window.addEventListener("popstate", this.handlePopstateEvent.bind(this));
+      window.addEventListener("scroll", debounce(Scroll.onWindowScroll.bind(Scroll), 100), true);
+    }
+    if (typeof document !== "undefined") {
+      document.addEventListener("scroll", debounce(Scroll.onScroll.bind(Scroll), 100), true);
+    }
+  }
+  onGlobalEvent(type, callback) {
+    const listener = ((event) => {
+      const response = callback(event);
+      if (event.cancelable && !event.defaultPrevented && response === false) {
+        event.preventDefault();
+      }
+    });
+    return this.registerListener(`inertia:${type}`, listener);
+  }
+  on(event, callback) {
+    this.internalListeners.push({ event, listener: callback });
+    return () => {
+      this.internalListeners = this.internalListeners.filter((listener) => listener.listener !== callback);
+    };
+  }
+  onMissingHistoryItem() {
+    page.clear();
+    this.fireInternalEvent("missingHistoryItem");
+  }
+  fireInternalEvent(event, ...args) {
+    this.internalListeners.filter((listener) => listener.event === event).forEach((listener) => listener.listener(...args));
+  }
+  registerListener(type, listener) {
+    document.addEventListener(type, listener);
+    return () => document.removeEventListener(type, listener);
+  }
+  handlePopstateEvent(event) {
+    const state = event.state || null;
+    if (state === null) {
+      const url = hrefToUrl(page.get().url);
+      url.hash = window.location.hash;
+      history.replaceState({ ...page.getWithoutFlashData(), url: url.href });
+      Scroll.reset();
+      return;
+    }
+    if (!history.isValidState(state)) {
+      return this.onMissingHistoryItem();
+    }
+    history.decrypt(state.page).then((data) => {
+      if (page.get().version !== data.version) {
+        this.onMissingHistoryItem();
+        return;
+      }
+      router.cancelAll();
+      page.setQuietly(data, { preserveState: false }).then(() => {
+        Scroll.restore(history.getScrollRegions());
+        fireNavigateEvent(page.get());
+      });
+    }).catch(() => {
+      this.onMissingHistoryItem();
+    });
+  }
+};
+var eventHandler = new EventHandler();
+var NavigationType = class {
+  constructor() {
+    this.type = this.resolveType();
+  }
+  resolveType() {
+    if (typeof window === "undefined") {
+      return "navigate";
+    }
+    if (window.performance && window.performance.getEntriesByType && window.performance.getEntriesByType("navigation").length > 0) {
+      return window.performance.getEntriesByType("navigation")[0].type;
+    }
+    return "navigate";
+  }
+  get() {
+    return this.type;
+  }
+  isBackForward() {
+    return this.type === "back_forward";
+  }
+  isReload() {
+    return this.type === "reload";
+  }
+};
+var navigationType = new NavigationType();
+var InitialVisit = class {
+  static handle() {
+    this.clearRememberedStateOnReload();
+    const scenarios = [this.handleBackForward, this.handleLocation, this.handleDefault];
+    scenarios.find((handler) => handler.bind(this)());
+  }
+  static clearRememberedStateOnReload() {
+    if (navigationType.isReload()) {
+      history.deleteState(history.rememberedState);
+      history.clearInitialState(history.rememberedState);
+    }
+  }
+  static handleBackForward() {
+    if (!navigationType.isBackForward() || !history.hasAnyState()) {
+      return false;
+    }
+    const scrollRegions = history.getScrollRegions();
+    history.decrypt().then((data) => {
+      page.set(data, { preserveScroll: true, preserveState: true }).then(() => {
+        Scroll.restore(scrollRegions);
+        fireNavigateEvent(page.get());
+      });
+    }).catch(() => {
+      eventHandler.onMissingHistoryItem();
+    });
+    return true;
+  }
+  /**
+   * @link https://inertiajs.com/redirects#external-redirects
+   */
+  static handleLocation() {
+    if (!SessionStorage.exists(SessionStorage.locationVisitKey)) {
+      return false;
+    }
+    const locationVisit = SessionStorage.get(SessionStorage.locationVisitKey) || {};
+    SessionStorage.remove(SessionStorage.locationVisitKey);
+    if (typeof window !== "undefined") {
+      page.setUrlHash(window.location.hash);
+    }
+    history.decrypt(page.get()).then(() => {
+      const rememberedState = history.getState(history.rememberedState, {});
+      const scrollRegions = history.getScrollRegions();
+      page.remember(rememberedState);
+      page.set(page.get(), {
+        preserveScroll: locationVisit.preserveScroll,
+        preserveState: true
+      }).then(() => {
+        if (locationVisit.preserveScroll) {
+          Scroll.restore(scrollRegions);
+        }
+        fireNavigateEvent(page.get());
+      });
+    }).catch(() => {
+      eventHandler.onMissingHistoryItem();
+    });
+    return true;
+  }
+  static handleDefault() {
+    if (typeof window !== "undefined") {
+      page.setUrlHash(window.location.hash);
+    }
+    page.set(page.get(), { preserveScroll: true, preserveState: true }).then(() => {
+      if (navigationType.isReload()) {
+        Scroll.restore(history.getScrollRegions());
+      } else {
+        Scroll.scrollToAnchor();
+      }
+      const page2 = page.get();
+      fireNavigateEvent(page2);
+      const flash = page2.flash;
+      if (Object.keys(flash).length > 0) {
+        fireFlashEvent(flash);
+      }
+    });
+  }
+};
+var Poll = class {
+  constructor(interval, cb, options) {
+    this.id = null;
+    this.throttle = false;
+    this.keepAlive = false;
+    this.cbCount = 0;
+    this.keepAlive = options.keepAlive ?? false;
+    this.cb = cb;
+    this.interval = interval;
+    if (options.autoStart ?? true) {
+      this.start();
+    }
+  }
+  stop() {
+    if (this.id) {
+      clearInterval(this.id);
+    }
+  }
+  start() {
+    if (typeof window === "undefined") {
+      return;
+    }
+    this.stop();
+    this.id = window.setInterval(() => {
+      if (!this.throttle || this.cbCount % 10 === 0) {
+        this.cb();
+      }
+      if (this.throttle) {
+        this.cbCount++;
+      }
+    }, this.interval);
+  }
+  isInBackground(hidden) {
+    this.throttle = this.keepAlive ? false : hidden;
+    if (this.throttle) {
+      this.cbCount = 0;
+    }
+  }
+};
+var Polls = class {
+  constructor() {
+    this.polls = [];
+    this.setupVisibilityListener();
+  }
+  add(interval, cb, options) {
+    const poll = new Poll(interval, cb, options);
+    this.polls.push(poll);
+    return {
+      stop: () => poll.stop(),
+      start: () => poll.start()
+    };
+  }
+  clear() {
+    this.polls.forEach((poll) => poll.stop());
+    this.polls = [];
+  }
+  setupVisibilityListener() {
+    if (typeof document === "undefined") {
+      return;
+    }
+    document.addEventListener(
+      "visibilitychange",
+      () => {
+        this.polls.forEach((poll) => poll.isInBackground(document.hidden));
+      },
+      false
+    );
+  }
+};
+var polls = new Polls();
+var RequestParams = class _RequestParams {
+  constructor(params) {
+    this.callbacks = [];
+    if (!params.prefetch) {
+      this.params = params;
+    } else {
+      const wrappedCallbacks = {
+        onBefore: this.wrapCallback(params, "onBefore"),
+        onBeforeUpdate: this.wrapCallback(params, "onBeforeUpdate"),
+        onStart: this.wrapCallback(params, "onStart"),
+        onProgress: this.wrapCallback(params, "onProgress"),
+        onFinish: this.wrapCallback(params, "onFinish"),
+        onCancel: this.wrapCallback(params, "onCancel"),
+        onSuccess: this.wrapCallback(params, "onSuccess"),
+        onError: this.wrapCallback(params, "onError"),
+        onFlash: this.wrapCallback(params, "onFlash"),
+        onCancelToken: this.wrapCallback(params, "onCancelToken"),
+        onPrefetched: this.wrapCallback(params, "onPrefetched"),
+        onPrefetching: this.wrapCallback(params, "onPrefetching")
+      };
+      this.params = {
+        ...params,
+        ...wrappedCallbacks,
+        onPrefetchResponse: params.onPrefetchResponse || (() => {
+        }),
+        onPrefetchError: params.onPrefetchError || (() => {
+        })
+      };
+    }
+  }
+  static create(params) {
+    return new _RequestParams(params);
+  }
+  data() {
+    return this.params.method === "get" ? null : this.params.data;
+  }
+  queryParams() {
+    return this.params.method === "get" ? this.params.data : {};
+  }
+  isPartial() {
+    return this.params.only.length > 0 || this.params.except.length > 0 || this.params.reset.length > 0;
+  }
+  isDeferredPropsRequest() {
+    return this.params.deferredProps === true;
+  }
+  onCancelToken(cb) {
+    this.params.onCancelToken({
+      cancel: cb
+    });
+  }
+  markAsFinished() {
+    this.params.completed = true;
+    this.params.cancelled = false;
+    this.params.interrupted = false;
+  }
+  markAsCancelled({ cancelled = true, interrupted = false }) {
+    this.params.onCancel();
+    this.params.completed = false;
+    this.params.cancelled = cancelled;
+    this.params.interrupted = interrupted;
+  }
+  wasCancelledAtAll() {
+    return this.params.cancelled || this.params.interrupted;
+  }
+  onFinish() {
+    this.params.onFinish(this.params);
+  }
+  onStart() {
+    this.params.onStart(this.params);
+  }
+  onPrefetching() {
+    this.params.onPrefetching(this.params);
+  }
+  onPrefetchResponse(response) {
+    if (this.params.onPrefetchResponse) {
+      this.params.onPrefetchResponse(response);
+    }
+  }
+  onPrefetchError(error) {
+    if (this.params.onPrefetchError) {
+      this.params.onPrefetchError(error);
+    }
+  }
+  all() {
+    return this.params;
+  }
+  headers() {
+    const headers = {
+      ...this.params.headers
+    };
+    if (this.isPartial()) {
+      headers["X-Inertia-Partial-Component"] = page.get().component;
+    }
+    const only = this.params.only.concat(this.params.reset);
+    if (only.length > 0) {
+      headers["X-Inertia-Partial-Data"] = only.join(",");
+    }
+    if (this.params.except.length > 0) {
+      headers["X-Inertia-Partial-Except"] = this.params.except.join(",");
+    }
+    if (this.params.reset.length > 0) {
+      headers["X-Inertia-Reset"] = this.params.reset.join(",");
+    }
+    if (this.params.errorBag && this.params.errorBag.length > 0) {
+      headers["X-Inertia-Error-Bag"] = this.params.errorBag;
+    }
+    return headers;
+  }
+  setPreserveOptions(page2) {
+    this.params.preserveScroll = _RequestParams.resolvePreserveOption(this.params.preserveScroll, page2);
+    this.params.preserveState = _RequestParams.resolvePreserveOption(this.params.preserveState, page2);
+  }
+  runCallbacks() {
+    this.callbacks.forEach(({ name, args }) => {
+      this.params[name](...args);
+    });
+  }
+  merge(toMerge) {
+    this.params = {
+      ...this.params,
+      ...toMerge
+    };
+  }
+  wrapCallback(params, name) {
+    return (...args) => {
+      this.recordCallback(name, args);
+      params[name](...args);
+    };
+  }
+  recordCallback(name, args) {
+    this.callbacks.push({ name, args });
+  }
+  static resolvePreserveOption(value, page2) {
+    if (typeof value === "function") {
+      return value(page2);
+    }
+    if (value === "errors") {
+      return Object.keys(page2.props.errors || {}).length > 0;
+    }
+    return value;
+  }
+};
+var modal_default = {
+  modal: null,
+  listener: null,
+  createIframeAndPage(html) {
+    if (typeof html === "object") {
+      html = `All Inertia requests must receive a valid Inertia response, however a plain JSON response was received.<hr>${JSON.stringify(
+        html
+      )}`;
+    }
+    const page2 = document.createElement("html");
+    page2.innerHTML = html;
+    page2.querySelectorAll("a").forEach((a) => a.setAttribute("target", "_top"));
+    const iframe = document.createElement("iframe");
+    iframe.style.backgroundColor = "white";
+    iframe.style.borderRadius = "5px";
+    iframe.style.width = "100%";
+    iframe.style.height = "100%";
+    return { iframe, page: page2 };
+  },
+  show(html) {
+    const { iframe, page: page2 } = this.createIframeAndPage(html);
+    this.modal = document.createElement("div");
+    this.modal.style.position = "fixed";
+    this.modal.style.width = "100vw";
+    this.modal.style.height = "100vh";
+    this.modal.style.padding = "50px";
+    this.modal.style.boxSizing = "border-box";
+    this.modal.style.backgroundColor = "rgba(0, 0, 0, .6)";
+    this.modal.style.zIndex = 2e5;
+    this.modal.addEventListener("click", () => this.hide());
+    this.modal.appendChild(iframe);
+    document.body.prepend(this.modal);
+    document.body.style.overflow = "hidden";
+    if (!iframe.contentWindow) {
+      throw new Error("iframe not yet ready.");
+    }
+    iframe.contentWindow.document.open();
+    iframe.contentWindow.document.write(page2.outerHTML);
+    iframe.contentWindow.document.close();
+    this.listener = this.hideOnEscape.bind(this);
+    document.addEventListener("keydown", this.listener);
+  },
+  hide() {
+    this.modal.outerHTML = "";
+    this.modal = null;
+    document.body.style.overflow = "visible";
+    document.removeEventListener("keydown", this.listener);
+  },
+  hideOnEscape(event) {
+    if (event.keyCode === 27) {
+      this.hide();
+    }
+  }
+};
+var dialog_default = {
+  show(html) {
+    const { iframe, page: page2 } = modal_default.createIframeAndPage(html);
+    iframe.style.boxSizing = "border-box";
+    iframe.style.display = "block";
+    const dialog = document.createElement("dialog");
+    dialog.id = "inertia-error-dialog";
+    Object.assign(dialog.style, {
+      width: "calc(100vw - 100px)",
+      height: "calc(100vh - 100px)",
+      padding: "0",
+      margin: "auto",
+      border: "none",
+      backgroundColor: "transparent"
+    });
+    const dialogStyleElement = document.createElement("style");
+    dialogStyleElement.textContent = `
+      dialog#inertia-error-dialog::backdrop {
+        background-color: rgba(0, 0, 0, 0.6);
+      }
+
+      dialog#inertia-error-dialog:focus {
+        outline: none;
+      }
+    `;
+    document.head.appendChild(dialogStyleElement);
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) {
+        dialog.close();
+      }
+    });
+    dialog.addEventListener("close", () => {
+      dialogStyleElement.remove();
+      dialog.remove();
+    });
+    dialog.appendChild(iframe);
+    document.body.prepend(dialog);
+    dialog.showModal();
+    dialog.focus();
+    if (!iframe.contentWindow) {
+      throw new Error("iframe not yet ready.");
+    }
+    iframe.contentWindow.document.open();
+    iframe.contentWindow.document.write(page2.outerHTML);
+    iframe.contentWindow.document.close();
+  }
+};
+var queue2 = new Queue();
+var Response = class _Response {
+  constructor(requestParams, response, originatingPage) {
+    this.requestParams = requestParams;
+    this.response = response;
+    this.originatingPage = originatingPage;
+    this.wasPrefetched = false;
+  }
+  static create(params, response, originatingPage) {
+    return new _Response(params, response, originatingPage);
+  }
+  async handlePrefetch() {
+    if (isSameUrlWithoutHash(this.requestParams.all().url, window.location)) {
+      this.handle();
+    }
+  }
+  async handle() {
+    return queue2.add(() => this.process());
+  }
+  async process() {
+    if (this.requestParams.all().prefetch) {
+      this.wasPrefetched = true;
+      this.requestParams.all().prefetch = false;
+      this.requestParams.all().onPrefetched(this.response, this.requestParams.all());
+      firePrefetchedEvent(this.response, this.requestParams.all());
+      return Promise.resolve();
+    }
+    this.requestParams.runCallbacks();
+    if (!this.isInertiaResponse()) {
+      return this.handleNonInertiaResponse();
+    }
+    await history.processQueue();
+    history.preserveUrl = this.requestParams.all().preserveUrl;
+    const previousFlash = page.get().flash;
+    await this.setPage();
+    const errors = page.get().props.errors || {};
+    if (Object.keys(errors).length > 0) {
+      const scopedErrors = this.getScopedErrors(errors);
+      fireErrorEvent(scopedErrors);
+      return this.requestParams.all().onError(scopedErrors);
+    }
+    router.flushByCacheTags(this.requestParams.all().invalidateCacheTags || []);
+    if (!this.wasPrefetched) {
+      router.flush(page.get().url);
+    }
+    const { flash } = page.get();
+    if (Object.keys(flash).length > 0 && (!this.requestParams.isPartial() || !isEqual(flash, previousFlash))) {
+      fireFlashEvent(flash);
+      this.requestParams.all().onFlash(flash);
+    }
+    fireSuccessEvent(page.get());
+    await this.requestParams.all().onSuccess(page.get());
+    history.preserveUrl = false;
+  }
+  mergeParams(params) {
+    this.requestParams.merge(params);
+  }
+  getPageResponse() {
+    const data = this.getDataFromResponse(this.response.data);
+    return this.response.data = { ...data, flash: data.flash ?? {} };
+  }
+  async handleNonInertiaResponse() {
+    if (this.isLocationVisit()) {
+      const locationUrl = hrefToUrl(this.getHeader("x-inertia-location"));
+      setHashIfSameUrl(this.requestParams.all().url, locationUrl);
+      return this.locationVisit(locationUrl);
+    }
+    const response = {
+      ...this.response,
+      data: this.getDataFromResponse(this.response.data)
+    };
+    if (fireInvalidEvent(response)) {
+      return config$1.get("future.useDialogForErrorModal") ? dialog_default.show(response.data) : modal_default.show(response.data);
+    }
+  }
+  isInertiaResponse() {
+    return this.hasHeader("x-inertia");
+  }
+  hasStatus(status2) {
+    return this.response.status === status2;
+  }
+  getHeader(header) {
+    return this.response.headers[header];
+  }
+  hasHeader(header) {
+    return this.getHeader(header) !== void 0;
+  }
+  isLocationVisit() {
+    return this.hasStatus(409) && this.hasHeader("x-inertia-location");
+  }
+  /**
+   * @link https://inertiajs.com/redirects#external-redirects
+   */
+  locationVisit(url) {
+    try {
+      SessionStorage.set(SessionStorage.locationVisitKey, {
+        preserveScroll: this.requestParams.all().preserveScroll === true
+      });
+      if (typeof window === "undefined") {
+        return;
+      }
+      if (isSameUrlWithoutHash(window.location, url)) {
+        window.location.reload();
+      } else {
+        window.location.href = url.href;
+      }
+    } catch (error) {
+      return false;
+    }
+  }
+  async setPage() {
+    const pageResponse = this.getPageResponse();
+    if (!this.shouldSetPage(pageResponse)) {
+      return Promise.resolve();
+    }
+    this.mergeProps(pageResponse);
+    page.mergeOncePropsIntoResponse(pageResponse);
+    this.preserveEqualProps(pageResponse);
+    await this.setRememberedState(pageResponse);
+    this.requestParams.setPreserveOptions(pageResponse);
+    pageResponse.url = history.preserveUrl ? page.get().url : this.pageUrl(pageResponse);
+    this.requestParams.all().onBeforeUpdate(pageResponse);
+    fireBeforeUpdateEvent(pageResponse);
+    return page.set(pageResponse, {
+      replace: this.requestParams.all().replace,
+      preserveScroll: this.requestParams.all().preserveScroll,
+      preserveState: this.requestParams.all().preserveState,
+      viewTransition: this.requestParams.all().viewTransition
+    });
+  }
+  getDataFromResponse(response) {
+    if (typeof response !== "string") {
+      return response;
+    }
+    try {
+      return JSON.parse(response);
+    } catch (error) {
+      return response;
+    }
+  }
+  shouldSetPage(pageResponse) {
+    if (!this.requestParams.all().async) {
+      return true;
+    }
+    if (this.originatingPage.component !== pageResponse.component) {
+      return true;
+    }
+    if (this.originatingPage.component !== page.get().component) {
+      return false;
+    }
+    const originatingUrl = hrefToUrl(this.originatingPage.url);
+    const currentPageUrl = hrefToUrl(page.get().url);
+    return originatingUrl.origin === currentPageUrl.origin && originatingUrl.pathname === currentPageUrl.pathname;
+  }
+  pageUrl(pageResponse) {
+    const responseUrl = hrefToUrl(pageResponse.url);
+    setHashIfSameUrl(this.requestParams.all().url, responseUrl);
+    return responseUrl.pathname + responseUrl.search + responseUrl.hash;
+  }
+  preserveEqualProps(pageResponse) {
+    if (pageResponse.component !== page.get().component || config$1.get("future.preserveEqualProps") !== true) {
+      return;
+    }
+    const currentPageProps = page.get().props;
+    Object.entries(pageResponse.props).forEach(([key, value]) => {
+      if (isEqual(value, currentPageProps[key])) {
+        pageResponse.props[key] = currentPageProps[key];
+      }
+    });
+  }
+  mergeProps(pageResponse) {
+    if (!this.requestParams.isPartial() || pageResponse.component !== page.get().component) {
+      return;
+    }
+    const propsToAppend = pageResponse.mergeProps || [];
+    const propsToPrepend = pageResponse.prependProps || [];
+    const propsToDeepMerge = pageResponse.deepMergeProps || [];
+    const matchPropsOn = pageResponse.matchPropsOn || [];
+    const mergeProp = (prop, shouldAppend) => {
+      const currentProp = get(page.get().props, prop);
+      const incomingProp = get(pageResponse.props, prop);
+      if (Array.isArray(incomingProp)) {
+        const newArray = this.mergeOrMatchItems(
+          currentProp || [],
+          incomingProp,
+          prop,
+          matchPropsOn,
+          shouldAppend
+        );
+        set(pageResponse.props, prop, newArray);
+      } else if (typeof incomingProp === "object" && incomingProp !== null) {
+        const newObject = {
+          ...currentProp || {},
+          ...incomingProp
+        };
+        set(pageResponse.props, prop, newObject);
+      }
+    };
+    propsToAppend.forEach((prop) => mergeProp(prop, true));
+    propsToPrepend.forEach((prop) => mergeProp(prop, false));
+    propsToDeepMerge.forEach((prop) => {
+      const currentProp = page.get().props[prop];
+      const incomingProp = pageResponse.props[prop];
+      const deepMerge = (target, source, matchProp) => {
+        if (Array.isArray(source)) {
+          return this.mergeOrMatchItems(target, source, matchProp, matchPropsOn);
+        }
+        if (typeof source === "object" && source !== null) {
+          return Object.keys(source).reduce(
+            (acc, key) => {
+              acc[key] = deepMerge(target ? target[key] : void 0, source[key], `${matchProp}.${key}`);
+              return acc;
+            },
+            { ...target }
+          );
+        }
+        return source;
+      };
+      pageResponse.props[prop] = deepMerge(currentProp, incomingProp, prop);
+    });
+    pageResponse.props = { ...page.get().props, ...pageResponse.props };
+    if (this.requestParams.isDeferredPropsRequest()) {
+      const currentErrors = page.get().props.errors;
+      if (currentErrors && Object.keys(currentErrors).length > 0) {
+        pageResponse.props.errors = currentErrors;
+      }
+    }
+    if (page.get().scrollProps) {
+      pageResponse.scrollProps = {
+        ...page.get().scrollProps || {},
+        ...pageResponse.scrollProps || {}
+      };
+    }
+    if (page.hasOnceProps()) {
+      pageResponse.onceProps = {
+        ...page.get().onceProps || {},
+        ...pageResponse.onceProps || {}
+      };
+    }
+    pageResponse.flash = {
+      ...page.get().flash,
+      ...this.requestParams.isDeferredPropsRequest() ? {} : pageResponse.flash
+    };
+  }
+  mergeOrMatchItems(existingItems, newItems, matchProp, matchPropsOn, shouldAppend = true) {
+    const items = Array.isArray(existingItems) ? existingItems : [];
+    const matchingKey = matchPropsOn.find((key) => {
+      const keyPath = key.split(".").slice(0, -1).join(".");
+      return keyPath === matchProp;
+    });
+    if (!matchingKey) {
+      return shouldAppend ? [...items, ...newItems] : [...newItems, ...items];
+    }
+    const uniqueProperty = matchingKey.split(".").pop() || "";
+    const newItemsMap = /* @__PURE__ */ new Map();
+    newItems.forEach((item) => {
+      if (this.hasUniqueProperty(item, uniqueProperty)) {
+        newItemsMap.set(item[uniqueProperty], item);
+      }
+    });
+    return shouldAppend ? this.appendWithMatching(items, newItems, newItemsMap, uniqueProperty) : this.prependWithMatching(items, newItems, newItemsMap, uniqueProperty);
+  }
+  appendWithMatching(existingItems, newItems, newItemsMap, uniqueProperty) {
+    const updatedExisting = existingItems.map((item) => {
+      if (this.hasUniqueProperty(item, uniqueProperty) && newItemsMap.has(item[uniqueProperty])) {
+        return newItemsMap.get(item[uniqueProperty]);
+      }
+      return item;
+    });
+    const newItemsToAdd = newItems.filter((item) => {
+      if (!this.hasUniqueProperty(item, uniqueProperty)) {
+        return true;
+      }
+      return !existingItems.some(
+        (existing) => this.hasUniqueProperty(existing, uniqueProperty) && existing[uniqueProperty] === item[uniqueProperty]
+      );
+    });
+    return [...updatedExisting, ...newItemsToAdd];
+  }
+  prependWithMatching(existingItems, newItems, newItemsMap, uniqueProperty) {
+    const untouchedExisting = existingItems.filter((item) => {
+      if (this.hasUniqueProperty(item, uniqueProperty)) {
+        return !newItemsMap.has(item[uniqueProperty]);
+      }
+      return true;
+    });
+    return [...newItems, ...untouchedExisting];
+  }
+  hasUniqueProperty(item, property) {
+    return item && typeof item === "object" && property in item;
+  }
+  async setRememberedState(pageResponse) {
+    const rememberedState = await history.getState(history.rememberedState, {});
+    if (this.requestParams.all().preserveState && rememberedState && pageResponse.component === page.get().component) {
+      pageResponse.rememberedState = rememberedState;
+    }
+  }
+  getScopedErrors(errors) {
+    if (!this.requestParams.all().errorBag) {
+      return errors;
+    }
+    return errors[this.requestParams.all().errorBag || ""] || {};
+  }
+};
+var Request = class _Request {
+  constructor(params, page2) {
+    this.page = page2;
+    this.requestHasFinished = false;
+    this.requestParams = RequestParams.create(params);
+    this.cancelToken = new AbortController();
+  }
+  static create(params, page2) {
+    return new _Request(params, page2);
+  }
+  async send() {
+    this.requestParams.onCancelToken(() => this.cancel({ cancelled: true }));
+    fireStartEvent(this.requestParams.all());
+    this.requestParams.onStart();
+    if (this.requestParams.all().prefetch) {
+      this.requestParams.onPrefetching();
+      firePrefetchingEvent(this.requestParams.all());
+    }
+    const originallyPrefetch = this.requestParams.all().prefetch;
+    return axios({
+      method: this.requestParams.all().method,
+      url: urlWithoutHash(this.requestParams.all().url).href,
+      data: this.requestParams.data(),
+      params: this.requestParams.queryParams(),
+      signal: this.cancelToken.signal,
+      headers: this.getHeaders(),
+      onUploadProgress: this.onProgress.bind(this),
+      // Why text? This allows us to delay JSON.parse until we're ready to use the response,
+      // helps with performance particularly on large responses + history encryption
+      responseType: "text"
+    }).then((response) => {
+      this.response = Response.create(this.requestParams, response, this.page);
+      return this.response.handle();
+    }).catch((error) => {
+      if (error?.response) {
+        this.response = Response.create(this.requestParams, error.response, this.page);
+        return this.response.handle();
+      }
+      return Promise.reject(error);
+    }).catch((error) => {
+      if (axios.isCancel(error)) {
+        return;
+      }
+      if (fireExceptionEvent(error)) {
+        if (originallyPrefetch) {
+          this.requestParams.onPrefetchError(error);
+        }
+        return Promise.reject(error);
+      }
+    }).finally(() => {
+      this.finish();
+      if (originallyPrefetch && this.response) {
+        this.requestParams.onPrefetchResponse(this.response);
+      }
+    });
+  }
+  finish() {
+    if (this.requestParams.wasCancelledAtAll()) {
+      return;
+    }
+    this.requestParams.markAsFinished();
+    this.fireFinishEvents();
+  }
+  fireFinishEvents() {
+    if (this.requestHasFinished) {
+      return;
+    }
+    this.requestHasFinished = true;
+    fireFinishEvent(this.requestParams.all());
+    this.requestParams.onFinish();
+  }
+  cancel({ cancelled = false, interrupted = false }) {
+    if (this.requestHasFinished) {
+      return;
+    }
+    this.cancelToken.abort();
+    this.requestParams.markAsCancelled({ cancelled, interrupted });
+    this.fireFinishEvents();
+  }
+  onProgress(progress3) {
+    if (this.requestParams.data() instanceof FormData) {
+      progress3.percentage = progress3.progress ? Math.round(progress3.progress * 100) : 0;
+      fireProgressEvent(progress3);
+      this.requestParams.all().onProgress(progress3);
+    }
+  }
+  getHeaders() {
+    const headers = {
+      ...this.requestParams.headers(),
+      Accept: "text/html, application/xhtml+xml",
+      "X-Requested-With": "XMLHttpRequest",
+      "X-Inertia": true
+    };
+    const page2 = page.get();
+    if (page2.version) {
+      headers["X-Inertia-Version"] = page2.version;
+    }
+    const onceProps = Object.entries(page2.onceProps || {}).filter(([, onceProp]) => {
+      if (page2.props[onceProp.prop] === void 0) {
+        return false;
+      }
+      return !onceProp.expiresAt || onceProp.expiresAt > Date.now();
+    }).map(([key]) => key);
+    if (onceProps.length > 0) {
+      headers["X-Inertia-Except-Once-Props"] = onceProps.join(",");
+    }
+    return headers;
+  }
+};
+var RequestStream = class {
+  constructor({ maxConcurrent, interruptible }) {
+    this.requests = [];
+    this.maxConcurrent = maxConcurrent;
+    this.interruptible = interruptible;
+  }
+  send(request) {
+    this.requests.push(request);
+    request.send().then(() => {
+      this.requests = this.requests.filter((r) => r !== request);
+    });
+  }
+  interruptInFlight() {
+    this.cancel({ interrupted: true }, false);
+  }
+  cancelInFlight() {
+    this.cancel({ cancelled: true }, true);
+  }
+  cancel({ cancelled = false, interrupted = false } = {}, force) {
+    if (!this.shouldCancel(force)) {
+      return;
+    }
+    const request = this.requests.shift();
+    request?.cancel({ interrupted, cancelled });
+  }
+  shouldCancel(force) {
+    if (force) {
+      return true;
+    }
+    return this.interruptible && this.requests.length >= this.maxConcurrent;
+  }
+};
+var Router = class {
+  constructor() {
+    this.syncRequestStream = new RequestStream({
+      maxConcurrent: 1,
+      interruptible: true
+    });
+    this.asyncRequestStream = new RequestStream({
+      maxConcurrent: Infinity,
+      interruptible: false
+    });
+    this.clientVisitQueue = new Queue();
+  }
+  init({
+    initialPage,
+    resolveComponent,
+    swapComponent: swapComponent2,
+    onFlash
+  }) {
+    page.init({
+      initialPage,
+      resolveComponent,
+      swapComponent: swapComponent2,
+      onFlash
+    });
+    InitialVisit.handle();
+    eventHandler.init();
+    eventHandler.on("missingHistoryItem", () => {
+      if (typeof window !== "undefined") {
+        this.visit(window.location.href, { preserveState: true, preserveScroll: true, replace: true });
+      }
+    });
+    eventHandler.on("loadDeferredProps", (deferredProps) => {
+      this.loadDeferredProps(deferredProps);
+    });
+  }
+  get(url, data = {}, options = {}) {
+    return this.visit(url, { ...options, method: "get", data });
+  }
+  post(url, data = {}, options = {}) {
+    return this.visit(url, { preserveState: true, ...options, method: "post", data });
+  }
+  put(url, data = {}, options = {}) {
+    return this.visit(url, { preserveState: true, ...options, method: "put", data });
+  }
+  patch(url, data = {}, options = {}) {
+    return this.visit(url, { preserveState: true, ...options, method: "patch", data });
+  }
+  delete(url, options = {}) {
+    return this.visit(url, { preserveState: true, ...options, method: "delete" });
+  }
+  reload(options = {}) {
+    return this.doReload(options);
+  }
+  doReload(options = {}) {
+    if (typeof window === "undefined") {
+      return;
+    }
+    return this.visit(window.location.href, {
+      ...options,
+      preserveScroll: true,
+      preserveState: true,
+      async: true,
+      headers: {
+        ...options.headers || {},
+        "Cache-Control": "no-cache"
+      }
+    });
+  }
+  remember(data, key = "default") {
+    history.remember(data, key);
+  }
+  restore(key = "default") {
+    return history.restore(key);
+  }
+  on(type, callback) {
+    if (typeof window === "undefined") {
+      return () => {
+      };
+    }
+    return eventHandler.onGlobalEvent(type, callback);
+  }
+  cancel() {
+    this.syncRequestStream.cancelInFlight();
+  }
+  cancelAll() {
+    this.asyncRequestStream.cancelInFlight();
+    this.syncRequestStream.cancelInFlight();
+  }
+  poll(interval, requestOptions = {}, options = {}) {
+    return polls.add(interval, () => this.reload(requestOptions), {
+      autoStart: options.autoStart ?? true,
+      keepAlive: options.keepAlive ?? false
+    });
+  }
+  visit(href, options = {}) {
+    const visit = this.getPendingVisit(href, {
+      ...options,
+      showProgress: options.showProgress ?? !options.async
+    });
+    const events = this.getVisitEvents(options);
+    if (events.onBefore(visit) === false || !fireBeforeEvent(visit)) {
+      return;
+    }
+    const requestStream = visit.async ? this.asyncRequestStream : this.syncRequestStream;
+    requestStream.interruptInFlight();
+    if (!page.isCleared() && !visit.preserveUrl) {
+      Scroll.save();
+    }
+    const requestParams = {
+      ...visit,
+      ...events
+    };
+    const prefetched = prefetchedRequests.get(requestParams);
+    if (prefetched) {
+      progress.reveal(prefetched.inFlight);
+      prefetchedRequests.use(prefetched, requestParams);
+    } else {
+      progress.reveal(true);
+      requestStream.send(Request.create(requestParams, page.get()));
+    }
+  }
+  getCached(href, options = {}) {
+    return prefetchedRequests.findCached(this.getPrefetchParams(href, options));
+  }
+  flush(href, options = {}) {
+    prefetchedRequests.remove(this.getPrefetchParams(href, options));
+  }
+  flushAll() {
+    prefetchedRequests.removeAll();
+  }
+  flushByCacheTags(tags) {
+    prefetchedRequests.removeByTags(Array.isArray(tags) ? tags : [tags]);
+  }
+  getPrefetching(href, options = {}) {
+    return prefetchedRequests.findInFlight(this.getPrefetchParams(href, options));
+  }
+  prefetch(href, options = {}, prefetchOptions = {}) {
+    const method = options.method ?? (isUrlMethodPair(href) ? href.method : "get");
+    if (method !== "get") {
+      throw new Error("Prefetch requests must use the GET method");
+    }
+    const visit = this.getPendingVisit(href, {
+      ...options,
+      async: true,
+      showProgress: false,
+      prefetch: true,
+      viewTransition: false
+    });
+    const visitUrl = visit.url.origin + visit.url.pathname + visit.url.search;
+    const currentUrl = window.location.origin + window.location.pathname + window.location.search;
+    if (visitUrl === currentUrl) {
+      return;
+    }
+    const events = this.getVisitEvents(options);
+    if (events.onBefore(visit) === false || !fireBeforeEvent(visit)) {
+      return;
+    }
+    progress.hide();
+    this.asyncRequestStream.interruptInFlight();
+    const requestParams = {
+      ...visit,
+      ...events
+    };
+    const ensureCurrentPageIsSet = () => {
+      return new Promise((resolve) => {
+        const checkIfPageIsDefined = () => {
+          if (page.get()) {
+            resolve();
+          } else {
+            setTimeout(checkIfPageIsDefined, 50);
+          }
+        };
+        checkIfPageIsDefined();
+      });
+    };
+    ensureCurrentPageIsSet().then(() => {
+      prefetchedRequests.add(
+        requestParams,
+        (params) => {
+          this.asyncRequestStream.send(Request.create(params, page.get()));
+        },
+        {
+          cacheFor: config$1.get("prefetch.cacheFor"),
+          cacheTags: [],
+          ...prefetchOptions
+        }
+      );
+    });
+  }
+  clearHistory() {
+    history.clear();
+  }
+  decryptHistory() {
+    return history.decrypt();
+  }
+  resolveComponent(component) {
+    return page.resolve(component);
+  }
+  replace(params) {
+    this.clientVisit(params, { replace: true });
+  }
+  replaceProp(name, value, options) {
+    this.replace({
+      preserveScroll: true,
+      preserveState: true,
+      props(currentProps) {
+        const newValue = typeof value === "function" ? value(get(currentProps, name), currentProps) : value;
+        return set(cloneDeep(currentProps), name, newValue);
+      },
+      ...options || {}
+    });
+  }
+  appendToProp(name, value, options) {
+    this.replaceProp(
+      name,
+      (currentValue, currentProps) => {
+        const newValue = typeof value === "function" ? value(currentValue, currentProps) : value;
+        if (!Array.isArray(currentValue)) {
+          currentValue = currentValue !== void 0 ? [currentValue] : [];
+        }
+        return [...currentValue, newValue];
+      },
+      options
+    );
+  }
+  prependToProp(name, value, options) {
+    this.replaceProp(
+      name,
+      (currentValue, currentProps) => {
+        const newValue = typeof value === "function" ? value(currentValue, currentProps) : value;
+        if (!Array.isArray(currentValue)) {
+          currentValue = currentValue !== void 0 ? [currentValue] : [];
+        }
+        return [newValue, ...currentValue];
+      },
+      options
+    );
+  }
+  push(params) {
+    this.clientVisit(params);
+  }
+  flash(keyOrData, value) {
+    const current = page.get().flash;
+    let flash;
+    if (typeof keyOrData === "function") {
+      flash = keyOrData(current);
+    } else if (typeof keyOrData === "string") {
+      flash = { ...current, [keyOrData]: value };
+    } else if (keyOrData && Object.keys(keyOrData).length) {
+      flash = { ...current, ...keyOrData };
+    } else {
+      return;
+    }
+    page.setFlash(flash);
+    if (Object.keys(flash).length) {
+      fireFlashEvent(flash);
+    }
+  }
+  clientVisit(params, { replace = false } = {}) {
+    this.clientVisitQueue.add(() => this.performClientVisit(params, { replace }));
+  }
+  performClientVisit(params, { replace = false } = {}) {
+    const current = page.get();
+    const props = typeof params.props === "function" ? params.props(current.props) : params.props ?? current.props;
+    const flash = typeof params.flash === "function" ? params.flash(current.flash) : params.flash;
+    const { viewTransition, onError, onFinish, onFlash, onSuccess, ...pageParams } = params;
+    const page2 = {
+      ...current,
+      ...pageParams,
+      flash: flash ?? {},
+      props
+    };
+    const preserveScroll = RequestParams.resolvePreserveOption(params.preserveScroll ?? false, page2);
+    const preserveState = RequestParams.resolvePreserveOption(params.preserveState ?? false, page2);
+    return page.set(page2, {
+      replace,
+      preserveScroll,
+      preserveState,
+      viewTransition
+    }).then(() => {
+      const currentFlash = page.get().flash;
+      if (Object.keys(currentFlash).length > 0) {
+        fireFlashEvent(currentFlash);
+        onFlash?.(currentFlash);
+      }
+      const errors = page.get().props.errors || {};
+      if (Object.keys(errors).length === 0) {
+        onSuccess?.(page.get());
+        return;
+      }
+      const scopedErrors = params.errorBag ? errors[params.errorBag || ""] || {} : errors;
+      onError?.(scopedErrors);
+    }).finally(() => onFinish?.(params));
+  }
+  getPrefetchParams(href, options) {
+    return {
+      ...this.getPendingVisit(href, {
+        ...options,
+        async: true,
+        showProgress: false,
+        prefetch: true,
+        viewTransition: false
+      }),
+      ...this.getVisitEvents(options)
+    };
+  }
+  getPendingVisit(href, options, pendingVisitOptions = {}) {
+    if (isUrlMethodPair(href)) {
+      const urlMethodPair = href;
+      href = urlMethodPair.url;
+      options.method = options.method ?? urlMethodPair.method;
+    }
+    const defaultVisitOptionsCallback = config$1.get("visitOptions");
+    const configuredOptions = defaultVisitOptionsCallback ? defaultVisitOptionsCallback(href.toString(), cloneDeep(options)) || {} : {};
+    const mergedOptions = {
+      method: "get",
+      data: {},
+      replace: false,
+      preserveScroll: false,
+      preserveState: false,
+      only: [],
+      except: [],
+      headers: {},
+      errorBag: "",
+      forceFormData: false,
+      queryStringArrayFormat: "brackets",
+      async: false,
+      showProgress: true,
+      fresh: false,
+      reset: [],
+      preserveUrl: false,
+      prefetch: false,
+      invalidateCacheTags: [],
+      viewTransition: false,
+      ...options,
+      ...configuredOptions
+    };
+    const [url, _data] = transformUrlAndData(
+      href,
+      mergedOptions.data,
+      mergedOptions.method,
+      mergedOptions.forceFormData,
+      mergedOptions.queryStringArrayFormat
+    );
+    const visit = {
+      cancelled: false,
+      completed: false,
+      interrupted: false,
+      ...mergedOptions,
+      ...pendingVisitOptions,
+      url,
+      data: _data
+    };
+    if (visit.prefetch) {
+      visit.headers["Purpose"] = "prefetch";
+    }
+    return visit;
+  }
+  getVisitEvents(options) {
+    return {
+      onCancelToken: options.onCancelToken || (() => {
+      }),
+      onBefore: options.onBefore || (() => {
+      }),
+      onBeforeUpdate: options.onBeforeUpdate || (() => {
+      }),
+      onStart: options.onStart || (() => {
+      }),
+      onProgress: options.onProgress || (() => {
+      }),
+      onFinish: options.onFinish || (() => {
+      }),
+      onCancel: options.onCancel || (() => {
+      }),
+      onSuccess: options.onSuccess || (() => {
+      }),
+      onError: options.onError || (() => {
+      }),
+      onFlash: options.onFlash || (() => {
+      }),
+      onPrefetched: options.onPrefetched || (() => {
+      }),
+      onPrefetching: options.onPrefetching || (() => {
+      })
+    };
+  }
+  loadDeferredProps(deferred) {
+    if (deferred) {
+      Object.entries(deferred).forEach(([_, group]) => {
+        this.doReload({ only: group, deferredProps: true });
+      });
+    }
+  }
+};
+var UseFormUtils = class {
+  /**
+   * Creates a callback that returns a UrlMethodPair.
+   *
+   * createWayfinderCallback(urlMethodPair)
+   * createWayfinderCallback(method, url)
+   * createWayfinderCallback(() => urlMethodPair)
+   * createWayfinderCallback(() => method, () => url)
+   */
+  static createWayfinderCallback(...args) {
+    return () => {
+      if (args.length === 1) {
+        return isUrlMethodPair(args[0]) ? args[0] : args[0]();
+      }
+      return {
+        method: typeof args[0] === "function" ? args[0]() : args[0],
+        url: typeof args[1] === "function" ? args[1]() : args[1]
+      };
+    };
+  }
+  /**
+   * Parses all useForm() arguments into { rememberKey, data, precognitionEndpoint }.
+   *
+   * useForm(data)
+   * useForm(rememberKey, data)
+   * useForm(method, url, data)
+   * useForm(urlMethodPair, data)
+   *
+   */
+  static parseUseFormArguments(...args) {
+    if (args.length === 1) {
+      return {
+        rememberKey: null,
+        data: args[0],
+        precognitionEndpoint: null
+      };
+    }
+    if (args.length === 2) {
+      if (typeof args[0] === "string") {
+        return {
+          rememberKey: args[0],
+          data: args[1],
+          precognitionEndpoint: null
+        };
+      }
+      return {
+        rememberKey: null,
+        data: args[1],
+        precognitionEndpoint: this.createWayfinderCallback(args[0])
+      };
+    }
+    return {
+      rememberKey: null,
+      data: args[2],
+      precognitionEndpoint: this.createWayfinderCallback(args[0], args[1])
+    };
+  }
+  /**
+   * Parses all submission arguments into { method, url, options }.
+   * It uses the Precognition endpoint if no explicit method/url are provided.
+   *
+   * form.submit(method, url)
+   * form.submit(method, url, options)
+   * form.submit(urlMethodPair)
+   * form.submit(urlMethodPair, options)
+   * form.submit()
+   * form.submit(options)
+   */
+  static parseSubmitArguments(args, precognitionEndpoint) {
+    if (args.length === 3 || args.length === 2 && typeof args[0] === "string") {
+      return { method: args[0], url: args[1], options: args[2] ?? {} };
+    }
+    if (isUrlMethodPair(args[0])) {
+      return { ...args[0], options: args[1] ?? {} };
+    }
+    return { ...precognitionEndpoint(), options: args[0] ?? {} };
+  }
+  /**
+   * Merges headers into the Precognition validate() arguments.
+   */
+  static mergeHeadersForValidation(field, config2, headers) {
+    const merge = (config3) => {
+      config3.headers = {
+        ...headers ?? {},
+        ...config3.headers ?? {}
+      };
+      return config3;
+    };
+    if (field && typeof field === "object" && !("target" in field)) {
+      field = merge(field);
+    } else if (config2 && typeof config2 === "object") {
+      config2 = merge(config2);
+    } else if (typeof field === "string") {
+      config2 = merge(config2 ?? {});
+    } else {
+      field = merge(field ?? {});
+    }
+    return [field, config2];
+  }
+};
+var elementInViewport = (el) => {
+  if (el.offsetParent === null) {
+    return false;
+  }
+  const rect = el.getBoundingClientRect();
+  const verticallyVisible = rect.top < window.innerHeight && rect.bottom >= 0;
+  const horizontallyVisible = rect.left < window.innerWidth && rect.right >= 0;
+  return verticallyVisible && horizontallyVisible;
+};
+var getScrollableParent = (element) => {
+  const allowsVerticalScroll = (el) => {
+    const computedStyle = window.getComputedStyle(el);
+    if (["scroll", "overlay"].includes(computedStyle.overflowY)) {
+      return true;
+    }
+    if (computedStyle.overflowY !== "auto") {
+      return false;
+    }
+    if (["visible", "clip"].includes(computedStyle.overflowX)) {
+      return true;
+    }
+    return hasDimensionConstraint(computedStyle.maxHeight, el.style.height);
+  };
+  const allowsHorizontalScroll = (el) => {
+    const computedStyle = window.getComputedStyle(el);
+    if (["scroll", "overlay"].includes(computedStyle.overflowX)) {
+      return true;
+    }
+    if (computedStyle.overflowX !== "auto") {
+      return false;
+    }
+    if (["visible", "clip"].includes(computedStyle.overflowY)) {
+      return true;
+    }
+    return hasDimensionConstraint(computedStyle.maxWidth, el.style.width);
+  };
+  const hasDimensionConstraint = (computedMaxDimension, inlineStyleDimension) => {
+    if (computedMaxDimension && computedMaxDimension !== "none" && computedMaxDimension !== "0px") {
+      return true;
+    }
+    if (inlineStyleDimension && inlineStyleDimension !== "auto" && inlineStyleDimension !== "0") {
+      return true;
+    }
+    return false;
+  };
+  let parent = element?.parentElement;
+  while (parent) {
+    const allowsScroll = allowsVerticalScroll(parent) || allowsHorizontalScroll(parent);
+    if (window.getComputedStyle(parent).display !== "contents" && allowsScroll) {
+      return parent;
+    }
+    parent = parent.parentElement;
+  }
+  return null;
+};
+var getElementsInViewportFromCollection = (elements, referenceElement) => {
+  if (!referenceElement) {
+    return elements.filter((element) => elementInViewport(element));
+  }
+  const referenceIndex = elements.indexOf(referenceElement);
+  const upwardElements = [];
+  const downwardElements = [];
+  for (let i = referenceIndex; i >= 0; i--) {
+    const element = elements[i];
+    if (elementInViewport(element)) {
+      upwardElements.push(element);
+    } else {
+      break;
+    }
+  }
+  for (let i = referenceIndex + 1; i < elements.length; i++) {
+    const element = elements[i];
+    if (elementInViewport(element)) {
+      downwardElements.push(element);
+    } else {
+      break;
+    }
+  }
+  return [...upwardElements.reverse(), ...downwardElements];
+};
+var requestAnimationFrame = (cb, times = 1) => {
+  window.requestAnimationFrame(() => {
+    if (times > 1) {
+      requestAnimationFrame(cb, times - 1);
+    } else {
+      cb();
+    }
+  });
+};
+var getInitialPageFromDOM = (id, useScriptElement = false) => {
+  if (typeof window === "undefined") {
+    return null;
+  }
+  if (!useScriptElement) {
+    const el = document.getElementById(id);
+    if (el?.dataset.page) {
+      return JSON.parse(el.dataset.page);
+    }
+  }
+  const scriptEl = document.querySelector(`script[data-page="${id}"][type="application/json"]`);
+  if (scriptEl?.textContent) {
+    return JSON.parse(scriptEl.textContent);
+  }
+  return null;
+};
+function undotKey(key) {
+  if (!key.includes(".")) {
+    return key;
+  }
+  const transformSegment = (segment) => {
+    if (segment.startsWith("[") && segment.endsWith("]")) {
+      return segment;
+    }
+    return segment.split(".").reduce((result, part, index) => index === 0 ? part : `${result}[${part}]`);
+  };
+  return key.replace(/\\\./g, "__ESCAPED_DOT__").split(/(\[[^\]]*\])/).filter(Boolean).map(transformSegment).join("").replace(/__ESCAPED_DOT__/g, ".");
+}
+function parseKey(key) {
+  const path = [];
+  const pattern = /([^\[\]]+)|\[(\d*)\]/g;
+  let match;
+  while ((match = pattern.exec(key)) !== null) {
+    if (match[1] !== void 0) {
+      path.push(match[1]);
+    } else if (match[2] !== void 0) {
+      path.push(match[2] === "" ? "" : Number(match[2]));
+    }
+  }
+  return path;
+}
+function setNestedObject(obj, path, value) {
+  let current = obj;
+  for (let i = 0; i < path.length - 1; i++) {
+    if (!(path[i] in current)) {
+      current[path[i]] = {};
+    }
+    current = current[path[i]];
+  }
+  current[path[path.length - 1]] = value;
+}
+function objectHasSequentialNumericKeys(value) {
+  const keys = Object.keys(value);
+  const numericKeys = keys.filter((k) => /^\d+$/.test(k)).map(Number).sort((a, b) => a - b);
+  return keys.length === numericKeys.length && numericKeys.length > 0 && numericKeys[0] === 0 && numericKeys.every((n, i) => n === i);
+}
+function convertSequentialObjectsToArrays(value) {
+  if (Array.isArray(value)) {
+    return value.map(convertSequentialObjectsToArrays);
+  }
+  if (typeof value !== "object" || value === null || isFile(value)) {
+    return value;
+  }
+  if (objectHasSequentialNumericKeys(value)) {
+    const result2 = [];
+    for (let i = 0; i < Object.keys(value).length; i++) {
+      result2[i] = convertSequentialObjectsToArrays(value[i]);
+    }
+    return result2;
+  }
+  const result = {};
+  for (const key in value) {
+    result[key] = convertSequentialObjectsToArrays(value[key]);
+  }
+  return result;
+}
+function formDataToObject(source) {
+  const form = {};
+  for (const [key, value] of source.entries()) {
+    if (value instanceof File && value.size === 0 && value.name === "") {
+      continue;
+    }
+    const path = parseKey(undotKey(key));
+    if (path[path.length - 1] === "") {
+      const arrayPath = path.slice(0, -1);
+      const existing = get(form, arrayPath);
+      if (Array.isArray(existing)) {
+        existing.push(value);
+      } else if (existing && typeof existing === "object" && !isFile(existing)) {
+        const numericKeys = Object.keys(existing).filter((k) => /^\d+$/.test(k)).map(Number).sort((a, b) => a - b);
+        set(form, arrayPath, numericKeys.length > 0 ? [...numericKeys.map((k) => existing[k]), value] : [value]);
+      } else {
+        set(form, arrayPath, [value]);
+      }
+      continue;
+    }
+    setNestedObject(form, path.map(String), value);
+  }
+  return convertSequentialObjectsToArrays(form);
+}
+var Renderer = {
+  preferredAttribute() {
+    return config$1.get("future.useDataInertiaHeadAttribute") ? "data-inertia" : "inertia";
+  },
+  buildDOMElement(tag) {
+    const template = document.createElement("template");
+    template.innerHTML = tag;
+    const node = template.content.firstChild;
+    if (!tag.startsWith("<script ")) {
+      return node;
+    }
+    const script = document.createElement("script");
+    script.innerHTML = node.innerHTML;
+    node.getAttributeNames().forEach((name) => {
+      script.setAttribute(name, node.getAttribute(name) || "");
+    });
+    return script;
+  },
+  isInertiaManagedElement(element) {
+    return element.nodeType === Node.ELEMENT_NODE && element.getAttribute(this.preferredAttribute()) !== null;
+  },
+  findMatchingElementIndex(element, elements) {
+    const attribute = this.preferredAttribute();
+    const key = element.getAttribute(attribute);
+    if (key !== null) {
+      return elements.findIndex((element2) => element2.getAttribute(attribute) === key);
+    }
+    return -1;
+  },
+  update: debounce(function(elements) {
+    const sourceElements = elements.map((element) => this.buildDOMElement(element));
+    const targetElements = Array.from(document.head.childNodes).filter(
+      (element) => this.isInertiaManagedElement(element)
+    );
+    targetElements.forEach((targetElement) => {
+      const index = this.findMatchingElementIndex(targetElement, sourceElements);
+      if (index === -1) {
+        targetElement?.parentNode?.removeChild(targetElement);
+        return;
+      }
+      const sourceElement = sourceElements.splice(index, 1)[0];
+      if (sourceElement && !targetElement.isEqualNode(sourceElement)) {
+        targetElement?.parentNode?.replaceChild(sourceElement, targetElement);
+      }
+    });
+    sourceElements.forEach((element) => document.head.appendChild(element));
+  }, 1)
+};
+function createHeadManager(isServer2, titleCallback, onUpdate) {
+  const states = {};
+  let lastProviderId = 0;
+  function connect() {
+    const id = lastProviderId += 1;
+    states[id] = [];
+    return id.toString();
+  }
+  function disconnect(id) {
+    if (id === null || Object.keys(states).indexOf(id) === -1) {
+      return;
+    }
+    delete states[id];
+    commit();
+  }
+  function reconnect(id) {
+    if (Object.keys(states).indexOf(id) === -1) {
+      states[id] = [];
+    }
+  }
+  function update(id, elements = []) {
+    if (id !== null && Object.keys(states).indexOf(id) > -1) {
+      states[id] = elements;
+    }
+    commit();
+  }
+  function collect() {
+    const title = titleCallback("");
+    const attribute = Renderer.preferredAttribute();
+    const defaults = {
+      ...title ? { title: `<title ${attribute}="">${title}</title>` } : {}
+    };
+    const elements = Object.values(states).reduce((carry, elements2) => carry.concat(elements2), []).reduce((carry, element) => {
+      if (element.indexOf("<") === -1) {
+        return carry;
+      }
+      if (element.indexOf("<title ") === 0) {
+        const title2 = element.match(/(<title [^>]+>)(.*?)(<\/title>)/);
+        carry.title = title2 ? `${title2[1]}${titleCallback(title2[2])}${title2[3]}` : element;
+        return carry;
+      }
+      const match = element.match(attribute === "inertia" ? / inertia="[^"]+"/ : / data-inertia="[^"]+"/);
+      if (match) {
+        carry[match[0]] = element;
+      } else {
+        carry[Object.keys(carry).length] = element;
+      }
+      return carry;
+    }, defaults);
+    return Object.values(elements);
+  }
+  function commit() {
+    isServer2 ? onUpdate(collect()) : Renderer.update(collect());
+  }
+  commit();
+  return {
+    forceUpdate: commit,
+    createProvider: function() {
+      const id = connect();
+      return {
+        preferredAttribute: Renderer.preferredAttribute,
+        reconnect: () => reconnect(id),
+        update: (elements) => update(id, elements),
+        disconnect: () => disconnect(id)
+      };
+    }
+  };
+}
+var MERGE_INTENT_HEADER = "X-Inertia-Infinite-Scroll-Merge-Intent";
+var useInfiniteScrollData = (options) => {
+  const getScrollPropFromCurrentPage = () => {
+    const scrollProp = page.get().scrollProps?.[options.getPropName()];
+    if (scrollProp) {
+      return scrollProp;
+    }
+    throw new Error(`The page object does not contain a scroll prop named "${options.getPropName()}".`);
+  };
+  const state = {
+    component: null,
+    loading: false,
+    previousPage: null,
+    nextPage: null,
+    lastLoadedPage: null,
+    requestCount: 0
+  };
+  const resetState = () => {
+    const scrollProp = getScrollPropFromCurrentPage();
+    state.component = page.get().component;
+    state.loading = false;
+    state.previousPage = scrollProp.previousPage;
+    state.nextPage = scrollProp.nextPage;
+    state.lastLoadedPage = scrollProp.currentPage;
+    state.requestCount = 0;
+  };
+  const getRememberKey = () => `inertia:infinite-scroll-data:${options.getPropName()}`;
+  if (typeof window !== "undefined") {
+    resetState();
+    const rememberedState = router.restore(getRememberKey());
+    if (rememberedState && typeof rememberedState === "object" && rememberedState.lastLoadedPage === getScrollPropFromCurrentPage().currentPage) {
+      state.previousPage = rememberedState.previousPage;
+      state.nextPage = rememberedState.nextPage;
+      state.lastLoadedPage = rememberedState.lastLoadedPage;
+      state.requestCount = rememberedState.requestCount || 0;
+    }
+  }
+  const removeEventListener = router.on("success", (event) => {
+    if (state.component === event.detail.page.component && getScrollPropFromCurrentPage().reset) {
+      resetState();
+    }
+  });
+  const getScrollPropKeyForSide = (side) => {
+    return side === "next" ? "nextPage" : "previousPage";
+  };
+  const findPageToLoad = (side) => {
+    const pagePropName = getScrollPropKeyForSide(side);
+    return state[pagePropName];
+  };
+  const syncStateOnSuccess = (side) => {
+    const scrollProp = getScrollPropFromCurrentPage();
+    const paginationProp = getScrollPropKeyForSide(side);
+    state.lastLoadedPage = scrollProp.currentPage;
+    state[paginationProp] = scrollProp[paginationProp];
+    state.requestCount += 1;
+    router.remember(
+      {
+        previousPage: state.previousPage,
+        nextPage: state.nextPage,
+        lastLoadedPage: state.lastLoadedPage,
+        requestCount: state.requestCount
+      },
+      getRememberKey()
+    );
+  };
+  const getPageName = () => getScrollPropFromCurrentPage().pageName;
+  const getRequestCount = () => state.requestCount;
+  const fetchPage = (side, reloadOptions = {}) => {
+    const page2 = findPageToLoad(side);
+    if (state.loading || page2 === null) {
+      return;
+    }
+    state.loading = true;
+    router.reload({
+      ...reloadOptions,
+      data: { [getPageName()]: page2 },
+      only: [options.getPropName()],
+      preserveUrl: true,
+      // we handle URL updates manually via useInfiniteScrollQueryString()
+      headers: {
+        [MERGE_INTENT_HEADER]: side === "previous" ? "prepend" : "append",
+        ...reloadOptions.headers
+      },
+      onBefore: (visit) => {
+        side === "next" ? options.onBeforeNextRequest() : options.onBeforePreviousRequest();
+        reloadOptions.onBefore?.(visit);
+      },
+      onBeforeUpdate: (page3) => {
+        options.onBeforeUpdate();
+        reloadOptions.onBeforeUpdate?.(page3);
+      },
+      onSuccess: (page3) => {
+        syncStateOnSuccess(side);
+        reloadOptions.onSuccess?.(page3);
+      },
+      onFinish: (visit) => {
+        state.loading = false;
+        side === "next" ? options.onCompleteNextRequest(state.lastLoadedPage) : options.onCompletePreviousRequest(state.lastLoadedPage);
+        reloadOptions.onFinish?.(visit);
+      }
+    });
+  };
+  const getLastLoadedPage = () => state.lastLoadedPage;
+  const hasPrevious = () => !!state.previousPage;
+  const hasNext = () => !!state.nextPage;
+  const fetchPrevious = (reloadOptions) => fetchPage("previous", reloadOptions);
+  const fetchNext = (reloadOptions) => fetchPage("next", reloadOptions);
+  return {
+    getLastLoadedPage,
+    getPageName,
+    getRequestCount,
+    hasPrevious,
+    hasNext,
+    fetchNext,
+    fetchPrevious,
+    removeEventListener
+  };
+};
+var useIntersectionObservers = () => {
+  const intersectionObservers = [];
+  const newIntersectionObserver = (callback, options = {}) => {
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          callback(entry);
+        }
+      }
+    }, options);
+    intersectionObservers.push(observer);
+    return observer;
+  };
+  const flushAll = () => {
+    intersectionObservers.forEach((observer) => observer.disconnect());
+    intersectionObservers.length = 0;
+  };
+  return {
+    new: newIntersectionObserver,
+    flushAll
+  };
+};
+var INFINITE_SCROLL_PAGE_KEY = "infiniteScrollPage";
+var INFINITE_SCROLL_IGNORE_KEY = "infiniteScrollIgnore";
+var getPageFromElement = (element) => element.dataset[INFINITE_SCROLL_PAGE_KEY];
+var useInfiniteScrollElementManager = (options) => {
+  const intersectionObservers = useIntersectionObservers();
+  let itemsObserver;
+  let startElementObserver;
+  let endElementObserver;
+  let itemsMutationObserver;
+  let triggersEnabled = false;
+  const setupObservers = () => {
+    itemsMutationObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach((node) => {
+          if (node.nodeType !== Node.ELEMENT_NODE) {
+            return;
+          }
+          addedElements.add(node);
+        });
+      });
+      rememberElementsDebounced();
+    });
+    itemsMutationObserver.observe(options.getItemsElement(), { childList: true });
+    itemsObserver = intersectionObservers.new(
+      (entry) => options.onItemIntersected(entry.target)
+    );
+    const observerOptions = {
+      root: options.getScrollableParent(),
+      rootMargin: `${Math.max(1, options.getTriggerMargin())}px`
+    };
+    startElementObserver = intersectionObservers.new(options.onPreviousTriggered, observerOptions);
+    endElementObserver = intersectionObservers.new(options.onNextTriggered, observerOptions);
+  };
+  const enableTriggers = () => {
+    if (triggersEnabled) {
+      disableTriggers();
+    }
+    const startElement = options.getStartElement();
+    const endElement = options.getEndElement();
+    if (startElement && options.shouldFetchPrevious()) {
+      startElementObserver.observe(startElement);
+    }
+    if (endElement && options.shouldFetchNext()) {
+      endElementObserver.observe(endElement);
+    }
+    triggersEnabled = true;
+  };
+  const disableTriggers = () => {
+    if (!triggersEnabled) {
+      return;
+    }
+    startElementObserver.disconnect();
+    endElementObserver.disconnect();
+    triggersEnabled = false;
+  };
+  const refreshTriggers = () => {
+    if (triggersEnabled) {
+      enableTriggers();
+    }
+  };
+  const flushAll = () => {
+    disableTriggers();
+    intersectionObservers.flushAll();
+    itemsMutationObserver?.disconnect();
+  };
+  const addedElements = /* @__PURE__ */ new Set();
+  const elementIsUntagged = (element) => !(INFINITE_SCROLL_PAGE_KEY in element.dataset) && !(INFINITE_SCROLL_IGNORE_KEY in element.dataset);
+  const processManuallyAddedElements = () => {
+    Array.from(addedElements).forEach((element) => {
+      if (elementIsUntagged(element)) {
+        element.dataset[INFINITE_SCROLL_IGNORE_KEY] = "true";
+      }
+      itemsObserver.observe(element);
+    });
+    addedElements.clear();
+  };
+  const findUntaggedElements = (containerElement) => {
+    return Array.from(
+      containerElement.querySelectorAll(
+        `:scope > *:not([data-infinite-scroll-page]):not([data-infinite-scroll-ignore])`
+      )
+    );
+  };
+  let hasRestoredElements = false;
+  const processServerLoadedElements = (loadedPage) => {
+    if (!hasRestoredElements) {
+      hasRestoredElements = true;
+      if (restoreElements()) {
+        return;
+      }
+    }
+    findUntaggedElements(options.getItemsElement()).forEach((element) => {
+      if (elementIsUntagged(element)) {
+        element.dataset[INFINITE_SCROLL_PAGE_KEY] = loadedPage?.toString() || "1";
+      }
+      itemsObserver.observe(element);
+    });
+    rememberElements();
+  };
+  const getElementsRememberKey = () => `inertia:infinite-scroll-elements:${options.getPropName()}`;
+  const rememberElements = () => {
+    const pageElementRange = {};
+    const childNodes = options.getItemsElement().childNodes;
+    for (let index = 0; index < childNodes.length; index++) {
+      const node = childNodes[index];
+      if (node.nodeType !== Node.ELEMENT_NODE) {
+        continue;
+      }
+      const page2 = getPageFromElement(node);
+      if (typeof page2 === "undefined") {
+        continue;
+      }
+      if (!(page2 in pageElementRange)) {
+        pageElementRange[page2] = { from: index, to: index };
+      } else {
+        pageElementRange[page2].to = index;
+      }
+    }
+    router.remember(pageElementRange, getElementsRememberKey());
+  };
+  const rememberElementsDebounced = debounce(rememberElements, 250);
+  const restoreElements = () => {
+    const pageElementRange = router.restore(getElementsRememberKey());
+    if (!pageElementRange || typeof pageElementRange !== "object") {
+      return false;
+    }
+    const childNodes = options.getItemsElement().childNodes;
+    for (let index = 0; index < childNodes.length; index++) {
+      const node = childNodes[index];
+      if (node.nodeType !== Node.ELEMENT_NODE) {
+        continue;
+      }
+      const element = node;
+      let elementPage;
+      for (const [page2, range] of Object.entries(pageElementRange)) {
+        if (index >= range.from && index <= range.to) {
+          elementPage = page2;
+          break;
+        }
+      }
+      if (elementPage) {
+        element.dataset[INFINITE_SCROLL_PAGE_KEY] = elementPage;
+      } else if (!elementIsUntagged(element)) {
+        continue;
+      } else {
+        element.dataset[INFINITE_SCROLL_IGNORE_KEY] = "true";
+      }
+      itemsObserver.observe(element);
+    }
+    return true;
+  };
+  return {
+    setupObservers,
+    enableTriggers,
+    disableTriggers,
+    refreshTriggers,
+    flushAll,
+    processManuallyAddedElements,
+    processServerLoadedElements
+  };
+};
+var queue3 = new Queue();
+var initialUrl;
+var payloadUrl;
+var initialUrlWasAbsolute = null;
+var useInfiniteScrollQueryString = (options) => {
+  let enabled = true;
+  const queuePageUpdate = (page2) => {
+    queue3.add(() => {
+      return new Promise((resolve) => {
+        if (!enabled) {
+          initialUrl = payloadUrl = null;
+          return resolve();
+        }
+        if (!initialUrl || !payloadUrl) {
+          const currentPageUrl = page.get().url;
+          initialUrl = hrefToUrl(currentPageUrl);
+          payloadUrl = hrefToUrl(currentPageUrl);
+          initialUrlWasAbsolute = urlHasProtocol(currentPageUrl);
+        }
+        const pageName = options.getPageName();
+        const searchParams = payloadUrl.searchParams;
+        if (page2 === "1") {
+          searchParams.delete(pageName);
+        } else {
+          searchParams.set(pageName, page2);
+        }
+        setTimeout(() => resolve());
+      });
+    }).finally(() => {
+      if (enabled && initialUrl && payloadUrl && initialUrl.href !== payloadUrl.href && initialUrlWasAbsolute !== null) {
+        router.replace({
+          url: urlToString(payloadUrl, initialUrlWasAbsolute),
+          preserveScroll: true,
+          preserveState: true
+        });
+      }
+      initialUrl = payloadUrl = initialUrlWasAbsolute = null;
+    });
+  };
+  const onItemIntersected = debounce((itemElement) => {
+    const itemsElement = options.getItemsElement();
+    if (!enabled || options.shouldPreserveUrl() || !itemElement || !itemsElement) {
+      return;
+    }
+    const pageMap = /* @__PURE__ */ new Map();
+    const elements = [...itemsElement.children];
+    getElementsInViewportFromCollection(elements, itemElement).forEach((element) => {
+      const page2 = getPageFromElement(element) ?? "1";
+      if (pageMap.has(page2)) {
+        pageMap.set(page2, pageMap.get(page2) + 1);
+      } else {
+        pageMap.set(page2, 1);
+      }
+    });
+    const sortedPages = Array.from(pageMap.entries()).sort((a, b) => b[1] - a[1]);
+    const mostVisiblePage = sortedPages[0]?.[0];
+    if (mostVisiblePage !== void 0) {
+      queuePageUpdate(mostVisiblePage);
+    }
+  }, 250);
+  return {
+    onItemIntersected,
+    cancel: () => enabled = false
+  };
+};
+var useInfiniteScrollPreservation = (options) => {
+  const createCallbacks = () => {
+    let currentScrollTop;
+    let referenceElement = null;
+    let referenceElementTop = 0;
+    const captureScrollPosition = () => {
+      const scrollableContainer = options.getScrollableParent();
+      const itemsElement = options.getItemsElement();
+      currentScrollTop = scrollableContainer?.scrollTop || window.scrollY;
+      const visibleElements = getElementsInViewportFromCollection([...itemsElement.children]);
+      if (visibleElements.length > 0) {
+        referenceElement = visibleElements[0];
+        const containerRect = scrollableContainer?.getBoundingClientRect() || { top: 0 };
+        const containerTop = scrollableContainer ? containerRect.top : 0;
+        const rect = referenceElement.getBoundingClientRect();
+        referenceElementTop = rect.top - containerTop;
+      }
+    };
+    const restoreScrollPosition = () => {
+      if (!referenceElement) {
+        return;
+      }
+      let attempts = 0;
+      let restored = false;
+      const restore = () => {
+        attempts++;
+        if (restored || attempts > 10) {
+          return false;
+        }
+        const scrollableContainer = options.getScrollableParent();
+        const containerRect = scrollableContainer?.getBoundingClientRect() || { top: 0 };
+        const containerTop = scrollableContainer ? containerRect.top : 0;
+        const newRect = referenceElement.getBoundingClientRect();
+        const newElementTop = newRect.top - containerTop;
+        const adjustment = newElementTop - referenceElementTop;
+        if (adjustment === 0) {
+          window.requestAnimationFrame(restore);
+          return;
+        }
+        if (scrollableContainer) {
+          scrollableContainer.scrollTo({ top: currentScrollTop + adjustment });
+        } else {
+          window.scrollTo(0, window.scrollY + adjustment);
+        }
+        restored = true;
+      };
+      window.requestAnimationFrame(restore);
+    };
+    return {
+      captureScrollPosition,
+      restoreScrollPosition
+    };
+  };
+  return {
+    createCallbacks
+  };
+};
+function useInfiniteScroll(options) {
+  const queryStringManager = useInfiniteScrollQueryString({ ...options, getPageName: () => dataManager.getPageName() });
+  const scrollPreservation = useInfiniteScrollPreservation(options);
+  const elementManager = useInfiniteScrollElementManager({
+    ...options,
+    // As items enter viewport, update URL to reflect the most visible page
+    onItemIntersected: queryStringManager.onItemIntersected,
+    onPreviousTriggered: () => dataManager.fetchPrevious(),
+    onNextTriggered: () => dataManager.fetchNext()
+  });
+  const dataManager = useInfiniteScrollData({
+    ...options,
+    // Before updating page data, tag any manually added DOM elements
+    // so they don't get confused with server-loaded content
+    onBeforeUpdate: elementManager.processManuallyAddedElements,
+    // After successful request, tag new server content
+    onCompletePreviousRequest: (loadedPage) => {
+      options.onCompletePreviousRequest();
+      requestAnimationFrame(() => {
+        elementManager.processServerLoadedElements(loadedPage);
+        elementManager.refreshTriggers();
+      }, 2);
+    },
+    onCompleteNextRequest: (loadedPage) => {
+      options.onCompleteNextRequest();
+      requestAnimationFrame(() => {
+        elementManager.processServerLoadedElements(loadedPage);
+        elementManager.refreshTriggers();
+      }, 2);
+    }
+  });
+  const addScrollPreservationCallbacks = (reloadOptions) => {
+    const { captureScrollPosition, restoreScrollPosition } = scrollPreservation.createCallbacks();
+    const originalOnBeforeUpdate = reloadOptions.onBeforeUpdate || (() => {
+    });
+    const originalOnSuccess = reloadOptions.onSuccess || (() => {
+    });
+    reloadOptions.onBeforeUpdate = (page2) => {
+      originalOnBeforeUpdate(page2);
+      captureScrollPosition();
+    };
+    reloadOptions.onSuccess = (page2) => {
+      originalOnSuccess(page2);
+      restoreScrollPosition();
+    };
+    return reloadOptions;
+  };
+  const originalFetchNext = dataManager.fetchNext;
+  dataManager.fetchNext = (reloadOptions = {}) => {
+    if (options.inReverseMode()) {
+      reloadOptions = addScrollPreservationCallbacks(reloadOptions);
+    }
+    originalFetchNext(reloadOptions);
+  };
+  const originalFetchPrevious = dataManager.fetchPrevious;
+  dataManager.fetchPrevious = (reloadOptions = {}) => {
+    if (!options.inReverseMode()) {
+      reloadOptions = addScrollPreservationCallbacks(reloadOptions);
+    }
+    originalFetchPrevious(reloadOptions);
+  };
+  return {
+    dataManager,
+    elementManager,
+    flush: () => {
+      dataManager.removeEventListener();
+      elementManager.flushAll();
+      queryStringManager.cancel();
+    }
+  };
+}
+function isContentEditableOrPrevented(event) {
+  return event.target instanceof HTMLElement && event.target.isContentEditable || event.defaultPrevented;
+}
+function shouldIntercept(event) {
+  const isLink = event.currentTarget.tagName.toLowerCase() === "a";
+  return !(isContentEditableOrPrevented(event) || isLink && event.altKey || isLink && event.ctrlKey || isLink && event.metaKey || isLink && event.shiftKey || isLink && "button" in event && event.button !== 0);
+}
+function shouldNavigate(event) {
+  const isButton = event.currentTarget.tagName.toLowerCase() === "button";
+  return !isContentEditableOrPrevented(event) && (event.key === "Enter" || isButton && event.key === " ");
+}
+var baseComponentSelector = "nprogress";
+var progress2;
+var settings = {
+  minimum: 0.08,
+  easing: "linear",
+  positionUsing: "translate3d",
+  speed: 200,
+  trickle: true,
+  trickleSpeed: 200,
+  showSpinner: true,
+  barSelector: '[role="bar"]',
+  spinnerSelector: '[role="spinner"]',
+  parent: "body",
+  color: "#29d",
+  includeCSS: true,
+  template: [
+    '<div class="bar" role="bar">',
+    '<div class="peg"></div>',
+    "</div>",
+    '<div class="spinner" role="spinner">',
+    '<div class="spinner-icon"></div>',
+    "</div>"
+  ].join("")
+};
+var status = null;
+var configure = (options) => {
+  Object.assign(settings, options);
+  if (settings.includeCSS) {
+    injectCSS(settings.color);
+  }
+  progress2 = document.createElement("div");
+  progress2.id = baseComponentSelector;
+  progress2.innerHTML = settings.template;
+};
+var set5 = (n) => {
+  const started = isStarted();
+  n = clamp(n, settings.minimum, 1);
+  status = n === 1 ? null : n;
+  const progress3 = render(!started);
+  const bar = progress3.querySelector(settings.barSelector);
+  const speed = settings.speed;
+  const ease = settings.easing;
+  progress3.offsetWidth;
+  queue4((next) => {
+    const barStyles = (() => {
+      if (settings.positionUsing === "translate3d") {
+        return {
+          transition: `all ${speed}ms ${ease}`,
+          transform: `translate3d(${toBarPercentage(n)}%,0,0)`
+        };
+      }
+      if (settings.positionUsing === "translate") {
+        return {
+          transition: `all ${speed}ms ${ease}`,
+          transform: `translate(${toBarPercentage(n)}%,0)`
+        };
+      }
+      return { marginLeft: `${toBarPercentage(n)}%` };
+    })();
+    for (const key in barStyles) {
+      bar.style[key] = barStyles[key];
+    }
+    if (n !== 1) {
+      return setTimeout(next, speed);
+    }
+    progress3.style.transition = "none";
+    progress3.style.opacity = "1";
+    progress3.offsetWidth;
+    setTimeout(() => {
+      progress3.style.transition = `all ${speed}ms linear`;
+      progress3.style.opacity = "0";
+      setTimeout(() => {
+        remove();
+        progress3.style.transition = "";
+        progress3.style.opacity = "";
+        next();
+      }, speed);
+    }, speed);
+  });
+};
+var isStarted = () => typeof status === "number";
+var start = () => {
+  if (!status) {
+    set5(0);
+  }
+  const work = function() {
+    setTimeout(function() {
+      if (!status) {
+        return;
+      }
+      increaseByRandom();
+      work();
+    }, settings.trickleSpeed);
+  };
+  if (settings.trickle) {
+    work();
+  }
+};
+var done = (force) => {
+  if (!force && !status) {
+    return;
+  }
+  increaseByRandom(0.3 + 0.5 * Math.random());
+  set5(1);
+};
+var increaseByRandom = (amount) => {
+  const n = status;
+  if (n === null) {
+    return start();
+  }
+  if (n > 1) {
+    return;
+  }
+  amount = typeof amount === "number" ? amount : (() => {
+    const ranges = {
+      0.1: [0, 0.2],
+      0.04: [0.2, 0.5],
+      0.02: [0.5, 0.8],
+      5e-3: [0.8, 0.99]
+    };
+    for (const r in ranges) {
+      if (n >= ranges[r][0] && n < ranges[r][1]) {
+        return parseFloat(r);
+      }
+    }
+    return 0;
+  })();
+  return set5(clamp(n + amount, 0, 0.994));
+};
+var render = (fromStart) => {
+  if (isRendered()) {
+    return document.getElementById(baseComponentSelector);
+  }
+  document.documentElement.classList.add(`${baseComponentSelector}-busy`);
+  const bar = progress2.querySelector(settings.barSelector);
+  const perc = fromStart ? "-100" : toBarPercentage(status || 0);
+  const parent = getParent();
+  bar.style.transition = "all 0 linear";
+  bar.style.transform = `translate3d(${perc}%,0,0)`;
+  if (!settings.showSpinner) {
+    progress2.querySelector(settings.spinnerSelector)?.remove();
+  }
+  if (parent !== document.body) {
+    parent.classList.add(`${baseComponentSelector}-custom-parent`);
+  }
+  parent.appendChild(progress2);
+  return progress2;
+};
+var getParent = () => {
+  return isDOM(settings.parent) ? settings.parent : document.querySelector(settings.parent);
+};
+var remove = () => {
+  document.documentElement.classList.remove(`${baseComponentSelector}-busy`);
+  getParent().classList.remove(`${baseComponentSelector}-custom-parent`);
+  progress2?.remove();
+};
+var isRendered = () => {
+  return document.getElementById(baseComponentSelector) !== null;
+};
+var isDOM = (obj) => {
+  if (typeof HTMLElement === "object") {
+    return obj instanceof HTMLElement;
+  }
+  return obj && typeof obj === "object" && obj.nodeType === 1 && typeof obj.nodeName === "string";
+};
+function clamp(n, min, max) {
+  if (n < min) {
+    return min;
+  }
+  if (n > max) {
+    return max;
+  }
+  return n;
+}
+var toBarPercentage = (n) => (-1 + n) * 100;
+var queue4 = /* @__PURE__ */ (() => {
+  const pending = [];
+  const next = () => {
+    const fn = pending.shift();
+    if (fn) {
+      fn(next);
+    }
+  };
+  return (fn) => {
+    pending.push(fn);
+    if (pending.length === 1) {
+      next();
+    }
+  };
+})();
+var injectCSS = (color) => {
+  const element = document.createElement("style");
+  element.textContent = `
+    #${baseComponentSelector} {
+      pointer-events: none;
+    }
+
+    #${baseComponentSelector} .bar {
+      background: ${color};
+
+      position: fixed;
+      z-index: 1031;
+      top: 0;
+      left: 0;
+
+      width: 100%;
+      height: 2px;
+    }
+
+    #${baseComponentSelector} .peg {
+      display: block;
+      position: absolute;
+      right: 0px;
+      width: 100px;
+      height: 100%;
+      box-shadow: 0 0 10px ${color}, 0 0 5px ${color};
+      opacity: 1.0;
+
+      transform: rotate(3deg) translate(0px, -4px);
+    }
+
+    #${baseComponentSelector} .spinner {
+      display: block;
+      position: fixed;
+      z-index: 1031;
+      top: 15px;
+      right: 15px;
+    }
+
+    #${baseComponentSelector} .spinner-icon {
+      width: 18px;
+      height: 18px;
+      box-sizing: border-box;
+
+      border: solid 2px transparent;
+      border-top-color: ${color};
+      border-left-color: ${color};
+      border-radius: 50%;
+
+      animation: ${baseComponentSelector}-spinner 400ms linear infinite;
+    }
+
+    .${baseComponentSelector}-custom-parent {
+      overflow: hidden;
+      position: relative;
+    }
+
+    .${baseComponentSelector}-custom-parent #${baseComponentSelector} .spinner,
+    .${baseComponentSelector}-custom-parent #${baseComponentSelector} .bar {
+      position: absolute;
+    }
+
+    @keyframes ${baseComponentSelector}-spinner {
+      0%   { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  `;
+  document.head.appendChild(element);
+};
+var show = () => {
+  if (progress2) {
+    progress2.style.display = "";
+  }
+};
+var hide = () => {
+  if (progress2) {
+    progress2.style.display = "none";
+  }
+};
+var progress_component_default = {
+  configure,
+  isStarted,
+  done,
+  set: set5,
+  remove,
+  start,
+  status,
+  show,
+  hide
+};
+var Progress = class {
+  constructor() {
+    this.hideCount = 0;
+  }
+  start() {
+    progress_component_default.start();
+  }
+  reveal(force = false) {
+    this.hideCount = Math.max(0, this.hideCount - 1);
+    if (force || this.hideCount === 0) {
+      progress_component_default.show();
+    }
+  }
+  hide() {
+    this.hideCount++;
+    progress_component_default.hide();
+  }
+  set(status2) {
+    progress_component_default.set(Math.max(0, Math.min(1, status2)));
+  }
+  finish() {
+    progress_component_default.done();
+  }
+  reset() {
+    progress_component_default.set(0);
+  }
+  remove() {
+    progress_component_default.done();
+    progress_component_default.remove();
+  }
+  isStarted() {
+    return progress_component_default.isStarted();
+  }
+  getStatus() {
+    return progress_component_default.status;
+  }
+};
+var progress = new Progress();
+progress.reveal;
+progress.hide;
+function addEventListeners(delay) {
+  document.addEventListener("inertia:start", (e) => handleStartEvent(e, delay));
+  document.addEventListener("inertia:progress", handleProgressEvent);
+}
+function handleStartEvent(event, delay) {
+  if (!event.detail.visit.showProgress) {
+    progress.hide();
+  }
+  const timeout = setTimeout(() => progress.start(), delay);
+  document.addEventListener("inertia:finish", (e) => finish(e, timeout), { once: true });
+}
+function handleProgressEvent(event) {
+  if (progress.isStarted() && event.detail.progress?.percentage) {
+    progress.set(Math.max(progress.getStatus(), event.detail.progress.percentage / 100 * 0.9));
+  }
+}
+function finish(event, timeout) {
+  clearTimeout(timeout);
+  if (!progress.isStarted()) {
+    return;
+  }
+  if (event.detail.visit.completed) {
+    progress.finish();
+  } else if (event.detail.visit.interrupted) {
+    progress.reset();
+  } else if (event.detail.visit.cancelled) {
+    progress.remove();
+  }
+}
+function setupProgress({
+  delay = 250,
+  color = "#29d",
+  includeCSS = true,
+  showSpinner = false
+} = {}) {
+  addEventListeners(delay);
+  progress_component_default.configure({ showSpinner, includeCSS, color });
+}
+function isFormElement(element) {
+  return element instanceof HTMLInputElement || element instanceof HTMLSelectElement || element instanceof HTMLTextAreaElement;
+}
+function resetInputElement(input, defaultValues) {
+  const oldValue = input.value;
+  const oldChecked = input.checked;
+  switch (input.type.toLowerCase()) {
+    case "checkbox":
+      input.checked = defaultValues.includes(input.value);
+      break;
+    case "radio":
+      input.checked = defaultValues[0] === input.value;
+      break;
+    case "file":
+      input.value = "";
+      break;
+    case "button":
+    case "submit":
+    case "reset":
+    case "image":
+      break;
+    default:
+      input.value = defaultValues[0] !== null && defaultValues[0] !== void 0 ? String(defaultValues[0]) : "";
+  }
+  return input.value !== oldValue || input.checked !== oldChecked;
+}
+function resetSelectElement(select, defaultValues) {
+  const oldValue = select.value;
+  const oldSelectedOptions = Array.from(select.selectedOptions).map((opt) => opt.value);
+  if (select.multiple) {
+    const defaultStrings = defaultValues.map((value) => String(value));
+    Array.from(select.options).forEach((option) => {
+      option.selected = defaultStrings.includes(option.value);
+    });
+  } else {
+    select.value = defaultValues[0] !== void 0 ? String(defaultValues[0]) : "";
+  }
+  const newSelectedOptions = Array.from(select.selectedOptions).map((opt) => opt.value);
+  const hasChanged = select.multiple ? JSON.stringify(oldSelectedOptions.sort()) !== JSON.stringify(newSelectedOptions.sort()) : select.value !== oldValue;
+  return hasChanged;
+}
+function resetFormElement(element, defaultValues) {
+  if (element.disabled) {
+    if (element instanceof HTMLInputElement) {
+      const oldValue = element.value;
+      const oldChecked = element.checked;
+      switch (element.type.toLowerCase()) {
+        case "checkbox":
+        case "radio":
+          element.checked = element.defaultChecked;
+          return element.checked !== oldChecked;
+        case "file":
+          element.value = "";
+          return oldValue !== "";
+        case "button":
+        case "submit":
+        case "reset":
+        case "image":
+          return false;
+        default:
+          element.value = element.defaultValue;
+          return element.value !== oldValue;
+      }
+    } else if (element instanceof HTMLSelectElement) {
+      const oldSelectedOptions = Array.from(element.selectedOptions).map((opt) => opt.value);
+      Array.from(element.options).forEach((option) => {
+        option.selected = option.defaultSelected;
+      });
+      const newSelectedOptions = Array.from(element.selectedOptions).map((opt) => opt.value);
+      return JSON.stringify(oldSelectedOptions.sort()) !== JSON.stringify(newSelectedOptions.sort());
+    } else if (element instanceof HTMLTextAreaElement) {
+      const oldValue = element.value;
+      element.value = element.defaultValue;
+      return element.value !== oldValue;
+    }
+    return false;
+  }
+  if (element instanceof HTMLInputElement) {
+    return resetInputElement(element, defaultValues);
+  } else if (element instanceof HTMLSelectElement) {
+    return resetSelectElement(element, defaultValues);
+  } else if (element instanceof HTMLTextAreaElement) {
+    const oldValue = element.value;
+    element.value = defaultValues[0] !== void 0 ? String(defaultValues[0]) : "";
+    return element.value !== oldValue;
+  }
+  return false;
+}
+function resetFieldElements(elements, defaultValues) {
+  let hasChanged = false;
+  if (elements instanceof RadioNodeList || elements instanceof HTMLCollection) {
+    Array.from(elements).forEach((node, index) => {
+      if (node instanceof Element && isFormElement(node)) {
+        if (node instanceof HTMLInputElement && ["checkbox", "radio"].includes(node.type.toLowerCase())) {
+          if (resetFormElement(node, defaultValues)) {
+            hasChanged = true;
+          }
+        } else {
+          const indexedDefaultValues = defaultValues[index] !== void 0 ? [defaultValues[index]] : [defaultValues[0] ?? null].filter(Boolean);
+          if (resetFormElement(node, indexedDefaultValues)) {
+            hasChanged = true;
+          }
+        }
+      }
+    });
+  } else if (isFormElement(elements)) {
+    hasChanged = resetFormElement(elements, defaultValues);
+  }
+  return hasChanged;
+}
+function resetFormFields(formElement, defaults, fieldNames) {
+  if (!formElement) {
+    return;
+  }
+  const resetEntireForm = !fieldNames || fieldNames.length === 0;
+  if (resetEntireForm) {
+    const formData = new FormData(formElement);
+    const formElementNames = Array.from(formElement.elements).map((el) => isFormElement(el) ? el.name : "").filter(Boolean);
+    fieldNames = [.../* @__PURE__ */ new Set([...defaults.keys(), ...formData.keys(), ...formElementNames])];
+  }
+  let hasChanged = false;
+  fieldNames.forEach((fieldName) => {
+    const elements = formElement.elements.namedItem(fieldName);
+    if (elements) {
+      if (resetFieldElements(elements, defaults.getAll(fieldName))) {
+        hasChanged = true;
+      }
+    }
+  });
+  if (hasChanged && resetEntireForm) {
+    formElement.dispatchEvent(new Event("reset", { bubbles: true }));
+  }
+}
+var router = new Router();
 var reactExports = requireReact();
 const React4 = /* @__PURE__ */ getDefaultExportFromCjs(reactExports);
 var reactDom = { exports: {} };
@@ -2188,7 +6049,7 @@ function App({
     routerIsInitialized = true;
   }
   reactExports.useEffect(() => {
-    swapComponent = async ({ component, page, preserveState }) => {
+    swapComponent = async ({ component, page: page2, preserveState }) => {
       if (currentIsInitialPage) {
         currentIsInitialPage = false;
         return;
@@ -2196,7 +6057,7 @@ function App({
       reactDomExports.flushSync(
         () => setCurrent((current2) => ({
           component,
-          page,
+          page: page2,
           key: preserveState ? current2.key : Date.now()
         }))
       );
@@ -2240,15 +6101,15 @@ async function createInertiaApp({
   resolve,
   setup,
   title,
-  progress: progress2 = {},
-  page,
-  render,
+  progress: progress22 = {},
+  page: page2,
+  render: render2,
   defaults = {}
 }) {
   config.replace(defaults);
-  const isServer = typeof window === "undefined";
+  const isServer2 = typeof window === "undefined";
   const useScriptElementForInitialPage = config.get("future.useScriptElementForInitialPage");
-  const initialPage = page || getInitialPageFromDOM(id, useScriptElementForInitialPage);
+  const initialPage = page2 || getInitialPageFromDOM(id, useScriptElementForInitialPage);
   const resolveComponent = (name) => Promise.resolve(resolve(name)).then((module) => module.default || module);
   let head = [];
   const reactApp = await Promise.all([
@@ -2262,7 +6123,7 @@ async function createInertiaApp({
       resolveComponent,
       titleCallback: title
     };
-    if (isServer) {
+    if (isServer2) {
       const ssrSetup = setup;
       return ssrSetup({
         el: null,
@@ -2277,10 +6138,10 @@ async function createInertiaApp({
       props
     });
   });
-  if (!isServer && progress2) {
-    setupProgress(progress2);
+  if (!isServer2 && progress22) {
+    setupProgress(progress22);
   }
-  if (isServer && render) {
+  if (isServer2 && render2) {
     const element = () => {
       if (!useScriptElementForInitialPage) {
         return reactExports.createElement(
@@ -2303,16 +6164,16 @@ async function createInertiaApp({
         reactExports.createElement("div", { id }, reactApp)
       );
     };
-    const body = await render(element());
+    const body = await render2(element());
     return { head, body };
   }
 }
 function usePage() {
-  const page = typeof React4.use === "function" ? React4.use(PageContext_default) : React4.useContext(PageContext_default);
-  if (!page) {
+  const page2 = typeof React4.use === "function" ? React4.use(PageContext_default) : React4.useContext(PageContext_default);
+  if (!page2) {
     throw new Error("usePage must be used within the Inertia component");
   }
-  return page;
+  return page2;
 }
 function useIsomorphicLayoutEffect(effect, deps) {
   typeof window === "undefined" ? reactExports.useEffect(effect, deps) : reactExports.useLayoutEffect(effect, deps);
@@ -2341,7 +6202,7 @@ function useForm(...args) {
   const [errors, setErrors] = rememberKey ? useRemember({}, `${rememberKey}:errors`) : reactExports.useState({});
   const [hasErrors, setHasErrors] = reactExports.useState(false);
   const [processing, setProcessing] = reactExports.useState(false);
-  const [progress2, setProgress] = reactExports.useState(null);
+  const [progress22, setProgress] = reactExports.useState(null);
   const [wasSuccessful, setWasSuccessful] = reactExports.useState(false);
   const [recentlySuccessful, setRecentlySuccessful] = reactExports.useState(false);
   const transform = reactExports.useRef((data2) => data2);
@@ -2390,7 +6251,7 @@ function useForm(...args) {
             return options.onProgress(event);
           }
         },
-        onSuccess: async (page) => {
+        onSuccess: async (page2) => {
           if (isMounted.current) {
             setProcessing(false);
             setProgress(null);
@@ -2404,7 +6265,7 @@ function useForm(...args) {
               }
             }, config.get("form.recentlySuccessfulDuration"));
           }
-          const onSuccess = options.onSuccess ? await options.onSuccess(page) : null;
+          const onSuccess = options.onSuccess ? await options.onSuccess(page2) : null;
           if (isMounted.current && !setDefaultsCalledInOnSuccess.current) {
             setData((data2) => {
               setDefaults(cloneDeep(data2));
@@ -2582,7 +6443,7 @@ function useForm(...args) {
     errors,
     hasErrors,
     processing,
-    progress: progress2,
+    progress: progress22,
     wasSuccessful,
     recentlySuccessful,
     transform: transformFunction,
@@ -2884,7 +6745,7 @@ var Form_default = Form;
 var Head = function({ children, title }) {
   const headManager = reactExports.useContext(HeadContext_default);
   const provider = reactExports.useMemo(() => headManager.createProvider(), [headManager]);
-  const isServer = typeof window === "undefined";
+  const isServer2 = typeof window === "undefined";
   reactExports.useEffect(() => {
     provider.reconnect();
     provider.update(renderNodes(children));
@@ -2962,7 +6823,7 @@ var Head = function({ children, title }) {
     }
     return elements;
   }
-  if (isServer) {
+  if (isServer2) {
     provider.update(renderNodes(children));
   }
   return null;
@@ -3424,13 +7285,44 @@ Link.displayName = "InertiaLink";
 var Link_default = Link;
 var router3 = router;
 var config = config$1.extend();
+var readableToString = (readable) => new Promise((resolve, reject) => {
+  let data = "";
+  readable.on("data", (chunk) => data += chunk);
+  readable.on("end", () => resolve(data));
+  readable.on("error", (err) => reject(err));
+});
+var server_default = (render2, options) => {
+  const _port = 13714;
+  const log = (message) => {
+    console.log(
+      message
+    );
+  };
+  const routes = {
+    "/health": async () => ({ status: "OK", timestamp: Date.now() }),
+    "/shutdown": () => process$1.exit(),
+    "/render": async (request) => render2(JSON.parse(await readableToString(request))),
+    "/404": async () => ({ status: "NOT_FOUND", timestamp: Date.now() })
+  };
+  createServer(async (request, response) => {
+    const dispatchRoute = routes[request.url] || routes["/404"];
+    try {
+      response.writeHead(200, { "Content-Type": "application/json", Server: "Inertia.js SSR" });
+      response.write(JSON.stringify(await dispatchRoute(request)));
+    } catch (e) {
+      console.error(e);
+    }
+    response.end();
+  }).listen(_port, () => log("Inertia SSR server started."));
+  log(`Starting SSR server on port ${_port}...`);
+};
 async function resolvePageComponent(path, pages) {
   for (const p of Array.isArray(path) ? path : [path]) {
-    const page = pages[p];
-    if (typeof page === "undefined") {
+    const page2 = pages[p];
+    if (typeof page2 === "undefined") {
       continue;
     }
-    return typeof page === "function" ? page() : page;
+    return typeof page2 === "function" ? page2() : page2;
   }
   throw new Error(`Page not found: ${path}`);
 }
@@ -5804,16 +9696,16 @@ function requireReactDomServerLegacy_node_production() {
     currentlyRenderingComponent = resolveCurrentlyRenderingComponent();
     workInProgressHook = createWorkInProgressHook();
     if (isReRender) {
-      var queue = workInProgressHook.queue;
-      initialArg = queue.dispatch;
-      if (null !== renderPhaseUpdates && (init = renderPhaseUpdates.get(queue), void 0 !== init)) {
-        renderPhaseUpdates.delete(queue);
-        queue = workInProgressHook.memoizedState;
+      var queue5 = workInProgressHook.queue;
+      initialArg = queue5.dispatch;
+      if (null !== renderPhaseUpdates && (init = renderPhaseUpdates.get(queue5), void 0 !== init)) {
+        renderPhaseUpdates.delete(queue5);
+        queue5 = workInProgressHook.memoizedState;
         do
-          queue = reducer(queue, init.action), init = init.next;
+          queue5 = reducer(queue5, init.action), init = init.next;
         while (null !== init);
-        workInProgressHook.memoizedState = queue;
-        return [queue, initialArg];
+        workInProgressHook.memoizedState = queue5;
+        return [queue5, initialArg];
       }
       return [workInProgressHook.memoizedState, initialArg];
     }
@@ -5851,17 +9743,17 @@ function requireReactDomServerLegacy_node_production() {
     workInProgressHook.memoizedState = [nextCreate, deps];
     return nextCreate;
   }
-  function dispatchAction(componentIdentity, queue, action) {
+  function dispatchAction(componentIdentity, queue5, action) {
     if (25 <= numberOfReRenders)
       throw Error(
         "Too many re-renders. React limits the number of renders to prevent an infinite loop."
       );
     if (componentIdentity === currentlyRenderingComponent)
-      if (didScheduleRenderPhaseUpdate = true, componentIdentity = { action, next: null }, null === renderPhaseUpdates && (renderPhaseUpdates = /* @__PURE__ */ new Map()), action = renderPhaseUpdates.get(queue), void 0 === action)
-        renderPhaseUpdates.set(queue, componentIdentity);
+      if (didScheduleRenderPhaseUpdate = true, componentIdentity = { action, next: null }, null === renderPhaseUpdates && (renderPhaseUpdates = /* @__PURE__ */ new Map()), action = renderPhaseUpdates.get(queue5), void 0 === action)
+        renderPhaseUpdates.set(queue5, componentIdentity);
       else {
-        for (queue = action; null !== queue.next; ) queue = queue.next;
-        queue.next = componentIdentity;
+        for (queue5 = action; null !== queue5.next; ) queue5 = queue5.next;
+        queue5.next = componentIdentity;
       }
   }
   function throwOnUseEffectEventCall() {
@@ -10857,16 +14749,16 @@ function requireReactDomServer_node_production() {
     currentlyRenderingComponent = resolveCurrentlyRenderingComponent();
     workInProgressHook = createWorkInProgressHook();
     if (isReRender) {
-      var queue = workInProgressHook.queue;
-      initialArg = queue.dispatch;
-      if (null !== renderPhaseUpdates && (init = renderPhaseUpdates.get(queue), void 0 !== init)) {
-        renderPhaseUpdates.delete(queue);
-        queue = workInProgressHook.memoizedState;
+      var queue5 = workInProgressHook.queue;
+      initialArg = queue5.dispatch;
+      if (null !== renderPhaseUpdates && (init = renderPhaseUpdates.get(queue5), void 0 !== init)) {
+        renderPhaseUpdates.delete(queue5);
+        queue5 = workInProgressHook.memoizedState;
         do
-          queue = reducer(queue, init.action), init = init.next;
+          queue5 = reducer(queue5, init.action), init = init.next;
         while (null !== init);
-        workInProgressHook.memoizedState = queue;
-        return [queue, initialArg];
+        workInProgressHook.memoizedState = queue5;
+        return [queue5, initialArg];
       }
       return [workInProgressHook.memoizedState, initialArg];
     }
@@ -10904,17 +14796,17 @@ function requireReactDomServer_node_production() {
     workInProgressHook.memoizedState = [nextCreate, deps];
     return nextCreate;
   }
-  function dispatchAction(componentIdentity, queue, action) {
+  function dispatchAction(componentIdentity, queue5, action) {
     if (25 <= numberOfReRenders)
       throw Error(
         "Too many re-renders. React limits the number of renders to prevent an infinite loop."
       );
     if (componentIdentity === currentlyRenderingComponent)
-      if (didScheduleRenderPhaseUpdate = true, componentIdentity = { action, next: null }, null === renderPhaseUpdates && (renderPhaseUpdates = /* @__PURE__ */ new Map()), action = renderPhaseUpdates.get(queue), void 0 === action)
-        renderPhaseUpdates.set(queue, componentIdentity);
+      if (didScheduleRenderPhaseUpdate = true, componentIdentity = { action, next: null }, null === renderPhaseUpdates && (renderPhaseUpdates = /* @__PURE__ */ new Map()), action = renderPhaseUpdates.get(queue5), void 0 === action)
+        renderPhaseUpdates.set(queue5, componentIdentity);
       else {
-        for (queue = action; null !== queue.next; ) queue = queue.next;
-        queue.next = componentIdentity;
+        for (queue5 = action; null !== queue5.next; ) queue5 = queue5.next;
+        queue5.next = componentIdentity;
       }
   }
   function throwOnUseEffectEventCall() {
@@ -14085,7 +17977,7 @@ function requireReactDomServerLegacy_node_development() {
     function describeObjectForErrorMessage(objectOrArray, expandedName) {
       var objKind = objectName(objectOrArray);
       if ("Object" !== objKind && "Array" !== objKind) return objKind;
-      var start = -1, length = 0;
+      var start2 = -1, length = 0;
       if (isArrayImpl(objectOrArray))
         if (jsxChildrenParents.has(objectOrArray)) {
           var type = jsxChildrenParents.get(objectOrArray);
@@ -14093,13 +17985,13 @@ function requireReactDomServerLegacy_node_development() {
           for (var i = 0; i < objectOrArray.length; i++) {
             var value = objectOrArray[i];
             value = "string" === typeof value ? value : "object" === typeof value && null !== value ? "{" + describeObjectForErrorMessage(value) + "}" : "{" + describeValueForErrorMessage(value) + "}";
-            "" + i === expandedName ? (start = objKind.length, length = value.length, objKind += value) : objKind = 15 > value.length && 40 > objKind.length + value.length ? objKind + value : objKind + "{...}";
+            "" + i === expandedName ? (start2 = objKind.length, length = value.length, objKind += value) : objKind = 15 > value.length && 40 > objKind.length + value.length ? objKind + value : objKind + "{...}";
           }
           objKind += "</" + describeElementType(type) + ">";
         } else {
           objKind = "[";
           for (type = 0; type < objectOrArray.length; type++)
-            0 < type && (objKind += ", "), i = objectOrArray[type], i = "object" === typeof i && null !== i ? describeObjectForErrorMessage(i) : describeValueForErrorMessage(i), "" + type === expandedName ? (start = objKind.length, length = i.length, objKind += i) : objKind = 10 > i.length && 40 > objKind.length + i.length ? objKind + i : objKind + "...";
+            0 < type && (objKind += ", "), i = objectOrArray[type], i = "object" === typeof i && null !== i ? describeObjectForErrorMessage(i) : describeValueForErrorMessage(i), "" + type === expandedName ? (start2 = objKind.length, length = i.length, objKind += i) : objKind = 10 > i.length && 40 > objKind.length + i.length ? objKind + i : objKind + "...";
           objKind += "]";
         }
       else if (objectOrArray.$$typeof === REACT_ELEMENT_TYPE)
@@ -14117,18 +18009,18 @@ function requireReactDomServerLegacy_node_development() {
             var _value2 = objectOrArray[value];
             var _substr2 = value === expandedName && "object" === typeof _value2 && null !== _value2 ? describeObjectForErrorMessage(_value2) : describeValueForErrorMessage(_value2);
             "string" !== typeof _value2 && (_substr2 = "{" + _substr2 + "}");
-            value === expandedName ? (start = objKind.length, length = _substr2.length, objKind += _substr2) : objKind = 10 > _substr2.length && 40 > objKind.length + _substr2.length ? objKind + _substr2 : objKind + "...";
+            value === expandedName ? (start2 = objKind.length, length = _substr2.length, objKind += _substr2) : objKind = 10 > _substr2.length && 40 > objKind.length + _substr2.length ? objKind + _substr2 : objKind + "...";
           }
           objKind += ">";
         } else {
           objKind = "{";
           type = Object.keys(objectOrArray);
           for (i = 0; i < type.length; i++)
-            0 < i && (objKind += ", "), value = type[i], objKind += describeKeyForErrorMessage(value) + ": ", _value2 = objectOrArray[value], _value2 = "object" === typeof _value2 && null !== _value2 ? describeObjectForErrorMessage(_value2) : describeValueForErrorMessage(_value2), value === expandedName ? (start = objKind.length, length = _value2.length, objKind += _value2) : objKind = 10 > _value2.length && 40 > objKind.length + _value2.length ? objKind + _value2 : objKind + "...";
+            0 < i && (objKind += ", "), value = type[i], objKind += describeKeyForErrorMessage(value) + ": ", _value2 = objectOrArray[value], _value2 = "object" === typeof _value2 && null !== _value2 ? describeObjectForErrorMessage(_value2) : describeValueForErrorMessage(_value2), value === expandedName ? (start2 = objKind.length, length = _value2.length, objKind += _value2) : objKind = 10 > _value2.length && 40 > objKind.length + _value2.length ? objKind + _value2 : objKind + "...";
           objKind += "}";
         }
       }
-      return void 0 === expandedName ? objKind : -1 < start && 0 < length ? (objectOrArray = " ".repeat(start) + "^".repeat(length), "\n  " + objKind + "\n  " + objectOrArray) : "\n  " + objKind;
+      return void 0 === expandedName ? objKind : -1 < start2 && 0 < length ? (objectOrArray = " ".repeat(start2) + "^".repeat(length), "\n  " + objKind + "\n  " + objectOrArray) : "\n  " + objKind;
     }
     function murmurhash3_32_gc(key, seed) {
       var remainder = key.length & 3;
@@ -16946,17 +20838,17 @@ function requireReactDomServerLegacy_node_development() {
       workInProgressHook.memoizedState = [nextCreate, deps];
       return nextCreate;
     }
-    function dispatchAction(componentIdentity, queue, action) {
+    function dispatchAction(componentIdentity, queue5, action) {
       if (25 <= numberOfReRenders)
         throw Error(
           "Too many re-renders. React limits the number of renders to prevent an infinite loop."
         );
       if (componentIdentity === currentlyRenderingComponent)
-        if (didScheduleRenderPhaseUpdate = true, componentIdentity = { action, next: null }, null === renderPhaseUpdates && (renderPhaseUpdates = /* @__PURE__ */ new Map()), action = renderPhaseUpdates.get(queue), void 0 === action)
-          renderPhaseUpdates.set(queue, componentIdentity);
+        if (didScheduleRenderPhaseUpdate = true, componentIdentity = { action, next: null }, null === renderPhaseUpdates && (renderPhaseUpdates = /* @__PURE__ */ new Map()), action = renderPhaseUpdates.get(queue5), void 0 === action)
+          renderPhaseUpdates.set(queue5, componentIdentity);
         else {
-          for (queue = action; null !== queue.next; ) queue = queue.next;
-          queue.next = componentIdentity;
+          for (queue5 = action; null !== queue5.next; ) queue5 = queue5.next;
+          queue5.next = componentIdentity;
         }
     }
     function throwOnUseEffectEventCall() {
@@ -18475,11 +22367,11 @@ function requireReactDomServerLegacy_node_development() {
               );
               return;
             case REACT_CONSUMER_TYPE:
-              var context$jscomp$0 = type._context, render = props.children;
-              "function" !== typeof render && console.error(
+              var context$jscomp$0 = type._context, render2 = props.children;
+              "function" !== typeof render2 && console.error(
                 "A context consumer was rendered with multiple children, or a child that isn't a function. A context consumer expects a single child that is a function. If you did pass a function, make sure there is no trailing or leading whitespace around it."
               );
-              var newChildren = render(context$jscomp$0._currentValue2), prevKeyPath$jscomp$6 = task.keyPath;
+              var newChildren = render2(context$jscomp$0._currentValue2), prevKeyPath$jscomp$6 = task.keyPath;
               task.keyPath = keyPath;
               renderNodeDestructive(request, task, newChildren, -1);
               task.keyPath = prevKeyPath$jscomp$6;
@@ -21180,7 +25072,7 @@ function requireReactDomServer_node_development() {
     function describeObjectForErrorMessage(objectOrArray, expandedName) {
       var objKind = objectName(objectOrArray);
       if ("Object" !== objKind && "Array" !== objKind) return objKind;
-      var start = -1, length = 0;
+      var start2 = -1, length = 0;
       if (isArrayImpl(objectOrArray))
         if (jsxChildrenParents.has(objectOrArray)) {
           var type = jsxChildrenParents.get(objectOrArray);
@@ -21188,13 +25080,13 @@ function requireReactDomServer_node_development() {
           for (var i = 0; i < objectOrArray.length; i++) {
             var value = objectOrArray[i];
             value = "string" === typeof value ? value : "object" === typeof value && null !== value ? "{" + describeObjectForErrorMessage(value) + "}" : "{" + describeValueForErrorMessage(value) + "}";
-            "" + i === expandedName ? (start = objKind.length, length = value.length, objKind += value) : objKind = 15 > value.length && 40 > objKind.length + value.length ? objKind + value : objKind + "{...}";
+            "" + i === expandedName ? (start2 = objKind.length, length = value.length, objKind += value) : objKind = 15 > value.length && 40 > objKind.length + value.length ? objKind + value : objKind + "{...}";
           }
           objKind += "</" + describeElementType(type) + ">";
         } else {
           objKind = "[";
           for (type = 0; type < objectOrArray.length; type++)
-            0 < type && (objKind += ", "), i = objectOrArray[type], i = "object" === typeof i && null !== i ? describeObjectForErrorMessage(i) : describeValueForErrorMessage(i), "" + type === expandedName ? (start = objKind.length, length = i.length, objKind += i) : objKind = 10 > i.length && 40 > objKind.length + i.length ? objKind + i : objKind + "...";
+            0 < type && (objKind += ", "), i = objectOrArray[type], i = "object" === typeof i && null !== i ? describeObjectForErrorMessage(i) : describeValueForErrorMessage(i), "" + type === expandedName ? (start2 = objKind.length, length = i.length, objKind += i) : objKind = 10 > i.length && 40 > objKind.length + i.length ? objKind + i : objKind + "...";
           objKind += "]";
         }
       else if (objectOrArray.$$typeof === REACT_ELEMENT_TYPE)
@@ -21212,18 +25104,18 @@ function requireReactDomServer_node_development() {
             var _value2 = objectOrArray[value];
             var _substr2 = value === expandedName && "object" === typeof _value2 && null !== _value2 ? describeObjectForErrorMessage(_value2) : describeValueForErrorMessage(_value2);
             "string" !== typeof _value2 && (_substr2 = "{" + _substr2 + "}");
-            value === expandedName ? (start = objKind.length, length = _substr2.length, objKind += _substr2) : objKind = 10 > _substr2.length && 40 > objKind.length + _substr2.length ? objKind + _substr2 : objKind + "...";
+            value === expandedName ? (start2 = objKind.length, length = _substr2.length, objKind += _substr2) : objKind = 10 > _substr2.length && 40 > objKind.length + _substr2.length ? objKind + _substr2 : objKind + "...";
           }
           objKind += ">";
         } else {
           objKind = "{";
           type = Object.keys(objectOrArray);
           for (i = 0; i < type.length; i++)
-            0 < i && (objKind += ", "), value = type[i], objKind += describeKeyForErrorMessage(value) + ": ", _value2 = objectOrArray[value], _value2 = "object" === typeof _value2 && null !== _value2 ? describeObjectForErrorMessage(_value2) : describeValueForErrorMessage(_value2), value === expandedName ? (start = objKind.length, length = _value2.length, objKind += _value2) : objKind = 10 > _value2.length && 40 > objKind.length + _value2.length ? objKind + _value2 : objKind + "...";
+            0 < i && (objKind += ", "), value = type[i], objKind += describeKeyForErrorMessage(value) + ": ", _value2 = objectOrArray[value], _value2 = "object" === typeof _value2 && null !== _value2 ? describeObjectForErrorMessage(_value2) : describeValueForErrorMessage(_value2), value === expandedName ? (start2 = objKind.length, length = _value2.length, objKind += _value2) : objKind = 10 > _value2.length && 40 > objKind.length + _value2.length ? objKind + _value2 : objKind + "...";
           objKind += "}";
         }
       }
-      return void 0 === expandedName ? objKind : -1 < start && 0 < length ? (objectOrArray = " ".repeat(start) + "^".repeat(length), "\n  " + objKind + "\n  " + objectOrArray) : "\n  " + objKind;
+      return void 0 === expandedName ? objKind : -1 < start2 && 0 < length ? (objectOrArray = " ".repeat(start2) + "^".repeat(length), "\n  " + objKind + "\n  " + objectOrArray) : "\n  " + objKind;
     }
     function flushBuffered(destination) {
       "function" === typeof destination.flush && destination.flush();
@@ -24086,17 +27978,17 @@ function requireReactDomServer_node_development() {
       workInProgressHook.memoizedState = [nextCreate, deps];
       return nextCreate;
     }
-    function dispatchAction(componentIdentity, queue, action) {
+    function dispatchAction(componentIdentity, queue5, action) {
       if (25 <= numberOfReRenders)
         throw Error(
           "Too many re-renders. React limits the number of renders to prevent an infinite loop."
         );
       if (componentIdentity === currentlyRenderingComponent)
-        if (didScheduleRenderPhaseUpdate = true, componentIdentity = { action, next: null }, null === renderPhaseUpdates && (renderPhaseUpdates = /* @__PURE__ */ new Map()), action = renderPhaseUpdates.get(queue), void 0 === action)
-          renderPhaseUpdates.set(queue, componentIdentity);
+        if (didScheduleRenderPhaseUpdate = true, componentIdentity = { action, next: null }, null === renderPhaseUpdates && (renderPhaseUpdates = /* @__PURE__ */ new Map()), action = renderPhaseUpdates.get(queue5), void 0 === action)
+          renderPhaseUpdates.set(queue5, componentIdentity);
         else {
-          for (queue = action; null !== queue.next; ) queue = queue.next;
-          queue.next = componentIdentity;
+          for (queue5 = action; null !== queue5.next; ) queue5 = queue5.next;
+          queue5.next = componentIdentity;
         }
     }
     function throwOnUseEffectEventCall() {
@@ -25739,11 +29631,11 @@ function requireReactDomServer_node_development() {
               );
               return;
             case REACT_CONSUMER_TYPE:
-              var context$jscomp$0 = type._context, render = props.children;
-              "function" !== typeof render && console.error(
+              var context$jscomp$0 = type._context, render2 = props.children;
+              "function" !== typeof render2 && console.error(
                 "A context consumer was rendered with multiple children, or a child that isn't a function. A context consumer expects a single child that is a function. If you did pass a function, make sure there is no trailing or leading whitespace around it."
               );
-              var newChildren = render(context$jscomp$0._currentValue), prevKeyPath$jscomp$6 = task.keyPath;
+              var newChildren = render2(context$jscomp$0._currentValue), prevKeyPath$jscomp$6 = task.keyPath;
               task.keyPath = keyPath;
               renderNodeDestructive(request, task, newChildren, -1);
               task.keyPath = prevKeyPath$jscomp$6;
@@ -29006,14 +32898,14 @@ function requireServer_node() {
 var server_nodeExports = requireServer_node();
 const ReactDOMServer = /* @__PURE__ */ getDefaultExportFromCjs(server_nodeExports);
 const appName = "ShareIdeas";
-createServer(
-  (page) => createInertiaApp({
-    page,
+server_default(
+  (page2) => createInertiaApp({
+    page: page2,
     render: ReactDOMServer.renderToString,
     title: (title) => title ? `${title} - ${appName}` : appName,
     resolve: (name) => resolvePageComponent(
       `./pages/${name}.tsx`,
-      /* @__PURE__ */ Object.assign({ "./pages/auth/confirm-password.tsx": () => import("./assets/confirm-password-WH2IH-XS.js"), "./pages/auth/forgot-password.tsx": () => import("./assets/forgot-password-Dw8y-yQZ.js"), "./pages/auth/login.tsx": () => import("./assets/login-DCifpp7B.js"), "./pages/auth/register.tsx": () => import("./assets/register-DgcZGjxj.js"), "./pages/auth/reset-password.tsx": () => import("./assets/reset-password-BjkGK65f.js"), "./pages/auth/two-factor-challenge.tsx": () => import("./assets/two-factor-challenge-BpJ7wgSB.js"), "./pages/auth/verify-email.tsx": () => import("./assets/verify-email-K5XRIT9U.js"), "./pages/dashboard.tsx": () => import("./assets/dashboard-B2ZN8-s9.js"), "./pages/home.tsx": () => import("./assets/home-DljZJKCi.js"), "./pages/posts/create.tsx": () => import("./assets/create-BoKwOeF4.js"), "./pages/posts/edit.tsx": () => import("./assets/edit-DMSEW3_-.js"), "./pages/posts/index-public.tsx": () => import("./assets/index-public-DapON-iT.js"), "./pages/posts/index.tsx": () => import("./assets/index-B7yG2VI8.js"), "./pages/posts/show-public.tsx": () => import("./assets/show-public-Dstj0kdv.js"), "./pages/privacy.tsx": () => import("./assets/privacy-CPf7IMW9.js"), "./pages/prompts/index.tsx": () => import("./assets/index-DreCf6bx.js"), "./pages/prompts/prompt-form.tsx": () => import("./assets/prompt-form-FWM1DSpb.js"), "./pages/prompts/show.tsx": () => import("./assets/show-Bb3h3g3P.js"), "./pages/scripts/index.tsx": () => import("./assets/index-Cz4m_fY3.js"), "./pages/scripts/script-form.tsx": () => import("./assets/script-form-DGH4Q-zi.js"), "./pages/scripts/show.tsx": () => import("./assets/show-CyKOdynr.js"), "./pages/settings/appearance.tsx": () => import("./assets/appearance-Djxgth6q.js"), "./pages/settings/password.tsx": () => import("./assets/password-USaZqdQo.js"), "./pages/settings/profile.tsx": () => import("./assets/profile-BM0bcyIa.js"), "./pages/settings/two-factor.tsx": () => import("./assets/two-factor-BqXvGfus.js"), "./pages/terms.tsx": () => import("./assets/terms-BCymuepM.js"), "./pages/welcome.tsx": () => import("./assets/welcome-DGJWhbbK.js") })
+      /* @__PURE__ */ Object.assign({ "./pages/auth/confirm-password.tsx": () => import("./assets/confirm-password-H4zksgKm.js"), "./pages/auth/forgot-password.tsx": () => import("./assets/forgot-password--NcSAMgs.js"), "./pages/auth/login.tsx": () => import("./assets/login-DcxG62-q.js"), "./pages/auth/register.tsx": () => import("./assets/register-MVu6i4i8.js"), "./pages/auth/reset-password.tsx": () => import("./assets/reset-password-CIEkNXuQ.js"), "./pages/auth/two-factor-challenge.tsx": () => import("./assets/two-factor-challenge-DepObFJW.js"), "./pages/auth/verify-email.tsx": () => import("./assets/verify-email-wpeA1voy.js"), "./pages/dashboard.tsx": () => import("./assets/dashboard-Bgb5mj9k.js"), "./pages/home.tsx": () => import("./assets/home-DfDH-eiq.js"), "./pages/posts/create.tsx": () => import("./assets/create-SI9RPbxQ.js"), "./pages/posts/edit.tsx": () => import("./assets/edit-CZwC_a8j.js"), "./pages/posts/index-public.tsx": () => import("./assets/index-public-DZS8lcib.js"), "./pages/posts/index.tsx": () => import("./assets/index-CmaApCv2.js"), "./pages/posts/show-public.tsx": () => import("./assets/show-public-AEXeQrbc.js"), "./pages/privacy.tsx": () => import("./assets/privacy-k3JGUKDv.js"), "./pages/prompts/index.tsx": () => import("./assets/index-CRMH99fq.js"), "./pages/prompts/prompt-form.tsx": () => import("./assets/prompt-form-DUhD8cKi.js"), "./pages/prompts/show.tsx": () => import("./assets/show-D0isKRlR.js"), "./pages/scripts/index.tsx": () => import("./assets/index-D4MYaJ0_.js"), "./pages/scripts/script-form.tsx": () => import("./assets/script-form-CYrxLARM.js"), "./pages/scripts/show.tsx": () => import("./assets/show-B4U126Ni.js"), "./pages/settings/appearance.tsx": () => import("./assets/appearance-D47FKJVO.js"), "./pages/settings/password.tsx": () => import("./assets/password-D3k9DStc.js"), "./pages/settings/profile.tsx": () => import("./assets/profile-ytFFwOo_.js"), "./pages/settings/two-factor.tsx": () => import("./assets/two-factor-D3fExUpS.js"), "./pages/terms.tsx": () => import("./assets/terms-DX-r52ob.js"), "./pages/welcome.tsx": () => import("./assets/welcome-DMECnJVR.js") })
     ),
     setup: ({ App: App2, props }) => {
       return /* @__PURE__ */ jsxRuntimeExports.jsx(App2, { ...props });

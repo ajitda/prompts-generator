@@ -34,6 +34,12 @@ export default defineConfig({
         jsx: 'automatic',
     },
     ssr: {
-        noExternal: ['react', 'react-dom', '@inertiajs/react'],
+        noExternal: [
+            'react',
+            'react-dom',
+            '@inertiajs/react',
+            '@inertiajs/core',
+            '@inertiajs/server' 
+        ],
     },
 });

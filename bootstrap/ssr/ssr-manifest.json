@@ -18,6 +18,8 @@
   "\u0000/Users/ajitdas/prjs-mega/prompts-generator/node_modules/react/jsx-runtime.js?commonjs-es-import": [],
   "\u0000/Users/ajitdas/prjs-mega/prompts-generator/node_modules/react/jsx-runtime.js?commonjs-module": [],
   "\u0000commonjsHelpers.js": [],
+  "node_modules/@inertiajs/core/dist/index.esm.js": [],
+  "node_modules/@inertiajs/core/dist/server.esm.js": [],
   "node_modules/@inertiajs/react/dist/index.esm.js": [],
   "node_modules/laravel-vite-plugin/inertia-helpers/index.js": [],
   "node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js": [],
@@ -45,10 +47,10 @@
     "/build/assets/ScriptController-DN8f1sXF.js"
   ],
   "resources/js/actions/App/Http/Controllers/Settings/PasswordController.ts": [
-    "/build/assets/password-USaZqdQo.js"
+    "/build/assets/password-D3k9DStc.js"
   ],
   "resources/js/actions/App/Http/Controllers/Settings/ProfileController.ts": [
-    "/build/assets/profile-BM0bcyIa.js"
+    "/build/assets/profile-ytFFwOo_.js"
   ],
   "resources/js/components/Hero.tsx": [
     "/build/assets/Hero-q9kHZ9gv.js"
@@ -57,7 +59,7 @@
     "/build/assets/IdeaCard-D7JaeDyx.js"
   ],
   "resources/js/components/IdeaGenerator.tsx": [
-    "/build/assets/index-Cz4m_fY3.js"
+    "/build/assets/index-D4MYaJ0_.js"
   ],
   "resources/js/components/LoadingState.tsx": [
     "/build/assets/StoryView-C0ptjWwE.js"
@@ -69,7 +71,7 @@
     "/build/assets/StoryView-C0ptjWwE.js"
   ],
   "resources/js/components/alert-error.tsx": [
-    "/build/assets/two-factor-BqXvGfus.js"
+    "/build/assets/two-factor-D3fExUpS.js"
   ],
   "resources/js/components/app-content.tsx": [
     "/build/assets/app-layout-DgUhOw1Y.js"
@@ -87,13 +89,13 @@
     "/build/assets/app-layout-DgUhOw1Y.js"
   ],
   "resources/js/components/appearance-tabs.tsx": [
-    "/build/assets/appearance-Djxgth6q.js"
+    "/build/assets/appearance-D47FKJVO.js"
   ],
   "resources/js/components/breadcrumbs.tsx": [
     "/build/assets/app-layout-DgUhOw1Y.js"
   ],
   "resources/js/components/delete-user.tsx": [
-    "/build/assets/profile-BM0bcyIa.js"
+    "/build/assets/profile-ytFFwOo_.js"
   ],
   "resources/js/components/heading-small.tsx": [
     "/build/assets/layout-UDwk9eZn.js"
@@ -120,13 +122,13 @@
     "/build/assets/text-link-CWmgQtHl.js"
   ],
   "resources/js/components/two-factor-recovery-codes.tsx": [
-    "/build/assets/two-factor-BqXvGfus.js"
+    "/build/assets/two-factor-D3fExUpS.js"
   ],
   "resources/js/components/two-factor-setup-modal.tsx": [
-    "/build/assets/two-factor-BqXvGfus.js"
+    "/build/assets/two-factor-D3fExUpS.js"
   ],
   "resources/js/components/ui/alert.tsx": [
-    "/build/assets/two-factor-BqXvGfus.js"
+    "/build/assets/two-factor-D3fExUpS.js"
   ],
   "resources/js/components/ui/avatar.tsx": [
     "/build/assets/app-layout-DgUhOw1Y.js"
@@ -144,7 +146,7 @@
     "/build/assets/card-MbFmKuYg.js"
   ],
   "resources/js/components/ui/checkbox.tsx": [
-    "/build/assets/login-DCifpp7B.js"
+    "/build/assets/login-DcxG62-q.js"
   ],
   "resources/js/components/ui/collapsible.tsx": [
     "/build/assets/app-layout-DgUhOw1Y.js"
@@ -165,7 +167,7 @@
     "/build/assets/label-BGQd_FCH.js"
   ],
   "resources/js/components/ui/placeholder-pattern.tsx": [
-    "/build/assets/dashboard-B2ZN8-s9.js"
+    "/build/assets/dashboard-Bgb5mj9k.js"
   ],
   "resources/js/components/ui/separator.tsx": [
     "/build/assets/layout-UDwk9eZn.js"
@@ -192,10 +194,10 @@
     "/build/assets/app-layout-DgUhOw1Y.js"
   ],
   "resources/js/hooks/use-appearance.tsx": [
-    "/build/assets/appearance-Djxgth6q.js"
+    "/build/assets/appearance-D47FKJVO.js"
   ],
   "resources/js/hooks/use-clipboard.ts": [
-    "/build/assets/two-factor-BqXvGfus.js"
+    "/build/assets/two-factor-D3fExUpS.js"
   ],
   "resources/js/hooks/use-initials.tsx": [
     "/build/assets/app-layout-DgUhOw1Y.js"
@@ -231,85 +233,85 @@
     "/build/assets/button-TIWYqyVf.js"
   ],
   "resources/js/pages/auth/confirm-password.tsx": [
-    "/build/assets/confirm-password-WH2IH-XS.js"
+    "/build/assets/confirm-password-H4zksgKm.js"
   ],
   "resources/js/pages/auth/forgot-password.tsx": [
-    "/build/assets/forgot-password-Dw8y-yQZ.js"
+    "/build/assets/forgot-password--NcSAMgs.js"
   ],
   "resources/js/pages/auth/login.tsx": [
-    "/build/assets/login-DCifpp7B.js"
+    "/build/assets/login-DcxG62-q.js"
   ],
   "resources/js/pages/auth/register.tsx": [
-    "/build/assets/register-DgcZGjxj.js"
+    "/build/assets/register-MVu6i4i8.js"
   ],
   "resources/js/pages/auth/reset-password.tsx": [
-    "/build/assets/reset-password-BjkGK65f.js"
+    "/build/assets/reset-password-CIEkNXuQ.js"
   ],
   "resources/js/pages/auth/two-factor-challenge.tsx": [
-    "/build/assets/two-factor-challenge-BpJ7wgSB.js"
+    "/build/assets/two-factor-challenge-DepObFJW.js"
   ],
   "resources/js/pages/auth/verify-email.tsx": [
-    "/build/assets/verify-email-K5XRIT9U.js"
+    "/build/assets/verify-email-wpeA1voy.js"
   ],
   "resources/js/pages/dashboard.tsx": [
-    "/build/assets/dashboard-B2ZN8-s9.js"
+    "/build/assets/dashboard-Bgb5mj9k.js"
   ],
   "resources/js/pages/home.tsx": [
-    "/build/assets/home-DljZJKCi.js"
+    "/build/assets/home-DfDH-eiq.js"
   ],
   "resources/js/pages/posts/create.tsx": [
-    "/build/assets/create-BoKwOeF4.js"
+    "/build/assets/create-SI9RPbxQ.js"
   ],
   "resources/js/pages/posts/edit.tsx": [
-    "/build/assets/edit-DMSEW3_-.js"
+    "/build/assets/edit-CZwC_a8j.js"
   ],
   "resources/js/pages/posts/index-public.tsx": [
-    "/build/assets/index-public-DapON-iT.js"
+    "/build/assets/index-public-DZS8lcib.js"
   ],
   "resources/js/pages/posts/index.tsx": [
-    "/build/assets/index-B7yG2VI8.js"
+    "/build/assets/index-CmaApCv2.js"
   ],
   "resources/js/pages/posts/show-public.tsx": [
-    "/build/assets/show-public-Dstj0kdv.js"
+    "/build/assets/show-public-AEXeQrbc.js"
   ],
   "resources/js/pages/privacy.tsx": [
-    "/build/assets/privacy-CPf7IMW9.js"
+    "/build/assets/privacy-k3JGUKDv.js"
   ],
   "resources/js/pages/prompts/index.tsx": [
-    "/build/assets/index-DreCf6bx.js"
+    "/build/assets/index-CRMH99fq.js"
   ],
   "resources/js/pages/prompts/prompt-form.tsx": [
-    "/build/assets/prompt-form-FWM1DSpb.js"
+    "/build/assets/prompt-form-DUhD8cKi.js"
   ],
   "resources/js/pages/prompts/show.tsx": [
-    "/build/assets/show-Bb3h3g3P.js"
+    "/build/assets/show-D0isKRlR.js"
   ],
   "resources/js/pages/scripts/index.tsx": [
-    "/build/assets/index-Cz4m_fY3.js"
+    "/build/assets/index-D4MYaJ0_.js"
   ],
   "resources/js/pages/scripts/script-form.tsx": [
-    "/build/assets/script-form-DGH4Q-zi.js"
+    "/build/assets/script-form-CYrxLARM.js"
   ],
   "resources/js/pages/scripts/show.tsx": [
-    "/build/assets/show-CyKOdynr.js"
+    "/build/assets/show-B4U126Ni.js"
   ],
   "resources/js/pages/settings/appearance.tsx": [
-    "/build/assets/appearance-Djxgth6q.js"
+    "/build/assets/appearance-D47FKJVO.js"
   ],
   "resources/js/pages/settings/password.tsx": [
-    "/build/assets/password-USaZqdQo.js"
+    "/build/assets/password-D3k9DStc.js"
   ],
   "resources/js/pages/settings/profile.tsx": [
-    "/build/assets/profile-BM0bcyIa.js"
+    "/build/assets/profile-ytFFwOo_.js"
   ],
   "resources/js/pages/settings/two-factor.tsx": [
-    "/build/assets/two-factor-BqXvGfus.js"
+    "/build/assets/two-factor-D3fExUpS.js"
   ],
   "resources/js/pages/terms.tsx": [
-    "/build/assets/terms-BCymuepM.js"
+    "/build/assets/terms-DX-r52ob.js"
   ],
   "resources/js/pages/welcome.tsx": [
-    "/build/assets/welcome-DGJWhbbK.js"
+    "/build/assets/welcome-DMECnJVR.js"
   ],
   "resources/js/routes/appearance/index.ts": [
     "/build/assets/layout-UDwk9eZn.js"
@@ -318,7 +320,7 @@
     "/build/assets/index-Cm2O5opL.js"
   ],
   "resources/js/routes/login/index.ts": [
-    "/build/assets/login-DCifpp7B.js"
+    "/build/assets/login-DcxG62-q.js"
   ],
   "resources/js/routes/password/confirm/index.ts": [
     "/build/assets/index-DFfij-Hh.js"
@@ -333,7 +335,7 @@
     "/build/assets/app-layout-DgUhOw1Y.js"
   ],
   "resources/js/routes/register/index.ts": [
-    "/build/assets/register-DgcZGjxj.js"
+    "/build/assets/register-MVu6i4i8.js"
   ],
   "resources/js/routes/two-factor/index.ts": [
     "/build/assets/index-BKq0lOP8.js"
