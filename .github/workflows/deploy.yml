@@ -21,10 +21,10 @@ jobs:
           coverage: none
 
       - name: Setup Node.js 18
-          uses: actions/setup-node@v4
-          with:
-            node-version: '18'
-            cache: 'npm' 
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm' 
 
       - name: Install composer dependencies
         run: composer update --prefer-dist --no-interaction --no-progress --ignore-platform-reqs
