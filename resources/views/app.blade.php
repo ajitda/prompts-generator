@@ -51,6 +51,8 @@
 <body class="font-sans antialiased">
     @inertia
     @if (config('app.url') === 'https://shareideas.info')
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9113948469232731"
+     crossorigin="anonymous"></script>
        <!-- Google tag (gtag.js) -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-L0CS8Z4RBE"></script>
         <script>
