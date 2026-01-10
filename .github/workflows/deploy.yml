@@ -32,7 +32,7 @@ jobs:
       # 4. Now install JS and Build
       - name: 📦 Install & Build (Frontend SSR)
         run: |
-          pnpm install --frozen-lockfile
+          pnpm install --no--frozen-lockfile
           pnpm run build:ssr
 
       # 5. Sync to VPS
