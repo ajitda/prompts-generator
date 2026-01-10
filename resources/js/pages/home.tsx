@@ -9,10 +9,10 @@ import {
 
 import Hero from '@/components/Hero';
 import Meta from '@/components/meta';
-import ToolsShowcase from '@/components/ToolsShowCase';
 import { Button } from '@/components/ui/button';
 import PublicLayout from '@/layouts/public-layout';
 import { Link } from '@inertiajs/react';
+import ToolsShowcase from '@/components/ToolsShowcase';
 
 function home() {
     return (
