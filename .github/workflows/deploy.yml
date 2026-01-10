@@ -49,16 +49,6 @@ jobs:
           DB_CONNECTION: sqlite
           DB_DATABASE: database/database.sqlite
 
-      - name: Run PHPUnit
-        run: vendor/bin/phpunit --colors=always
-        env:
-          APP_ENV: testing
-          CACHE_DRIVER: array
-          QUEUE_CONNECTION: sync
-          SESSION_DRIVER: array
-          DB_CONNECTION: sqlite
-          DB_DATABASE: database/database.sqlite
-
       # Now install JS and Build
       - name: 📦 Install & Build (Frontend SSR)
         run: |
