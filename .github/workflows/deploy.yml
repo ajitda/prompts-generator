@@ -52,7 +52,7 @@ jobs:
       # Now install JS and Build
       - name: 📦 Install & Build (Frontend SSR)
         run: |
-          npm ci --legacy-peer-deps
+          npm install
           npm run build:ssr
 
       # Run Backend Commands on Your Server (Prepares the server)
