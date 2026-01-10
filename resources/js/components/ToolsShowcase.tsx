@@ -50,7 +50,6 @@ const ToolsShowcase = () => {
                     content ideas in seconds with our suite of AI-powered tools.
                 </p>
             </div>
-
             <div className="mx-auto grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {tools.map((tool, index) => (
                     <div
