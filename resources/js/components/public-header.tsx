@@ -64,6 +64,14 @@ export default function PublicHeader() {
                         >
                             <DropdownMenuItem asChild>
                                 <Link
+                                    href="/youtube"
+                                    className="w-full cursor-pointer"
+                                >
+                                    YouTube Video Idea Generator
+                                </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                                <Link
                                     href="/captions"
                                     className="w-full cursor-pointer"
                                 >
