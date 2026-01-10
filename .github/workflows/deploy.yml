@@ -65,7 +65,6 @@ jobs:
           port: ${{ secrets.DEPLOY_PORT || 22 }}
           script: |
             cd /var/www/idea-shareideas
-            git checkout main
             git reset --hard "origin/main" # Clears the public/js and public/css directories
             composer update --no-dev --optimize-autoloader --no-interaction --prefer-dist --ignore-platform-reqs
             php artisan down || true
