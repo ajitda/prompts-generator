@@ -13,13 +13,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.3'
-          extensions: mbstring, intl, gd, sqlite3, pdo_sqlite, fileinfo
-          coverage: none
-
       - name: Setup Node.js 18
         uses: actions/setup-node@v4
         with:
@@ -66,7 +59,6 @@ jobs:
           script: |
             cd /var/www/idea-shareideas
             git reset --hard "origin/main" # Clears the public/js and public/css directories
-            composer update --no-dev --optimize-autoloader --no-interaction --prefer-dist --ignore-platform-reqs
             php artisan down || true
             php artisan migrate 
             php artisan config:cache
