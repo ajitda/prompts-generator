@@ -184,7 +184,7 @@ const IdeaGenerator = ({
     };
 
     return (
-        <div className="mx-auto w-full max-w-4xl">
+        <div className="mx-auto mt-4 w-full max-w-4xl">
             {/* INPUT */}
             {step === 'input' && !isLoading && (
                 <div className="mb-8 rounded-2xl border bg-card p-6 shadow-card">

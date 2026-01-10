@@ -20,7 +20,7 @@ const ToolCard = ({
     gradient,
 }: ToolCardProps) => {
     return (
-        <div className="group relative rounded-2xl border border-border/50 bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover">
+        <div className="group relative flex h-full flex-col rounded-2xl border border-border/50 bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover">
             {/* Badge */}
             {badge && (
                 <div className="absolute -top-3 left-6 z-10">
@@ -56,7 +56,7 @@ const ToolCard = ({
             </p>
 
             {/* CTA */}
-            <Link href={href}>
+            <Link href={href} className="mt-auto">
                 <Button
                     variant="ghost"
                     className="h-auto p-0 text-sm font-semibold transition-colors group-hover:text-primary hover:bg-transparent"

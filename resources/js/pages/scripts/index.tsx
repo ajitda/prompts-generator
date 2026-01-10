@@ -4,11 +4,11 @@ import {
     // edit as productsEdit,
     index as scriptsIndex,
 } from '@/actions/App/Http/Controllers/ScriptController';
-import Hero from '@/components/Hero';
 import IdeaGenerator from '@/components/IdeaGenerator';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem, SortField, SortProps } from '@/types';
 import { Head, router, usePage } from '@inertiajs/react';
+import { Sparkles, Zap } from 'lucide-react';
 import { useCallback, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -129,7 +129,40 @@ export default function VideoScripts() {
             </Head>
             <div className="min-h-screen bg-background">
                 <main className="container mx-auto px-4 py-12 md:py-20">
-                    <Hero />
+                    <div className="mb-12 space-y-6 text-center">
+                        <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
+                            <Sparkles className="h-4 w-4" />
+                            <span>AI-Powered YouTube Strategy</span>
+                        </div>
+
+                        <h1 className="text-4xl leading-tight font-extrabold md:text-5xl lg:text-6xl">
+                            Turn Any Niche Into{' '}
+                            <span className="text-gradient">
+                                Viral YouTube Ideas
+                            </span>
+                        </h1>
+
+                        <p className="mx-auto max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl">
+                            Beat creator's block in seconds. Get strategic,
+                            high-CTR video ideas tailored to your niche—complete
+                            with titles, thumbnail concepts, and hook scripts.
+                        </p>
+
+                        <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
+                            <div className="flex items-center gap-2">
+                                <Zap className="h-4 w-4 text-primary" />
+                                <span>5 Ideas per Generation</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <Zap className="h-4 w-4 text-primary" />
+                                <span>Copy-Ready Scripts</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <Zap className="h-4 w-4 text-primary" />
+                                <span>Free to Use</span>
+                            </div>
+                        </div>
+                    </div>
                     <IdeaGenerator
                         initialGuestCredits={initialGuestCredits}
                         isAuthenticated={isAuthenticated}

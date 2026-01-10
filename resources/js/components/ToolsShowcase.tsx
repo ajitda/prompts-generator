@@ -12,15 +12,6 @@ const tools = [
         gradient: 'primary' as const,
     },
     {
-        title: 'Tiktok/Instagram Captions Generator',
-        description:
-            'Create high-engagement captions for TikTok, Instagram, and more with optimized hashtags.',
-        icon: Instagram,
-        href: '/captions',
-        badge: 'Popular',
-        gradient: 'primary' as const,
-    },
-    {
         title: 'Prompt Generator',
         description:
             'Engineer the perfect prompts for Midjourney, ChatGPT, Gemini, Grok, and Deepseek.',
@@ -28,6 +19,15 @@ const tools = [
         href: '/prompts',
         badge: 'Popular',
         gradient: 'accent' as const,
+    },
+    {
+        title: 'Tiktok/Instagram Captions Generator',
+        description:
+            'Create high-engagement captions for TikTok, Instagram, and more with optimized hashtags.',
+        icon: Instagram,
+        href: '/captions',
+        badge: 'Popular',
+        gradient: 'primary' as const,
     },
 ];
 
@@ -55,7 +55,7 @@ const ToolsShowcase = () => {
                 {tools.map((tool, index) => (
                     <div
                         key={tool.title}
-                        className="animate-reveal"
+                        className="animate-reveal h-full"
                         style={{ animationDelay: `${index * 100}ms` }}
                     >
                         <ToolCard {...tool} />

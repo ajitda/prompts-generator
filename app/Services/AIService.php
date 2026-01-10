@@ -83,7 +83,7 @@ PROMPT;
 You are a world-class Prompt Engineer expert in Midjourney, DALL-E, and ChatGPT prompts.
 
 Task:
-Generate 5 unique, high-quality AI prompts for: "{$keyword}".
+Generate 3 unique, high-quality AI prompts for: "{$keyword}".
 
 Constraints:
 - Include different categories (e.g., Photorealistic, Artistic, Minimalist, Detailed, Abstract).
@@ -113,7 +113,7 @@ PROMPT;
 You are a world-class Social Media Manager expert in TikTok and Instagram engagement.
 
 Task:
-Generate 5 unique, high-engagement captions for a TikTok or Instagram post about: "{$topic}".
+Generate 3 unique, high-engagement captions for a TikTok or Instagram post about: "{$topic}".
 
 Constraints:
 - Include relevant emojis.
