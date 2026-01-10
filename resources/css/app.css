@@ -150,6 +150,34 @@
     background-clip: text;
 }
 
+@utility bg-gradient {
+    background: linear-gradient(to right, var(--primary), #4f46e5);
+}
+
+@utility bg-gradient-accent {
+    background: linear-gradient(to right, #4f46e5, #9333ea);
+}
+
+@utility shadow-card-hover {
+    box-shadow:
+        0 10px 15px -3px rgba(0, 0, 0, 0.1),
+        0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+@utility shadow-elegant {
+    box-shadow:
+        0 4px 6px -1px rgb(0 0 0 / 0.1),
+        0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+@utility bg-gradient-hero {
+    background: linear-gradient(135deg, var(--primary), #4f46e5);
+}
+
+@utility shadow-card {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
 /* Blog Content Styles */
 .blog-content ul {
     list-style-type: disc !important;
