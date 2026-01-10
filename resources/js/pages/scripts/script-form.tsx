@@ -1,16 +1,15 @@
-import { useState, useEffect } from "react";
-import { Sparkles, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import IdeaCard from '@/components/IdeaCard';
+import LoadingState from '@/components/LoadingState';
+import ScriptView from '@/components/ScriptView';
+import StoryView from '@/components/StoryView';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { SharedData, StorySection } from '@/types';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
-import { Input } from "@/components/ui/input";
-import { StorySection } from "@/types";
-import IdeaCard from "@/components/IdeaCard";
-import StoryView from "@/components/StoryView";
-import ScriptView from "@/components/ScriptView";
-import LoadingState from "@/components/LoadingState";
-import toast from "react-hot-toast";
-import { usePage } from "@inertiajs/react";
-import { SharedData } from "@/types";
+import { usePage } from '@inertiajs/react';
+import { ArrowRight, Sparkles } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 interface Idea {
     Title: string;
     Thumbnail_Concept: string;
@@ -18,7 +17,7 @@ interface Idea {
     Difficulty: string;
 }
 
-type AppStep = "input" | "ideas" | "story" | "script";
+type AppStep = 'input' | 'ideas' | 'story' | 'script';
 
 interface ScriptFormProps {
     initialGuestCredits: number | null;
@@ -31,16 +30,18 @@ const ScriptForm = () => {
     const { auth, initialGuestCredits, isAuthenticated, userCredits } = props;
 
     // Use userCredits if authenticated, otherwise use initialGuestCredits (which will be updated by session)
-    const currentCredits = isAuthenticated ? (userCredits ?? 0) : (initialGuestCredits ?? 0);
+    const currentCredits = isAuthenticated
+        ? (userCredits ?? 0)
+        : (initialGuestCredits ?? 0);
 
-    const [step, setStep] = useState<AppStep>("input");
+    const [step, setStep] = useState<AppStep>('input');
     const [scriptId, setScriptId] = useState<number | null>(null);
-    const [keyword, setKeyword] = useState("");
+    const [keyword, setKeyword] = useState('');
     const [ideas, setIdeas] = useState<Idea[]>([]);
-    const [selectedIdea, setSelectedIdea] = useState("");
+    const [selectedIdea, setSelectedIdea] = useState('');
     const [story, setStory] = useState<StorySection[]>([]);
-    const [script, setScript] = useState("");
-    const [tone, setTone] = useState("Conversational & Educational");
+    const [script, setScript] = useState('');
+    const [tone, setTone] = useState('Conversational & Educational');
     const [isLoading, setIsLoading] = useState(false);
     const [fingerprint, setFingerprint] = useState<string | null>(null);
 
@@ -51,7 +52,7 @@ const ScriptForm = () => {
                 const result = await fp.get();
                 setFingerprint(result.visitorId);
             } catch (error) {
-                console.error("Error loading FingerprintJS:", error);
+                console.error('Error loading FingerprintJS:', error);
             }
         };
         loadFingerprint();
@@ -60,15 +61,20 @@ const ScriptForm = () => {
     // Helper for CSRF and Headers
     const requestHeaders = {
         'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': (document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') as string) || '',
+        'X-CSRF-TOKEN':
+            (document
+                .querySelector('meta[name="csrf-token"]')
+                ?.getAttribute('content') as string) || '',
         'X-Browser-Fingerprint': fingerprint,
     };
 
     const handleSaveIdeas = async (scriptId: number, ideas: string[]) => {
-
         const requestHeaders = {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': (document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') as string) || '',
+            'X-CSRF-TOKEN':
+                (document
+                    .querySelector('meta[name="csrf-token"]')
+                    ?.getAttribute('content') as string) || '',
             ...(fingerprint && { 'X-Browser-Fingerprint': fingerprint }),
         };
 
@@ -87,7 +93,9 @@ const ScriptForm = () => {
     const handleGenerateIdeas = async () => {
         if (!keyword.trim()) return;
         if (currentCredits <= 0) {
-            toast.error("You have no generations left. Please sign up for more.");
+            toast.error(
+                'You have no generations left. Please sign up for more.',
+            );
             return;
         }
         console.log(requestHeaders, 'requestHeaders');
@@ -102,11 +110,11 @@ const ScriptForm = () => {
             if (data.success) {
                 setIdeas(data.ideas);
                 setScriptId(data.script_id);
-                setStep("ideas");
+                setStep('ideas');
                 handleSaveIdeas(data.script_id, data.ideas);
             } else throw new Error(data.message);
         } catch (_error: unknown) {
-            toast.error((_error as Error).message || "Error");
+            toast.error((_error as Error).message || 'Error');
         } finally {
             setIsLoading(false);
         }
@@ -115,7 +123,7 @@ const ScriptForm = () => {
     const handleSelectIdea = async (idea: string) => {
         setSelectedIdea(idea);
         setIsLoading(true);
-        setStep("story");
+        setStep('story');
         try {
             const res = await fetch('/scripts/story', {
                 method: 'POST',
@@ -127,9 +135,9 @@ const ScriptForm = () => {
                 setStory(data.story);
             } else throw new Error(data.message);
         } catch (_error: unknown) {
-            toast.error((_error as Error).message || "Error");
+            toast.error((_error as Error).message || 'Error');
             console.log('check error:', _error);
-            setStep("ideas");
+            setStep('ideas');
         } finally {
             setIsLoading(false);
         }
@@ -137,7 +145,7 @@ const ScriptForm = () => {
 
     const handleGenerateScript = async () => {
         setIsLoading(true);
-        setStep("script");
+        setStep('script');
         try {
             const res = await fetch('/scripts/final', {
                 method: 'POST',
@@ -150,90 +158,123 @@ const ScriptForm = () => {
                 setTone(data.tone);
             } else throw new Error(data.message);
         } catch (_error: unknown) {
-            console.error("Full Error Details:", _error); // Add this line!
-            toast.error((_error as Error).message || "Error");
-            setStep("story");
+            console.error('Full Error Details:', _error); // Add this line!
+            toast.error((_error as Error).message || 'Error');
+            setStep('story');
         } finally {
             setIsLoading(false);
         }
     };
 
     const handleStartOver = () => {
-        setStep("input");
-        setKeyword("");
+        setStep('input');
+        setKeyword('');
         setScriptId(null);
         setIdeas([]);
-        setSelectedIdea("");
+        setSelectedIdea('');
         setStory([]);
-        setScript("");
+        setScript('');
     };
 
     return (
         <div className="min-h-screen bg-background">
-            <main className="container mx-auto px-6 max-w-3xl">
-                {step === "input" && !isLoading && (
-                   <div className="animate-fade-in flex flex-col items-center justify-center min-h-[60vh]">
-                        <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-8">
-                            <Sparkles className="w-8 h-8 text-primary" />
+            <main className="container mx-auto max-w-3xl px-6">
+                {step === 'input' && !isLoading && (
+                    <div className="animate-fade-in flex min-h-[60vh] flex-col items-center justify-center">
+                        <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
+                            <Sparkles className="h-8 w-8 text-primary" />
                         </div>
-                        <h1 className="text-center mb-4 text-balance text-4xl font-bold">What's your video about?</h1>
+                        <h1 className="mb-4 text-center text-4xl font-bold text-balance">
+                            What's your video about?
+                        </h1>
                         <div className="w-full max-w-lg space-y-4">
                             <Input
                                 value={keyword}
                                 onChange={(e) => setKeyword(e.target.value)}
                                 placeholder="e.g., productivity tips for students"
-                                className="text-center text-lg h-14"
-                                onKeyDown={(e) => e.key === "Enter" && handleGenerateIdeas()}
+                                className="h-14 text-center text-lg"
+                                onKeyDown={(e) =>
+                                    e.key === 'Enter' && handleGenerateIdeas()
+                                }
                             />
-                            <Button variant="default" onClick={handleGenerateIdeas} disabled={!keyword.trim() || currentCredits <= 0 || !fingerprint} size="lg" className="w-full gap-2">
-                                Generate video ideas <ArrowRight className="w-4 h-4" />
+                            <Button
+                                variant="default"
+                                onClick={handleGenerateIdeas}
+                                disabled={
+                                    !keyword.trim() ||
+                                    currentCredits <= 0 ||
+                                    !fingerprint
+                                }
+                                size="lg"
+                                className="w-full gap-2"
+                            >
+                                Generate video ideas{' '}
+                                <ArrowRight className="h-4 w-4" />
                             </Button>
                             {!isAuthenticated && (
                                 <p className="text-center text-sm text-muted-foreground">
-                                    You have {currentCredits} free generations left.
+                                    You have {currentCredits} free credits left.
                                 </p>
                             )}
                         </div>
-                   </div>
+                    </div>
                 )}
 
                 {isLoading && (
                     <LoadingState
-                        message={step === "input" ? "Exploring possibilities..." : step === "ideas" ? "Crafting your story..." : "Writing your script..."}
+                        message={
+                            step === 'input'
+                                ? 'Exploring possibilities...'
+                                : step === 'ideas'
+                                  ? 'Crafting your story...'
+                                  : 'Writing your script...'
+                        }
                     />
                 )}
 
-                {step === "ideas" && !isLoading && (
+                {step === 'ideas' && !isLoading && (
                     <div className="animate-fade-in space-y-8">
-                        <div className="text-center space-y-3">
-                            <h2 className="text-3xl font-semibold">Let's explore a few directions</h2>
+                        <div className="space-y-3 text-center">
+                            <h2 className="text-3xl font-semibold">
+                                Let's explore a few directions
+                            </h2>
                         </div>
                         <div className="space-y-3">
                             {ideas.map((idea, index) => (
-                                <IdeaCard key={index} idea={idea} index={index} />
+                                <IdeaCard
+                                    key={index}
+                                    idea={idea}
+                                    index={index}
+                                />
                             ))}
                         </div>
-                        <Button variant="ghost" onClick={handleStartOver} className="w-full">← Try a different topic</Button>
+                        <Button
+                            variant="ghost"
+                            onClick={handleStartOver}
+                            className="w-full"
+                        >
+                            ← Try a different topic
+                        </Button>
                     </div>
                 )}
 
-                {step === "story" && !isLoading && (
+                {step === 'story' && !isLoading && (
                     <StoryView
                         selectedIdea={selectedIdea}
                         story={story}
                         onRegenerate={() => handleSelectIdea(selectedIdea)}
                         onGenerateScript={handleGenerateScript}
-                        onBack={() => setStep("ideas")}
+                        onBack={() => setStep('ideas')}
                         isLoading={isLoading}
                     />
                 )}
 
-                {step === "script" && !isLoading && (
+                {step === 'script' && !isLoading && (
                     <ScriptView
                         selectedIdea={selectedIdea}
                         script={script}
                         tone={tone}
-                        onBack={() => setStep("story")}
+                        onBack={() => setStep('story')}
                         onRegenerate={handleGenerateScript}
                         onStartOver={handleStartOver}
                         isLoading={isLoading}

@@ -28,7 +28,7 @@ const buttonVariants = cva(
           "text-primary underline-offset-4 hover:underline",
 
         hero:
-          "bg-indigo-600 text-accent hover:opacity-90",
+          "bg-gradient-hero text-white border-0 hover:opacity-90 shadow-lg shadow-primary/20",
 
         accent:
           "bg-accent text-accent-foreground shadow hover:bg-accent/80",

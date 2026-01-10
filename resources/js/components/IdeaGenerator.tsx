@@ -96,8 +96,10 @@ const IdeaGenerator = ({
             setScriptId(data.script_id);
             setStep('ideas');
 
-            // Reload sidebar menu
-            router.reload({ only: ['menu_data'] });
+            // Reload sidebar menu and credits
+            router.reload({
+                only: ['menu_data', 'initialGuestCredits', 'userCredits'],
+            });
         } catch (err: any) {
             toast.error(err.message);
         } finally {
@@ -127,6 +129,11 @@ const IdeaGenerator = ({
             if (!data.success) throw new Error();
 
             setStory(data.story);
+
+            // Reload credits
+            router.reload({
+                only: ['initialGuestCredits', 'userCredits'],
+            });
         } catch {
             toast.error('Failed to generate story');
             setStep('ideas');
@@ -153,6 +160,11 @@ const IdeaGenerator = ({
 
             setScript(data.script);
             setTone(data.tone);
+
+            // Reload credits
+            router.reload({
+                only: ['initialGuestCredits', 'userCredits'],
+            });
         } catch {
             toast.error('Failed to generate script');
             setStep('story');
@@ -172,7 +184,7 @@ const IdeaGenerator = ({
     };
 
     return (
-        <div className="mx-auto w-full max-w-4xl">
+        <div className="mx-auto mt-4 w-full max-w-4xl">
             {/* INPUT */}
             {step === 'input' && !isLoading && (
                 <div className="mb-8 rounded-2xl border bg-card p-6 shadow-card">
@@ -202,7 +214,7 @@ const IdeaGenerator = ({
             {!isAuthenticated && step === 'input' && !isLoading && (
                 <div className="mt-[-20px] mb-8 text-center">
                     <p className="text-sm text-muted-foreground">
-                        You have {currentCredits} free generations left.
+                        You have {currentCredits} free credits left.
                     </p>
                     <p className="mt-1 text-sm font-bold">
                         Please{' '}

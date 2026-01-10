@@ -1,23 +1,23 @@
 {
-  "\u0000/Users/ajitdas/prjs-mega/prompts-generator/node_modules/qs/lib/index.js?commonjs-es-import": [],
-  "\u0000/Users/ajitdas/prjs-mega/prompts-generator/node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js?commonjs-exports": [],
-  "\u0000/Users/ajitdas/prjs-mega/prompts-generator/node_modules/react-dom/cjs/react-dom-server-legacy.node.production.js?commonjs-exports": [],
-  "\u0000/Users/ajitdas/prjs-mega/prompts-generator/node_modules/react-dom/cjs/react-dom-server.node.development.js?commonjs-exports": [],
-  "\u0000/Users/ajitdas/prjs-mega/prompts-generator/node_modules/react-dom/cjs/react-dom-server.node.production.js?commonjs-exports": [],
-  "\u0000/Users/ajitdas/prjs-mega/prompts-generator/node_modules/react-dom/cjs/react-dom.development.js?commonjs-exports": [],
-  "\u0000/Users/ajitdas/prjs-mega/prompts-generator/node_modules/react-dom/cjs/react-dom.production.js?commonjs-exports": [],
-  "\u0000/Users/ajitdas/prjs-mega/prompts-generator/node_modules/react-dom/index.js?commonjs-es-import": [],
-  "\u0000/Users/ajitdas/prjs-mega/prompts-generator/node_modules/react-dom/index.js?commonjs-module": [],
-  "\u0000/Users/ajitdas/prjs-mega/prompts-generator/node_modules/react-dom/server.node.js?commonjs-es-import": [],
-  "\u0000/Users/ajitdas/prjs-mega/prompts-generator/node_modules/react-dom/server.node.js?commonjs-exports": [],
-  "\u0000/Users/ajitdas/prjs-mega/prompts-generator/node_modules/react/cjs/react-jsx-runtime.development.js?commonjs-exports": [],
-  "\u0000/Users/ajitdas/prjs-mega/prompts-generator/node_modules/react/cjs/react-jsx-runtime.production.js?commonjs-exports": [],
-  "\u0000/Users/ajitdas/prjs-mega/prompts-generator/node_modules/react/cjs/react.development.js?commonjs-module": [],
-  "\u0000/Users/ajitdas/prjs-mega/prompts-generator/node_modules/react/cjs/react.production.js?commonjs-exports": [],
-  "\u0000/Users/ajitdas/prjs-mega/prompts-generator/node_modules/react/index.js?commonjs-es-import": [],
-  "\u0000/Users/ajitdas/prjs-mega/prompts-generator/node_modules/react/index.js?commonjs-module": [],
-  "\u0000/Users/ajitdas/prjs-mega/prompts-generator/node_modules/react/jsx-runtime.js?commonjs-es-import": [],
-  "\u0000/Users/ajitdas/prjs-mega/prompts-generator/node_modules/react/jsx-runtime.js?commonjs-module": [],
+  "\u0000/Users/ajitdas/Sites/prompts-generator/node_modules/qs/lib/index.js?commonjs-es-import": [],
+  "\u0000/Users/ajitdas/Sites/prompts-generator/node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js?commonjs-exports": [],
+  "\u0000/Users/ajitdas/Sites/prompts-generator/node_modules/react-dom/cjs/react-dom-server-legacy.node.production.js?commonjs-exports": [],
+  "\u0000/Users/ajitdas/Sites/prompts-generator/node_modules/react-dom/cjs/react-dom-server.node.development.js?commonjs-exports": [],
+  "\u0000/Users/ajitdas/Sites/prompts-generator/node_modules/react-dom/cjs/react-dom-server.node.production.js?commonjs-exports": [],
+  "\u0000/Users/ajitdas/Sites/prompts-generator/node_modules/react-dom/cjs/react-dom.development.js?commonjs-exports": [],
+  "\u0000/Users/ajitdas/Sites/prompts-generator/node_modules/react-dom/cjs/react-dom.production.js?commonjs-exports": [],
+  "\u0000/Users/ajitdas/Sites/prompts-generator/node_modules/react-dom/index.js?commonjs-es-import": [],
+  "\u0000/Users/ajitdas/Sites/prompts-generator/node_modules/react-dom/index.js?commonjs-module": [],
+  "\u0000/Users/ajitdas/Sites/prompts-generator/node_modules/react-dom/server.node.js?commonjs-es-import": [],
+  "\u0000/Users/ajitdas/Sites/prompts-generator/node_modules/react-dom/server.node.js?commonjs-exports": [],
+  "\u0000/Users/ajitdas/Sites/prompts-generator/node_modules/react/cjs/react-jsx-runtime.development.js?commonjs-exports": [],
+  "\u0000/Users/ajitdas/Sites/prompts-generator/node_modules/react/cjs/react-jsx-runtime.production.js?commonjs-exports": [],
+  "\u0000/Users/ajitdas/Sites/prompts-generator/node_modules/react/cjs/react.development.js?commonjs-module": [],
+  "\u0000/Users/ajitdas/Sites/prompts-generator/node_modules/react/cjs/react.production.js?commonjs-exports": [],
+  "\u0000/Users/ajitdas/Sites/prompts-generator/node_modules/react/index.js?commonjs-es-import": [],
+  "\u0000/Users/ajitdas/Sites/prompts-generator/node_modules/react/index.js?commonjs-module": [],
+  "\u0000/Users/ajitdas/Sites/prompts-generator/node_modules/react/jsx-runtime.js?commonjs-es-import": [],
+  "\u0000/Users/ajitdas/Sites/prompts-generator/node_modules/react/jsx-runtime.js?commonjs-module": [],
   "\u0000commonjsHelpers.js": [],
   "node_modules/@inertiajs/core/dist/index.esm.js": [],
   "node_modules/@inertiajs/core/dist/server.esm.js": [],
@@ -173,290 +173,306 @@
   "node_modules/react/index.js": [],
   "node_modules/react/jsx-runtime.js": [],
   "public/images/logo.png": [
-    "/build/assets/logo-LJNW8YKn.js",
+    "/build/assets/dropdown-menu-DJaFPoPg.js",
     "/build/assets/logo-BS0aM2X_.png"
-  ],
-  "resources/js/actions/App/Http/Controllers/PromptController.ts": [
-    "/build/assets/PromptController-BWYLHRJD.js"
   ],
   "resources/js/actions/App/Http/Controllers/ScriptController.ts": [
     "/build/assets/ScriptController-DN8f1sXF.js"
   ],
   "resources/js/actions/App/Http/Controllers/Settings/PasswordController.ts": [
-    "/build/assets/password-Cu0vMra2.js"
+    "/build/assets/password-8To1BERO.js"
   ],
   "resources/js/actions/App/Http/Controllers/Settings/ProfileController.ts": [
-    "/build/assets/profile-N0W6Xxve.js"
+    "/build/assets/profile-CXioIt7d.js"
+  ],
+  "resources/js/components/CaptionGenerator.tsx": [
+    "/build/assets/index-axMBOrKR.js"
   ],
   "resources/js/components/Hero.tsx": [
-    "/build/assets/Hero-q9kHZ9gv.js"
+    "/build/assets/home-BeHj2L70.js"
   ],
   "resources/js/components/IdeaCard.tsx": [
-    "/build/assets/IdeaCard-D7JaeDyx.js"
+    "/build/assets/IdeaCard-BBLnlIr9.js"
   ],
   "resources/js/components/IdeaGenerator.tsx": [
-    "/build/assets/index-BMB5UOG0.js"
+    "/build/assets/index-CkWZ6N32.js"
   ],
   "resources/js/components/LoadingState.tsx": [
-    "/build/assets/StoryView-C0ptjWwE.js"
+    "/build/assets/LoadingState-j_yxnCDU.js"
+  ],
+  "resources/js/components/PromptGenerator.tsx": [
+    "/build/assets/index-CBXKww5r.js"
   ],
   "resources/js/components/ScriptView.tsx": [
-    "/build/assets/ScriptView-XY6c0IG4.js"
+    "/build/assets/StoryView-DLGfz7y9.js"
   ],
   "resources/js/components/StoryView.tsx": [
-    "/build/assets/StoryView-C0ptjWwE.js"
+    "/build/assets/StoryView-DLGfz7y9.js"
+  ],
+  "resources/js/components/ToolCard.tsx": [
+    "/build/assets/home-BeHj2L70.js"
+  ],
+  "resources/js/components/ToolsShowcase.tsx": [
+    "/build/assets/home-BeHj2L70.js"
   ],
   "resources/js/components/alert-error.tsx": [
-    "/build/assets/two-factor-BqmXV28o.js"
+    "/build/assets/two-factor-BCSOMVtG.js"
   ],
   "resources/js/components/app-content.tsx": [
-    "/build/assets/app-layout-DgUhOw1Y.js"
+    "/build/assets/app-layout-BzJRehLM.js"
   ],
   "resources/js/components/app-logo.tsx": [
-    "/build/assets/app-layout-DgUhOw1Y.js"
+    "/build/assets/app-layout-BzJRehLM.js"
   ],
   "resources/js/components/app-shell.tsx": [
-    "/build/assets/app-layout-DgUhOw1Y.js"
+    "/build/assets/app-layout-BzJRehLM.js"
   ],
   "resources/js/components/app-sidebar-header.tsx": [
-    "/build/assets/app-layout-DgUhOw1Y.js"
+    "/build/assets/app-layout-BzJRehLM.js"
   ],
   "resources/js/components/app-sidebar.tsx": [
-    "/build/assets/app-layout-DgUhOw1Y.js"
+    "/build/assets/app-layout-BzJRehLM.js"
   ],
   "resources/js/components/appearance-tabs.tsx": [
-    "/build/assets/appearance-B0bNshRN.js"
+    "/build/assets/appearance-ugl8KKT7.js"
   ],
   "resources/js/components/breadcrumbs.tsx": [
-    "/build/assets/app-layout-DgUhOw1Y.js"
+    "/build/assets/app-layout-BzJRehLM.js"
   ],
   "resources/js/components/delete-user.tsx": [
-    "/build/assets/profile-N0W6Xxve.js"
+    "/build/assets/profile-CXioIt7d.js"
   ],
   "resources/js/components/heading-small.tsx": [
-    "/build/assets/layout-UDwk9eZn.js"
+    "/build/assets/layout-BC6Z4wVq.js"
   ],
   "resources/js/components/heading.tsx": [
-    "/build/assets/layout-UDwk9eZn.js"
+    "/build/assets/layout-BC6Z4wVq.js"
   ],
   "resources/js/components/input-error.tsx": [
-    "/build/assets/input-error-BxiP7EW1.js"
+    "/build/assets/input-error-BAXsLgaJ.js"
   ],
   "resources/js/components/meta.tsx": [
-    "/build/assets/public-layout-CVdJgUC6.js"
+    "/build/assets/public-layout-axkMHGZC.js"
   ],
   "resources/js/components/nav-user.tsx": [
-    "/build/assets/app-layout-DgUhOw1Y.js"
+    "/build/assets/app-layout-BzJRehLM.js"
   ],
   "resources/js/components/public-footer.tsx": [
-    "/build/assets/public-header-B7wuJHzd.js"
+    "/build/assets/public-header-BeG1FJzI.js"
   ],
   "resources/js/components/public-header.tsx": [
-    "/build/assets/public-header-B7wuJHzd.js"
+    "/build/assets/public-header-BeG1FJzI.js"
   ],
   "resources/js/components/text-link.tsx": [
-    "/build/assets/text-link-CWmgQtHl.js"
+    "/build/assets/text-link-DMS5Hcym.js"
   ],
   "resources/js/components/two-factor-recovery-codes.tsx": [
-    "/build/assets/two-factor-BqmXV28o.js"
+    "/build/assets/two-factor-BCSOMVtG.js"
   ],
   "resources/js/components/two-factor-setup-modal.tsx": [
-    "/build/assets/two-factor-BqmXV28o.js"
+    "/build/assets/two-factor-BCSOMVtG.js"
   ],
   "resources/js/components/ui/alert.tsx": [
-    "/build/assets/two-factor-BqmXV28o.js"
+    "/build/assets/two-factor-BCSOMVtG.js"
   ],
   "resources/js/components/ui/avatar.tsx": [
-    "/build/assets/app-layout-DgUhOw1Y.js"
+    "/build/assets/app-layout-BzJRehLM.js"
   ],
   "resources/js/components/ui/badge.tsx": [
-    "/build/assets/app-layout-DgUhOw1Y.js"
+    "/build/assets/app-layout-BzJRehLM.js"
   ],
   "resources/js/components/ui/breadcrumb.tsx": [
-    "/build/assets/app-layout-DgUhOw1Y.js"
+    "/build/assets/app-layout-BzJRehLM.js"
   ],
   "resources/js/components/ui/button.tsx": [
-    "/build/assets/button-TIWYqyVf.js"
+    "/build/assets/button-CkHcfFL4.js"
   ],
   "resources/js/components/ui/card.tsx": [
-    "/build/assets/card-MbFmKuYg.js"
+    "/build/assets/card-BqcUKBWb.js"
   ],
   "resources/js/components/ui/checkbox.tsx": [
-    "/build/assets/login-8bVg0JQs.js"
+    "/build/assets/login-CmMnTfhL.js"
   ],
   "resources/js/components/ui/collapsible.tsx": [
-    "/build/assets/app-layout-DgUhOw1Y.js"
+    "/build/assets/app-layout-BzJRehLM.js"
   ],
   "resources/js/components/ui/dialog.tsx": [
-    "/build/assets/dialog-kKRTTdj7.js"
+    "/build/assets/dialog-CqmzwDfA.js"
   ],
   "resources/js/components/ui/dropdown-menu.tsx": [
-    "/build/assets/app-layout-DgUhOw1Y.js"
+    "/build/assets/dropdown-menu-DJaFPoPg.js",
+    "/build/assets/logo-BS0aM2X_.png"
   ],
   "resources/js/components/ui/input-otp.tsx": [
-    "/build/assets/use-two-factor-auth-DZv87LFY.js"
+    "/build/assets/use-two-factor-auth-ziEWFiXp.js"
   ],
   "resources/js/components/ui/input.tsx": [
-    "/build/assets/input-BjgwYVx7.js"
+    "/build/assets/input-Pi6_Jx3x.js"
   ],
   "resources/js/components/ui/label.tsx": [
-    "/build/assets/label-BGQd_FCH.js"
+    "/build/assets/label-Cz6ecBJd.js"
   ],
   "resources/js/components/ui/placeholder-pattern.tsx": [
-    "/build/assets/dashboard-B8ookBap.js"
+    "/build/assets/dashboard-B27PMYBt.js"
   ],
   "resources/js/components/ui/separator.tsx": [
-    "/build/assets/layout-UDwk9eZn.js"
+    "/build/assets/layout-BC6Z4wVq.js"
   ],
   "resources/js/components/ui/sheet.tsx": [
-    "/build/assets/app-layout-DgUhOw1Y.js"
+    "/build/assets/app-layout-BzJRehLM.js"
   ],
   "resources/js/components/ui/sidebar.tsx": [
-    "/build/assets/app-layout-DgUhOw1Y.js"
+    "/build/assets/app-layout-BzJRehLM.js"
   ],
   "resources/js/components/ui/spinner.tsx": [
-    "/build/assets/spinner-ZfimL0Vg.js"
+    "/build/assets/spinner-CWHtRx-6.js"
   ],
   "resources/js/components/ui/textarea.tsx": [
-    "/build/assets/textarea-Du8ce-Bq.js"
+    "/build/assets/textarea-obK-5odM.js"
   ],
   "resources/js/components/ui/tooltip.tsx": [
-    "/build/assets/app-layout-DgUhOw1Y.js"
+    "/build/assets/app-layout-BzJRehLM.js"
   ],
   "resources/js/components/user-info.tsx": [
-    "/build/assets/app-layout-DgUhOw1Y.js"
+    "/build/assets/app-layout-BzJRehLM.js"
   ],
   "resources/js/components/user-menu-content.tsx": [
-    "/build/assets/app-layout-DgUhOw1Y.js"
+    "/build/assets/app-layout-BzJRehLM.js"
   ],
   "resources/js/hooks/use-appearance.tsx": [
-    "/build/assets/appearance-B0bNshRN.js"
+    "/build/assets/appearance-ugl8KKT7.js"
   ],
   "resources/js/hooks/use-clipboard.ts": [
-    "/build/assets/two-factor-BqmXV28o.js"
+    "/build/assets/two-factor-BCSOMVtG.js"
   ],
   "resources/js/hooks/use-initials.tsx": [
-    "/build/assets/app-layout-DgUhOw1Y.js"
+    "/build/assets/app-layout-BzJRehLM.js"
   ],
   "resources/js/hooks/use-mobile-navigation.ts": [
-    "/build/assets/app-layout-DgUhOw1Y.js"
+    "/build/assets/app-layout-BzJRehLM.js"
   ],
   "resources/js/hooks/use-mobile.tsx": [
-    "/build/assets/app-layout-DgUhOw1Y.js"
+    "/build/assets/app-layout-BzJRehLM.js"
   ],
   "resources/js/hooks/use-two-factor-auth.ts": [
-    "/build/assets/use-two-factor-auth-DZv87LFY.js"
+    "/build/assets/use-two-factor-auth-ziEWFiXp.js"
   ],
   "resources/js/layouts/app-layout.tsx": [
-    "/build/assets/app-layout-DgUhOw1Y.js"
+    "/build/assets/app-layout-BzJRehLM.js"
   ],
   "resources/js/layouts/app/app-sidebar-layout.tsx": [
-    "/build/assets/app-layout-DgUhOw1Y.js"
+    "/build/assets/app-layout-BzJRehLM.js"
   ],
   "resources/js/layouts/auth-layout.tsx": [
-    "/build/assets/auth-layout-yP9LyPXA.js"
+    "/build/assets/auth-layout-Dcx1kGQl.js"
   ],
   "resources/js/layouts/auth/auth-simple-layout.tsx": [
-    "/build/assets/auth-layout-yP9LyPXA.js"
+    "/build/assets/auth-layout-Dcx1kGQl.js"
   ],
   "resources/js/layouts/public-layout.tsx": [
-    "/build/assets/public-layout-CVdJgUC6.js"
+    "/build/assets/public-layout-axkMHGZC.js"
   ],
   "resources/js/layouts/settings/layout.tsx": [
-    "/build/assets/layout-UDwk9eZn.js"
+    "/build/assets/layout-BC6Z4wVq.js"
   ],
   "resources/js/lib/utils.ts": [
-    "/build/assets/button-TIWYqyVf.js"
+    "/build/assets/button-CkHcfFL4.js"
   ],
   "resources/js/pages/auth/confirm-password.tsx": [
-    "/build/assets/confirm-password-ahGb4F2P.js"
+    "/build/assets/confirm-password-CP39ICTd.js"
   ],
   "resources/js/pages/auth/forgot-password.tsx": [
-    "/build/assets/forgot-password-BiuxpOVP.js"
+    "/build/assets/forgot-password-1kXm3DMT.js"
   ],
   "resources/js/pages/auth/login.tsx": [
-    "/build/assets/login-8bVg0JQs.js"
+    "/build/assets/login-CmMnTfhL.js"
   ],
   "resources/js/pages/auth/register.tsx": [
-    "/build/assets/register-ht3TI3qY.js"
+    "/build/assets/register-COKEcYaV.js"
   ],
   "resources/js/pages/auth/reset-password.tsx": [
-    "/build/assets/reset-password-B25RKw-1.js"
+    "/build/assets/reset-password-D922DA_Z.js"
   ],
   "resources/js/pages/auth/two-factor-challenge.tsx": [
-    "/build/assets/two-factor-challenge-D6O2EJpP.js"
+    "/build/assets/two-factor-challenge-BQfBnJiS.js"
   ],
   "resources/js/pages/auth/verify-email.tsx": [
-    "/build/assets/verify-email-BXw7m--o.js"
+    "/build/assets/verify-email-CmwTFZQb.js"
+  ],
+  "resources/js/pages/captions/index.tsx": [
+    "/build/assets/index-axMBOrKR.js"
+  ],
+  "resources/js/pages/captions/show.tsx": [
+    "/build/assets/show-D26Uv7Kv.js"
   ],
   "resources/js/pages/dashboard.tsx": [
-    "/build/assets/dashboard-B8ookBap.js"
+    "/build/assets/dashboard-B27PMYBt.js"
   ],
   "resources/js/pages/home.tsx": [
-    "/build/assets/home-2y5noUES.js"
+    "/build/assets/home-BeHj2L70.js"
   ],
   "resources/js/pages/posts/create.tsx": [
-    "/build/assets/create-CxSXeSCU.js"
+    "/build/assets/create-CuouM2mH.js"
   ],
   "resources/js/pages/posts/edit.tsx": [
-    "/build/assets/edit-CWSXZP4W.js"
+    "/build/assets/edit-D5QBuDPK.js"
   ],
   "resources/js/pages/posts/index-public.tsx": [
-    "/build/assets/index-public-CT772wMh.js"
+    "/build/assets/index-public-DPIPpdmR.js"
   ],
   "resources/js/pages/posts/index.tsx": [
-    "/build/assets/index-LZ5f3DP1.js"
+    "/build/assets/index-BwZZMUZk.js"
   ],
   "resources/js/pages/posts/show-public.tsx": [
-    "/build/assets/show-public-DNeb9K1E.js"
+    "/build/assets/show-public-j_n4jXPD.js"
   ],
   "resources/js/pages/privacy.tsx": [
-    "/build/assets/privacy-aKouI8FU.js"
+    "/build/assets/privacy-CEhaVQuj.js"
   ],
   "resources/js/pages/prompts/index.tsx": [
-    "/build/assets/index-Ce6t0khI.js"
+    "/build/assets/index-CBXKww5r.js"
   ],
   "resources/js/pages/prompts/prompt-form.tsx": [
-    "/build/assets/prompt-form-DcEBpDD7.js"
+    "/build/assets/prompt-form-DxfuFCcb.js"
   ],
   "resources/js/pages/prompts/show.tsx": [
-    "/build/assets/show-CmjVg-oq.js"
+    "/build/assets/show-ks4fx-c1.js"
   ],
   "resources/js/pages/scripts/index.tsx": [
-    "/build/assets/index-BMB5UOG0.js"
+    "/build/assets/index-CkWZ6N32.js"
   ],
   "resources/js/pages/scripts/script-form.tsx": [
-    "/build/assets/script-form-BpePE99o.js"
+    "/build/assets/script-form-C__HTBIy.js"
   ],
   "resources/js/pages/scripts/show.tsx": [
-    "/build/assets/show-fVqqZ8lX.js"
+    "/build/assets/show-Dgw8TpCE.js"
   ],
   "resources/js/pages/settings/appearance.tsx": [
-    "/build/assets/appearance-B0bNshRN.js"
+    "/build/assets/appearance-ugl8KKT7.js"
   ],
   "resources/js/pages/settings/password.tsx": [
-    "/build/assets/password-Cu0vMra2.js"
+    "/build/assets/password-8To1BERO.js"
   ],
   "resources/js/pages/settings/profile.tsx": [
-    "/build/assets/profile-N0W6Xxve.js"
+    "/build/assets/profile-CXioIt7d.js"
   ],
   "resources/js/pages/settings/two-factor.tsx": [
-    "/build/assets/two-factor-BqmXV28o.js"
+    "/build/assets/two-factor-BCSOMVtG.js"
   ],
   "resources/js/pages/terms.tsx": [
-    "/build/assets/terms-VBxqOSx4.js"
+    "/build/assets/terms-CUxjofBZ.js"
   ],
   "resources/js/pages/welcome.tsx": [
-    "/build/assets/welcome-CD2bMY3E.js"
+    "/build/assets/welcome-C6v9W4z5.js"
   ],
   "resources/js/routes/appearance/index.ts": [
-    "/build/assets/layout-UDwk9eZn.js"
+    "/build/assets/layout-BC6Z4wVq.js"
   ],
   "resources/js/routes/index.ts": [
     "/build/assets/index-Cm2O5opL.js"
   ],
   "resources/js/routes/login/index.ts": [
-    "/build/assets/login-8bVg0JQs.js"
+    "/build/assets/login-CmMnTfhL.js"
   ],
   "resources/js/routes/password/confirm/index.ts": [
     "/build/assets/index-DFfij-Hh.js"
@@ -468,10 +484,10 @@
     "/build/assets/index-B6anorhi.js"
   ],
   "resources/js/routes/profile/index.ts": [
-    "/build/assets/app-layout-DgUhOw1Y.js"
+    "/build/assets/app-layout-BzJRehLM.js"
   ],
   "resources/js/routes/register/index.ts": [
-    "/build/assets/register-ht3TI3qY.js"
+    "/build/assets/register-COKEcYaV.js"
   ],
   "resources/js/routes/two-factor/index.ts": [
     "/build/assets/index-BKq0lOP8.js"
@@ -480,7 +496,7 @@
     "/build/assets/index-BKq0lOP8.js"
   ],
   "resources/js/routes/user-password/index.ts": [
-    "/build/assets/layout-UDwk9eZn.js"
+    "/build/assets/layout-BC6Z4wVq.js"
   ],
   "resources/js/routes/verification/index.ts": [
     "/build/assets/index-BVZoIs4X.js"

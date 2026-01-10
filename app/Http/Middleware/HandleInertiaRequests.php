@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Middleware;
 use App\Models\Script;
+use App\Models\Caption;
+use App\Models\Prompt;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -45,33 +47,36 @@ class HandleInertiaRequests extends Middleware
 
         $menuData = [
             'prompts' => [],
-            'scripts' => []
+            'scripts' => [],
+            'captions' => []
         ];
 
         if ($user) {
             $cacheKey = "sidebar_menu_user_{$user->id}";
 
-            $menuData = Cache::remember($cacheKey, now()->addDay(), function () use ($user) {
+            $cached = Cache::remember($cacheKey, now()->addDay(), function () use ($user) {
                 return [
                     'prompts' => $user->prompts()->latest()->limit(10)->get(['id', 'keyword']),
                     'scripts' => $user->scripts()->latest()->limit(10)->get(['id', 'keyword']),
+                    'captions' => Caption::where('user_id', $user->id)->latest()->limit(10)->get(['id', 'topic as keyword']),
                 ];
             });
+            $menuData = array_merge($menuData, $cached);
         } else {
             // Try to get fingerprint for guest
             $fingerprint = $request->cookie('browser_fingerprint') ?? $request->header('X-Browser-Fingerprint');
 
             if ($fingerprint) {
-                // For guests, we can't cache by user ID. 
-                // We could cache by fingerprint, but simpler to just query for now or short cache.
                 $cacheKey = "sidebar_menu_guest_{$fingerprint}";
 
-                $menuData['scripts'] = Cache::remember($cacheKey, now()->addMinutes(10), function () use ($fingerprint) {
-                    return Script::where('fingerprint', $fingerprint)
-                        ->latest()
-                        ->limit(10)
-                        ->get(['id', 'keyword']);
+                $cached = Cache::remember($cacheKey, now()->addMinutes(10), function () use ($fingerprint) {
+                    return [
+                        'prompts' => Prompt::where('fingerprint', $fingerprint)->latest()->limit(10)->get(['id', 'keyword']),
+                        'scripts' => Script::where('fingerprint', $fingerprint)->latest()->limit(10)->get(['id', 'keyword']),
+                        'captions' => Caption::where('fingerprint', $fingerprint)->latest()->limit(10)->get(['id', 'topic as keyword']),
+                    ];
                 });
+                $menuData = array_merge($menuData, $cached);
             }
         }
 
