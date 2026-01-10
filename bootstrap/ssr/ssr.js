@@ -34837,7 +34837,7 @@ function requireServer_node() {
 }
 var server_nodeExports = requireServer_node();
 const ReactDOMServer = /* @__PURE__ */ getDefaultExportFromCjs(server_nodeExports);
-const appName = "ShareIdeas";
+const appName = "Laravel";
 server_default(
   (page2) => createInertiaApp({
     page: page2,
@@ -34845,7 +34845,7 @@ server_default(
     title: (title) => title ? `${title} - ${appName}` : appName,
     resolve: (name) => resolvePageComponent(
       `./pages/${name}.tsx`,
-      /* @__PURE__ */ Object.assign({ "./pages/auth/confirm-password.tsx": () => import("./assets/confirm-password-ahGb4F2P.js"), "./pages/auth/forgot-password.tsx": () => import("./assets/forgot-password-BiuxpOVP.js"), "./pages/auth/login.tsx": () => import("./assets/login-8bVg0JQs.js"), "./pages/auth/register.tsx": () => import("./assets/register-ht3TI3qY.js"), "./pages/auth/reset-password.tsx": () => import("./assets/reset-password-B25RKw-1.js"), "./pages/auth/two-factor-challenge.tsx": () => import("./assets/two-factor-challenge-D6O2EJpP.js"), "./pages/auth/verify-email.tsx": () => import("./assets/verify-email-BXw7m--o.js"), "./pages/dashboard.tsx": () => import("./assets/dashboard-B8ookBap.js"), "./pages/home.tsx": () => import("./assets/home-2y5noUES.js"), "./pages/posts/create.tsx": () => import("./assets/create-CxSXeSCU.js"), "./pages/posts/edit.tsx": () => import("./assets/edit-CWSXZP4W.js"), "./pages/posts/index-public.tsx": () => import("./assets/index-public-CT772wMh.js"), "./pages/posts/index.tsx": () => import("./assets/index-LZ5f3DP1.js"), "./pages/posts/show-public.tsx": () => import("./assets/show-public-DNeb9K1E.js"), "./pages/privacy.tsx": () => import("./assets/privacy-aKouI8FU.js"), "./pages/prompts/index.tsx": () => import("./assets/index-Ce6t0khI.js"), "./pages/prompts/prompt-form.tsx": () => import("./assets/prompt-form-DcEBpDD7.js"), "./pages/prompts/show.tsx": () => import("./assets/show-CmjVg-oq.js"), "./pages/scripts/index.tsx": () => import("./assets/index-BMB5UOG0.js"), "./pages/scripts/script-form.tsx": () => import("./assets/script-form-BpePE99o.js"), "./pages/scripts/show.tsx": () => import("./assets/show-fVqqZ8lX.js"), "./pages/settings/appearance.tsx": () => import("./assets/appearance-B0bNshRN.js"), "./pages/settings/password.tsx": () => import("./assets/password-Cu0vMra2.js"), "./pages/settings/profile.tsx": () => import("./assets/profile-N0W6Xxve.js"), "./pages/settings/two-factor.tsx": () => import("./assets/two-factor-BqmXV28o.js"), "./pages/terms.tsx": () => import("./assets/terms-VBxqOSx4.js"), "./pages/welcome.tsx": () => import("./assets/welcome-CD2bMY3E.js") })
+      /* @__PURE__ */ Object.assign({ "./pages/auth/confirm-password.tsx": () => import("./assets/confirm-password-wDpwmShI.js"), "./pages/auth/forgot-password.tsx": () => import("./assets/forgot-password-6RHLV1jw.js"), "./pages/auth/login.tsx": () => import("./assets/login-CJJQi14A.js"), "./pages/auth/register.tsx": () => import("./assets/register-BL_VZv41.js"), "./pages/auth/reset-password.tsx": () => import("./assets/reset-password-BgFhgUR5.js"), "./pages/auth/two-factor-challenge.tsx": () => import("./assets/two-factor-challenge-DziBF4Cd.js"), "./pages/auth/verify-email.tsx": () => import("./assets/verify-email-DjhwKVhH.js"), "./pages/captions/index.tsx": () => import("./assets/index-DSkl_m_D.js"), "./pages/captions/show.tsx": () => import("./assets/show-CKggvXBV.js"), "./pages/dashboard.tsx": () => import("./assets/dashboard-Db_8Ixhu.js"), "./pages/home.tsx": () => import("./assets/home-D2z8lFZd.js"), "./pages/posts/create.tsx": () => import("./assets/create-bOzBXeVw.js"), "./pages/posts/edit.tsx": () => import("./assets/edit-D0hE8wA-.js"), "./pages/posts/index-public.tsx": () => import("./assets/index-public-LEYpndxo.js"), "./pages/posts/index.tsx": () => import("./assets/index-CC-E9UOQ.js"), "./pages/posts/show-public.tsx": () => import("./assets/show-public-DvhnSjxz.js"), "./pages/privacy.tsx": () => import("./assets/privacy-Cycd_WJV.js"), "./pages/prompts/index.tsx": () => import("./assets/index-DQdxcwwu.js"), "./pages/prompts/prompt-form.tsx": () => import("./assets/prompt-form-QFX6hap9.js"), "./pages/prompts/show.tsx": () => import("./assets/show-D6CA26AR.js"), "./pages/scripts/index.tsx": () => import("./assets/index-DK2qHx_Y.js"), "./pages/scripts/script-form.tsx": () => import("./assets/script-form-Ba_Ly-Nn.js"), "./pages/scripts/show.tsx": () => import("./assets/show-CspHFcwJ.js"), "./pages/settings/appearance.tsx": () => import("./assets/appearance-BKhQiVZr.js"), "./pages/settings/password.tsx": () => import("./assets/password-B3IKuPbh.js"), "./pages/settings/profile.tsx": () => import("./assets/profile-CsEC21Ag.js"), "./pages/settings/two-factor.tsx": () => import("./assets/two-factor-CjrkYs2_.js"), "./pages/terms.tsx": () => import("./assets/terms-C55Zh3K-.js"), "./pages/welcome.tsx": () => import("./assets/welcome-BLUsrNB6.js") })
     ),
     setup: ({ App: App2, props }) => {
       return /* @__PURE__ */ jsxRuntimeExports.jsx(App2, { ...props });
@@ -34856,9 +34856,9 @@ export {
   Form_default as F,
   Head_default as H,
   Link_default as L,
-  usePage as a,
-  router3 as b,
+  router3 as a,
+  useForm as b,
   jsxRuntimeExports as j,
   reactExports as r,
-  useForm as u
+  usePage as u
 };

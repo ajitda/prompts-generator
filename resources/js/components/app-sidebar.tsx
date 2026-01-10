@@ -15,7 +15,7 @@ import {
     SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, MessageSquare, Plus, Video } from 'lucide-react';
+import { BookOpen, MessageSquare, Plus, Sparkles, Video } from 'lucide-react';
 import AppLogo from './app-logo';
 import { Badge } from './ui/badge';
 import {
@@ -77,6 +77,17 @@ export function AppSidebar() {
             action: {
                 icon: Plus,
                 href: '/captions',
+            },
+        },
+        {
+            title: 'Prompt Generator',
+            icon: Sparkles,
+            baseHref: '/prompts',
+            href: '/prompts',
+            items: prompts,
+            action: {
+                icon: Plus,
+                href: '/prompts',
             },
         },
         {

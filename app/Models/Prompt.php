@@ -9,6 +9,7 @@ class Prompt extends Model
 {
     protected $fillable = [
         'user_id',
+        'fingerprint',
         'keyword',
         'prompt',
     ];

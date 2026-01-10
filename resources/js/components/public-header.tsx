@@ -70,6 +70,14 @@ export default function PublicHeader() {
                                     TikTok/Instagram Captions
                                 </Link>
                             </DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                                <Link
+                                    href="/prompts"
+                                    className="w-full cursor-pointer"
+                                >
+                                    Prompt Generator
+                                </Link>
+                            </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </nav>

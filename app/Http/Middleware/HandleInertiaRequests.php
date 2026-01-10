@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Cache;
 use Inertia\Middleware;
 use App\Models\Script;
 use App\Models\Caption;
+use App\Models\Prompt;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -70,7 +71,7 @@ class HandleInertiaRequests extends Middleware
 
                 $cached = Cache::remember($cacheKey, now()->addMinutes(10), function () use ($fingerprint) {
                     return [
-                        'prompts' => [],
+                        'prompts' => Prompt::where('fingerprint', $fingerprint)->latest()->limit(10)->get(['id', 'keyword']),
                         'scripts' => Script::where('fingerprint', $fingerprint)->latest()->limit(10)->get(['id', 'keyword']),
                         'captions' => Caption::where('fingerprint', $fingerprint)->latest()->limit(10)->get(['id', 'topic as keyword']),
                     ];
