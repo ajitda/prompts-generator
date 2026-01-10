@@ -33,8 +33,20 @@ export default defineConfig({
     esbuild: {
         jsx: 'automatic',
     },
+    resolve: {
+        dedupe: ['react', 'react-dom', '@inertiajs/react'],
+    },
     ssr: {
         noExternal: [
+            /^@radix-ui\/react-/,
+            '@headlessui/react',
+            'lucide-react',
+            'react-hot-toast',
+            'input-otp',
+            'class-variance-authority',
+            'clsx',
+            'tailwind-merge',
+            '@tinymce/tinymce-react',
             'react',
             'qs',
             'react-dom',
