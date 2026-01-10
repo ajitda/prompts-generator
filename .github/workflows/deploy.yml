@@ -27,7 +27,7 @@ jobs:
           cache: 'npm' 
 
       - name: Install composer dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress --ignore-platform-reqs
+        run: composer install --prefer-dist --no-interaction --no-progress --ignore-platform-reqs
 
       - name: Copy .env
         run: cp .env.example .env
