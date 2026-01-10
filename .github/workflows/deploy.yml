@@ -23,7 +23,7 @@ jobs:
 
       # 2. Install PHP dependencies FIRST
       - name: 📦 Install PHP Dependencies
-        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --ignore-platform-reqs
 
       # 3. Generate Key (Required for some Artisan commands)
       - name: 🔑 Generate App Key
