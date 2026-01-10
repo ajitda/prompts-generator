@@ -4,10 +4,13 @@ use App\Http\Controllers\CaptionController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PromptController;
 use App\Http\Controllers\ScriptController;
+use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 use Illuminate\Support\Facades\Auth;
+
+Route::get('/sitemap.xml', [SitemapController::class, 'index']);
 
 Route::get('/', function () {
     return Inertia::render('home', [
@@ -64,7 +67,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/user/credits', [ScriptController::class, 'getCredits'])->name('user.credits');
 
     Route::middleware('can:admin')->group(function () {
-        Route::resource('/prompts-generator/posts', PostController::class)
+        Route::resource('/posts', PostController::class)
             ->names('posts')
             ->parameters(['posts' => 'post']);
     });

@@ -1,0 +1,60 @@
+name: Deploy Laravel + React 
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: ⚙️ Setup PHP & Node
+        uses: shivammathur/setup-php@v2
+        with: { php-version: '8.2.29' }
+        
+      - uses: pnpm/action-setup@v3
+        with: { version: 9 }
+
+      # 1. Create .env file (Artisan needs this)
+      - name: 📝 Prepare Environment
+        run: cp .env.example .env
+
+      # 2. Install PHP dependencies FIRST
+      - name: 📦 Install PHP Dependencies
+        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      # 3. Generate Key (Required for some Artisan commands)
+      - name: 🔑 Generate App Key
+        run: php artisan key:generate
+
+      # 4. Now install JS and Build
+      - name: 📦 Install & Build (Frontend SSR)
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm run build:ssr
+
+      # 5. Sync to VPS
+      - name: Deploy to Server
+        uses: easingthemes/ssh-deploy@v5.1.0
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_KEY }}
+          REMOTE_HOST: ${{ secrets.DEPLOY_HOST }}
+          REMOTE_USER: ${{ secrets.DEPLOY_USER }}
+          TARGET: "/var/www/idea-shareideas"
+          SOURCE: "./"
+          REMOTE_PORT: ${{ secrets.DEPLOY_PORT || 22 }}
+
+      # 6. Post-Deployment
+      - name: 🧩 Post-Deployment
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          port: ${{ secrets.DEPLOY_PORT || 22 }}
+          script: |
+            cd /var/www/idea-shareideas
+            php artisan optimize
+            pm2 startOrRestart ecosystem.config.cjs

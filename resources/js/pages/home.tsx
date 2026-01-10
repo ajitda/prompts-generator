@@ -10,7 +10,7 @@ function home() {
     return (
         <PublicLayout>
             <Meta
-                title="AI YouTube Video Idea Generator"
+                title="Free Idea Generator Hub: YouTube, Business & Social"
                 description="Beat creator's block with our AI YouTube strategist. Generate viral-worthy video ideas, high-CTR titles, and engaging scripts in seconds."
             />
             {/* Hero Section */}
@@ -110,9 +110,6 @@ function home() {
 
                     <div className="mx-auto flex max-w-4xl flex-col items-center justify-center gap-8 md:flex-row">
                         <div className="flex-1 text-center">
-                            <div className="bg-gradient-hero mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full text-2xl font-bold text-primary-foreground">
-                                1
-                            </div>
                             <h3 className="mb-2 text-lg font-semibold">
                                 Enter Your Niche
                             </h3>
@@ -124,9 +121,6 @@ function home() {
                         <div className="hidden h-0.5 w-12 bg-primary/80 md:block"></div>
 
                         <div className="flex-1 text-center">
-                            <div className="bg-gradient-hero mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full text-2xl font-bold text-primary-foreground">
-                                2
-                            </div>
                             <h3 className="mb-2 text-lg font-semibold">
                                 AI Generates Ideas
                             </h3>
@@ -139,9 +133,6 @@ function home() {
                         <div className="hidden h-0.5 w-12 bg-primary/80 md:block"></div>
 
                         <div className="flex-1 text-center">
-                            <div className="bg-gradient-hero mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full text-2xl font-bold text-primary-foreground">
-                                3
-                            </div>
                             <h3 className="mb-2 text-lg font-semibold">
                                 Copy & Create
                             </h3>

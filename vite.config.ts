@@ -33,4 +33,15 @@ export default defineConfig({
     esbuild: {
         jsx: 'automatic',
     },
+    ssr: {
+        noExternal: [
+            'react',
+            'qs',
+            'react-dom',
+            'lodash-es',
+            '@inertiajs/react',
+            '@inertiajs/core',
+            '@inertiajs/server' 
+        ],
+    },
 });

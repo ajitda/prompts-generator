@@ -15,14 +15,9 @@ import {
     SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
 import { Link, usePage } from '@inertiajs/react';
-import {
-    BookOpen,
-    ChevronRight,
-    MessageSquare,
-    Plus,
-    Video,
-} from 'lucide-react';
+import { BookOpen, MessageSquare, Plus, Video } from 'lucide-react';
 import AppLogo from './app-logo';
+import { Badge } from './ui/badge';
 import {
     Collapsible,
     CollapsibleContent,
@@ -63,7 +58,7 @@ export function AppSidebar() {
 
     const dynamicGroups = [
         {
-            title: 'AI Video Idea',
+            title: 'Youtube Video Idea',
             icon: Video,
             baseHref: '/youtube',
             href: '/youtube',
@@ -86,7 +81,7 @@ export function AppSidebar() {
         },
         {
             title: 'Blog',
-            href: postsRoutes.indexPublic().url,
+            href: '/posts',
             icon: BookOpen,
             action: isPostAdmin
                 ? {
@@ -134,19 +129,21 @@ export function AppSidebar() {
                                         >
                                             <group.icon className="h-4 w-4" />
                                             <span>{group.title}</span>
-                                            <ChevronRight className="ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                                            {/* <ChevronRight className="ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" /> */}
                                         </SidebarMenuButton>
                                     </CollapsibleTrigger>
 
                                     <TooltipProvider delayDuration={0}>
                                         <Tooltip>
                                             <TooltipTrigger asChild>
-                                                <SidebarMenuAction
-                                                    asChild
-                                                    className="right-8"
-                                                >
+                                                <SidebarMenuAction asChild>
                                                     <Link href={group.baseHref}>
-                                                        <Plus className="mr-16 h-4 w-4" />
+                                                        <Badge
+                                                            variant="default"
+                                                            className="mr-4"
+                                                        >
+                                                            New
+                                                        </Badge>
                                                     </Link>
                                                 </SidebarMenuAction>
                                             </TooltipTrigger>
@@ -190,7 +187,12 @@ export function AppSidebar() {
                                 {group.action && (
                                     <SidebarMenuAction asChild>
                                         <Link href={group.action.href}>
-                                            <group.action.icon />
+                                            <Badge
+                                                variant="default"
+                                                className="mr-4"
+                                            >
+                                                New
+                                            </Badge>
                                         </Link>
                                     </SidebarMenuAction>
                                 )}
