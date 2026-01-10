@@ -3,7 +3,7 @@ export default function AppLogo() {
     return (
         <>
             <div>
-                <img src={Logo} alt="Brand Logo" width="150" />
+                <img src={Logo} alt="ShareIdeas" width="150" />
             </div>
         </>
     );

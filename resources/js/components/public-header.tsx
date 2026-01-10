@@ -19,7 +19,7 @@ export default function PublicHeader() {
         <header className="sticky top-0 z-50 border-b border-border/50 bg-card/50 backdrop-blur-sm">
             <div className="container mx-auto flex h-16 items-center justify-between px-4">
                 <Link href="/" className="flex items-center gap-2">
-                    <img src={Logo} alt="" width="150" />
+                    <img src={Logo} alt="ShareIdeas" width="150" />
                 </Link>
                 <nav className="hidden items-center gap-6 text-sm md:flex">
                     <Link

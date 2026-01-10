@@ -7,7 +7,7 @@ export default function PublicFooter() {
             <div className="container mx-auto px-4 py-6">
                 <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
                     <Link href="/" className="flex items-center gap-2">
-                        <img src={Logo} alt="" width="150" />
+                        <img src={Logo} alt="ShareIdeas" width="150" />
                     </Link>
                     <p className="text-sm text-muted-foreground">
                         Helping creators publish with clarity since 2025
