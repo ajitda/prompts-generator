@@ -15,10 +15,19 @@ interface Caption {
 }
 
 interface CaptionGeneratorProps {
+    initialGuestCredits?: number | null;
     isAuthenticated?: boolean;
+    userCredits?: number | null;
 }
 
-const CaptionGenerator = ({ isAuthenticated }: CaptionGeneratorProps) => {
+const CaptionGenerator = ({
+    initialGuestCredits,
+    isAuthenticated,
+    userCredits,
+}: CaptionGeneratorProps) => {
+    const currentCredits = isAuthenticated
+        ? (userCredits ?? 0)
+        : (initialGuestCredits ?? 0);
     const [fingerprint, setFingerprint] = useState<string | null>(null);
     const [topic, setTopic] = useState('');
     const [captions, setCaptions] = useState<Caption[]>([]);
@@ -42,6 +51,11 @@ const CaptionGenerator = ({ isAuthenticated }: CaptionGeneratorProps) => {
 
     const handleGenerate = async () => {
         if (!topic.trim()) return;
+        if (currentCredits <= 0) {
+            toast.error('You have no generations left.');
+            return;
+        }
+
         setIsLoading(true);
 
         try {
@@ -64,7 +78,9 @@ const CaptionGenerator = ({ isAuthenticated }: CaptionGeneratorProps) => {
             if (!data.success) throw new Error(data.message);
 
             setCaptions(data.captions);
-            router.reload({ only: ['menu_data'] });
+            router.reload({
+                only: ['menu_data', 'initialGuestCredits', 'userCredits'],
+            });
         } catch (err: any) {
             toast.error(err.message || 'Failed to generate captions');
         } finally {
@@ -93,7 +109,12 @@ const CaptionGenerator = ({ isAuthenticated }: CaptionGeneratorProps) => {
                     <Button
                         size="xl"
                         onClick={handleGenerate}
-                        disabled={!topic || isLoading || !fingerprint}
+                        disabled={
+                            !topic ||
+                            isLoading ||
+                            !fingerprint ||
+                            currentCredits <= 0
+                        }
                     >
                         <Sparkles className="h-5 w-5" />
                         Generate Captions
@@ -161,6 +182,9 @@ const CaptionGenerator = ({ isAuthenticated }: CaptionGeneratorProps) => {
 
             {!isLoading && captions.length === 0 && !isAuthenticated && (
                 <div className="animate-reveal mt-[-20px] mb-8 text-center">
+                    <p className="text-sm text-muted-foreground">
+                        You have {currentCredits} free credits left.
+                    </p>
                     <p className="mt-1 text-sm font-bold">
                         Please{' '}
                         <Link
@@ -178,7 +202,7 @@ const CaptionGenerator = ({ isAuthenticated }: CaptionGeneratorProps) => {
                         </Link>
                         <span className="text-muted-foreground">
                             {' '}
-                            for more features
+                            for 10 more credit
                         </span>
                     </p>
                 </div>

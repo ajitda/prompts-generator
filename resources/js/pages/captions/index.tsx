@@ -12,7 +12,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function CaptionsIndex() {
     const { props } = usePage<any>();
-    const { isAuthenticated } = props;
+    const { isAuthenticated, initialGuestCredits, userCredits } = props;
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -38,7 +38,11 @@ export default function CaptionsIndex() {
                         </p>
                     </div>
 
-                    <CaptionGenerator isAuthenticated={isAuthenticated} />
+                    <CaptionGenerator
+                        isAuthenticated={isAuthenticated}
+                        initialGuestCredits={initialGuestCredits}
+                        userCredits={userCredits}
+                    />
                 </main>
             </div>
         </AppLayout>

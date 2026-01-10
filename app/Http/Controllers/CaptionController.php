@@ -35,11 +35,16 @@ class CaptionController extends Controller
             $captionsQuery->where('fingerprint', $fingerprint);
         }
 
+        $guestCredits = session('guest_credits', 5);
+        $userCredits = $isAuthenticated ? Auth::user()->credits : 0;
+
         $captions = $captionsQuery->paginate(10);
 
         return Inertia::render('captions/index', [
             'captions' => $captions,
             'isAuthenticated' => $isAuthenticated,
+            'initialGuestCredits' => $isAuthenticated ? null : $guestCredits,
+            'userCredits' => $isAuthenticated ? $userCredits : null,
         ]);
     }
 
@@ -48,6 +53,18 @@ class CaptionController extends Controller
         $isAuthenticated = Auth::check();
         $user = Auth::user();
         $fingerprint = $request->header('X-Browser-Fingerprint');
+
+        // Credit check
+        if ($isAuthenticated) {
+            if ($user->credits <= 0) {
+                return response()->json(['success' => false, 'message' => 'You have no credits left.'], 403);
+            }
+        } else {
+            $guestCredits = session('guest_credits', 5);
+            if ($guestCredits <= 0) {
+                return response()->json(['success' => false, 'message' => 'You have no guest credits left. Please sign up to get more.'], 403);
+            }
+        }
 
         $validated = $request->validate([
             'topic' => 'required|string|min:2|max:255',
@@ -63,6 +80,13 @@ class CaptionController extends Controller
                 'topic' => $validated['topic'],
                 'content' => $decodedCaptions,
             ]);
+
+            // Credit deduction
+            if ($isAuthenticated) {
+                $user->decrement('credits');
+            } else {
+                session(['guest_credits' => $guestCredits - 1]);
+            }
 
             // Invalidate cache
             if ($isAuthenticated) {
