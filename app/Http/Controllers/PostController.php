@@ -129,8 +129,15 @@ class PostController extends Controller
         // Changed 'image_path' to 'image' to match your migration
         $posts = Post::latest()
             ->where('status', 'published')
-            ->select(['id', 'title', 'slug', 'image', 'created_at'])
-            ->paginate(12);
+            ->select(['id', 'title', 'slug', 'image', 'created_at', 'scheduled_at'])
+            ->paginate(12)
+            ->through(fn($post) => [
+                'id' => $post->id,
+                'title' => $post->title,
+                'slug' => $post->slug,
+                'image' => $post->image,
+                'created_at' => ($post->scheduled_at ?? $post->created_at)->toIso8601String(),
+            ]);
 
         return Inertia::render('posts/index-public', [
             'posts' => $posts
@@ -151,7 +158,7 @@ class PostController extends Controller
                 'meta_description' => $post->meta_description,
                 // Changed $post->image_path to $post->image
                 'image_url' => $post->image ? asset('storage/' . $post->image) : null,
-                'created_at' => $post->created_at->format('M d, Y'),
+                'created_at' => ($post->scheduled_at ?? $post->created_at)->format('M d, Y'),
             ]
         ]);
     }

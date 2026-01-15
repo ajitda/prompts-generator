@@ -63,7 +63,7 @@ export default function ShowPublic({ post }: { post: PublicPost }) {
                     <header className="mb-10">
                         <div className="mb-4 flex items-center gap-2 text-sm font-medium text-muted-foreground">
                             <Calendar className="h-4 w-4" />
-                            {post.created_at}
+                            Published on {post.created_at}
                         </div>
                         <h1 className="mb-8 text-2xl leading-relaxed font-extrabold tracking-wide md:text-3xl lg:text-4xl">
                             {post.title}
