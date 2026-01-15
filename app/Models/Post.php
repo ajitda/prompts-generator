@@ -11,10 +11,16 @@ class Post extends Model
         'title',
         'slug',
         'content',
+        'status',
+        'scheduled_at',
         'image',
         'image_original_name',
         'meta_title',
         'meta_description',
+    ];
+
+    protected $casts = [
+        'scheduled_at' => 'datetime',
     ];
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo

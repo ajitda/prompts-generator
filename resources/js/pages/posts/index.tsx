@@ -1,9 +1,10 @@
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import postsRoutes from '@/routes/posts';
 import { BreadcrumbItem, PageProps, Post } from '@/types';
 import { Link, useForm } from '@inertiajs/react';
-import { Edit2, Plus, Trash2 } from 'lucide-react';
+import { Clock, Edit2, Plus, Trash2 } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -17,7 +18,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Index({ posts }: PageProps<{ posts: Post[] }>) {
-    const { delete: destroy } = useForm();
+    const { delete: destroy } = useForm({});
 
     const handleDelete = (id: number) => {
         if (
@@ -50,12 +51,18 @@ export default function Index({ posts }: PageProps<{ posts: Post[] }>) {
                 </div>
 
                 {/* Data Table */}
-                <div className="shadow-elegant overflow-hidden rounded-2xl border border-border/40 bg-card/50 backdrop-blur-sm">
+                <div className="overflow-hidden rounded-2xl border border-border/40 bg-card/50 shadow-elegant backdrop-blur-sm">
                     <table className="w-full text-sm">
                         <thead className="border-b border-border/40 bg-muted/30">
                             <tr>
                                 <th className="p-4 text-left text-[11px] font-bold tracking-wider text-muted-foreground uppercase">
                                     Article Title
+                                </th>
+                                <th className="p-4 text-left text-[11px] font-bold tracking-wider text-muted-foreground uppercase">
+                                    Status
+                                </th>
+                                <th className="p-4 text-left text-[11px] font-bold tracking-wider text-muted-foreground uppercase">
+                                    Scheduled At
                                 </th>
                                 <th className="w-40 p-4 text-right text-[11px] font-bold tracking-wider text-muted-foreground uppercase">
                                     Actions
@@ -75,6 +82,33 @@ export default function Index({ posts }: PageProps<{ posts: Post[] }>) {
                                                     {p.title}
                                                 </span>
                                             </div>
+                                        </td>
+                                        <td className="p-4">
+                                            <Badge
+                                                variant={
+                                                    p.status === 'published'
+                                                        ? 'default'
+                                                        : p.status ===
+                                                            'scheduled'
+                                                          ? 'outline'
+                                                          : 'secondary'
+                                                }
+                                                className="rounded-lg px-2.5 py-0.5 text-[10px] font-black tracking-widest uppercase"
+                                            >
+                                                {p.status}
+                                            </Badge>
+                                        </td>
+                                        <td className="p-4">
+                                            {p.scheduled_at ? (
+                                                <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                                                    <Clock className="h-3 w-3" />
+                                                    {p.scheduled_at}
+                                                </div>
+                                            ) : (
+                                                <span className="text-xs font-medium text-muted-foreground/40">
+                                                    —
+                                                </span>
+                                            )}
                                         </td>
                                         <td className="p-4 text-right">
                                             <div className="flex items-center justify-end gap-2">
@@ -109,7 +143,7 @@ export default function Index({ posts }: PageProps<{ posts: Post[] }>) {
                             ) : (
                                 <tr>
                                     <td
-                                        colSpan={2}
+                                        colSpan={4}
                                         className="p-12 text-center text-muted-foreground italic"
                                     >
                                         No articles found. Start by creating

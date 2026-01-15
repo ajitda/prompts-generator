@@ -51,4 +51,26 @@ return [
         'key' => env('GEMINI_API_KEY'),
     ],
 
+    'facebook' => [
+        'token' => env('FACEBOOK_ACCESS_TOKEN'),
+        'page_id' => env('FACEBOOK_PAGE_ID'),
+    ],
+
+    'instagram' => [
+        'token' => env('INSTAGRAM_ACCESS_TOKEN'),
+        'account_id' => env('INSTAGRAM_ACCOUNT_ID'),
+    ],
+
+    'twitter' => [
+        'consumer_key' => env('TWITTER_CONSUMER_KEY'),
+        'consumer_secret' => env('TWITTER_CONSUMER_SECRET'),
+        'access_token' => env('TWITTER_ACCESS_TOKEN'),
+        'access_token_secret' => env('TWITTER_ACCESS_TOKEN_SECRET'),
+    ],
+
+    'linkedin' => [
+        'token' => env('LINKEDIN_ACCESS_TOKEN'),
+        'urn' => env('LINKEDIN_URN'),
+    ],
+
 ];

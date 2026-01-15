@@ -1,13 +1,20 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import postsRoutes from '@/routes/posts';
 import { BreadcrumbItem, Post } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
 import { Editor } from '@tinymce/tinymce-react';
-import { ArrowLeft, Plus, Save } from 'lucide-react';
+import { ArrowLeft, Calendar, Plus, Save } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -28,6 +35,8 @@ export default function Edit({ post: postData }: { post: Post }) {
     const { data, setData, post, processing, errors } = useForm({
         title: postData.title,
         content: postData.content,
+        status: postData.status,
+        scheduled_at: postData.scheduled_at || '',
         image: null as File | null,
         meta_title: postData.meta_title || '',
         meta_description: postData.meta_description || '',
@@ -64,7 +73,7 @@ export default function Edit({ post: postData }: { post: Post }) {
                     </div>
                 </div>
 
-                <div className="shadow-elegant overflow-hidden rounded-[32px] border border-border/40 bg-card/50 p-8 backdrop-blur-sm">
+                <div className="overflow-hidden rounded-[32px] border border-border/40 bg-card/50 p-8 shadow-elegant backdrop-blur-sm">
                     <form onSubmit={submit} className="space-y-8">
                         <div className="group space-y-2">
                             <Label
@@ -197,78 +206,151 @@ export default function Edit({ post: postData }: { post: Post }) {
                                 </div>
                             </div>
 
-                            <div className="space-y-4">
-                                <Label
-                                    htmlFor="image"
-                                    className="px-1 text-xs font-black tracking-widest text-muted-foreground uppercase"
-                                >
-                                    Featured Image
-                                </Label>
+                            <div className="space-y-8">
+                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                    <div className="space-y-2">
+                                        <Label
+                                            htmlFor="status"
+                                            className="px-1 text-xs font-black tracking-widest text-muted-foreground uppercase"
+                                        >
+                                            Status
+                                        </Label>
+                                        <Select
+                                            value={data.status}
+                                            onValueChange={(
+                                                value:
+                                                    | 'published'
+                                                    | 'draft'
+                                                    | 'scheduled',
+                                            ) => setData('status', value)}
+                                        >
+                                            <SelectTrigger className="h-12 rounded-xl border-border/40 bg-muted/20">
+                                                <SelectValue placeholder="Select status" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="draft">
+                                                    Draft
+                                                </SelectItem>
+                                                <SelectItem value="scheduled">
+                                                    Scheduled
+                                                </SelectItem>
+                                                <SelectItem value="published">
+                                                    Published
+                                                </SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                        {errors.status && (
+                                            <p className="px-1 text-xs font-bold text-destructive">
+                                                {errors.status}
+                                            </p>
+                                        )}
+                                    </div>
 
-                                <div className="space-y-4">
-                                    {(data.image || postData.image) && (
-                                        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-border/40 bg-muted/20">
-                                            <img
-                                                src={
-                                                    data.image
-                                                        ? URL.createObjectURL(
-                                                              data.image,
-                                                          )
-                                                        : postData.image ||
-                                                          undefined
-                                                }
-                                                alt="Preview"
-                                                className="h-full w-full object-cover"
-                                            />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                                            <div className="absolute bottom-3 left-4">
-                                                <p className="mb-0.5 text-[10px] font-black tracking-[0.2em] text-white/80 uppercase">
-                                                    Preview Mode
-                                                </p>
-                                                <p className="max-w-[250px] truncate text-sm font-bold text-white">
-                                                    {data.image
-                                                        ? data.image.name
-                                                        : postData.image_original_name ||
-                                                          'Current Image'}
-                                                </p>
+                                    {data.status === 'scheduled' && (
+                                        <div className="animate-in space-y-2 fade-in slide-in-from-top-2">
+                                            <Label
+                                                htmlFor="scheduled_at"
+                                                className="px-1 text-xs font-black tracking-widest text-muted-foreground uppercase"
+                                            >
+                                                Schedule Publishing
+                                            </Label>
+                                            <div className="relative">
+                                                <Input
+                                                    id="scheduled_at"
+                                                    type="datetime-local"
+                                                    className="h-12 rounded-xl border-border/40 bg-muted/20 focus:ring-primary/20"
+                                                    value={data.scheduled_at}
+                                                    onChange={(e) =>
+                                                        setData(
+                                                            'scheduled_at',
+                                                            e.target.value,
+                                                        )
+                                                    }
+                                                />
+                                                <Calendar className="pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-muted-foreground opacity-50" />
                                             </div>
+                                            {errors.scheduled_at && (
+                                                <p className="px-1 text-xs font-bold text-destructive">
+                                                    {errors.scheduled_at}
+                                                </p>
+                                            )}
                                         </div>
                                     )}
-
-                                    <div className="group relative flex flex-col gap-4 overflow-hidden rounded-[2rem] border border-dashed border-border/60 bg-muted/5 p-8 transition-all hover:border-primary/40 hover:bg-muted/10">
-                                        <div className="absolute inset-0 bg-primary/5 opacity-0 transition-opacity group-hover:opacity-100" />
-                                        <div className="relative flex flex-col items-center justify-center space-y-2 text-center">
-                                            <div className="mb-1 rounded-full bg-primary/10 p-3 text-primary transition-transform group-hover:scale-110">
-                                                <Plus className="h-6 w-6" />
-                                            </div>
-                                            <p className="text-sm font-bold text-foreground">
-                                                Click to upload a new image
-                                            </p>
-                                            <p className="text-[11px] font-medium text-muted-foreground">
-                                                PNG, JPG or WEBP up to 2MB
-                                            </p>
-                                        </div>
-                                        <Input
-                                            id="image"
-                                            type="file"
-                                            className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-                                            onChange={(e) =>
-                                                setData(
-                                                    'image',
-                                                    e.target.files
-                                                        ? e.target.files[0]
-                                                        : null,
-                                                )
-                                            }
-                                        />
-                                    </div>
                                 </div>
 
-                                {errors.image && (
-                                    <p className="px-1 text-xs font-bold text-destructive">
-                                        {errors.image}
-                                    </p>
-                                )}
+                                <div className="space-y-4">
+                                    <Label
+                                        htmlFor="image"
+                                        className="px-1 text-xs font-black tracking-widest text-muted-foreground uppercase"
+                                    >
+                                        Featured Image
+                                    </Label>
+
+                                    <div className="space-y-4">
+                                        {(data.image || postData.image) && (
+                                            <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-border/40 bg-muted/20">
+                                                <img
+                                                    src={
+                                                        data.image
+                                                            ? URL.createObjectURL(
+                                                                  data.image,
+                                                              )
+                                                            : postData.image ||
+                                                              undefined
+                                                    }
+                                                    alt="Preview"
+                                                    className="h-full w-full object-cover"
+                                                />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                                                <div className="absolute bottom-3 left-4">
+                                                    <p className="mb-0.5 text-[10px] font-black tracking-[0.2em] text-white/80 uppercase">
+                                                        Preview Mode
+                                                    </p>
+                                                    <p className="max-w-[250px] truncate text-sm font-bold text-white">
+                                                        {data.image
+                                                            ? data.image.name
+                                                            : postData.image_original_name ||
+                                                              'Current Image'}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        <div className="group relative flex flex-col gap-4 overflow-hidden rounded-[2rem] border border-dashed border-border/60 bg-muted/5 p-8 transition-all hover:border-primary/40 hover:bg-muted/10">
+                                            <div className="absolute inset-0 bg-primary/5 opacity-0 transition-opacity group-hover:opacity-100" />
+                                            <div className="relative flex flex-col items-center justify-center space-y-2 text-center">
+                                                <div className="mb-1 rounded-full bg-primary/10 p-3 text-primary transition-transform group-hover:scale-110">
+                                                    <Plus className="h-6 w-6" />
+                                                </div>
+                                                <p className="text-sm font-bold text-foreground">
+                                                    Click to upload a new image
+                                                </p>
+                                                <p className="text-[11px] font-medium text-muted-foreground">
+                                                    PNG, JPG or WEBP up to 2MB
+                                                </p>
+                                            </div>
+                                            <Input
+                                                id="image"
+                                                type="file"
+                                                className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                                                onChange={(e) =>
+                                                    setData(
+                                                        'image',
+                                                        e.target.files
+                                                            ? e.target.files[0]
+                                                            : null,
+                                                    )
+                                                }
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {errors.image && (
+                                        <p className="px-1 text-xs font-bold text-destructive">
+                                            {errors.image}
+                                        </p>
+                                    )}
+                                </div>
                             </div>
                         </div>
 
@@ -287,7 +369,13 @@ export default function Edit({ post: postData }: { post: Post }) {
                                 disabled={processing}
                             >
                                 <Save className="mr-2 h-4 w-4" />
-                                {processing ? 'Updating...' : 'Save Changes'}
+                                {processing
+                                    ? 'Updating...'
+                                    : data.status === 'published'
+                                      ? 'Publish Changes'
+                                      : data.status === 'scheduled'
+                                        ? 'Schedule Changes'
+                                        : 'Save Draft'}
                             </Button>
                         </div>
                     </form>
