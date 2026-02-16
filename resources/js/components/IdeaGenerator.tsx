@@ -52,7 +52,7 @@ const IdeaGenerator = ({
     const [step, setStep] = useState<AppStep>('input');
     const [keyword, setKeyword] = useState('');
     const [ideas, setIdeas] = useState<Idea[]>([]);
-    const [selectedIdea, setSelectedIdea] = useState('');
+    const [selectedIdea, setSelectedIdea] = useState<Idea | null>(null);
     const [story, setStory] = useState<StorySection[]>([]);
     const [script, setScript] = useState('');
     const [tone, setTone] = useState('Conversational & Educational');
@@ -82,10 +82,10 @@ const IdeaGenerator = ({
         setHasGenerated(true);
 
         try {
-            const res = await fetch('/scripts/ideas', {
+            const res = await fetch('/generate/ideas', {
                 method: 'POST',
                 headers: requestHeaders,
-                body: JSON.stringify({ keyword }),
+                body: JSON.stringify({ keyword, type: 'youtube_idea' }),
             });
 
             const data = await res.json();
@@ -100,8 +100,9 @@ const IdeaGenerator = ({
             router.reload({
                 only: ['menu_data', 'initialGuestCredits', 'userCredits'],
             });
-        } catch (err: any) {
-            toast.error(err.message);
+        } catch (err: unknown) {
+            const error = err as Error;
+            toast.error(error.message);
         } finally {
             setIsLoading(false);
         }
@@ -109,14 +110,14 @@ const IdeaGenerator = ({
 
     /* ---------------- STORY ---------------- */
 
-    const handleSelectIdea = async (idea: any) => {
+    const handleSelectIdea = async (idea: Idea) => {
         console.log(idea, 'idea selected');
         setSelectedIdea(idea);
         setStep('story');
         setIsLoading(true);
 
         try {
-            const res = await fetch('/scripts/story', {
+            const res = await fetch('/generate/story', {
                 method: 'POST',
                 headers: requestHeaders,
                 body: JSON.stringify({
@@ -149,10 +150,13 @@ const IdeaGenerator = ({
         setStep('script');
 
         try {
-            const res = await fetch('/scripts/final', {
+            const res = await fetch('/generate/final', {
                 method: 'POST',
                 headers: requestHeaders,
-                body: JSON.stringify({ script_id: scriptId }),
+                body: JSON.stringify({
+                    script_id: scriptId,
+                    title: selectedIdea?.Title,
+                }),
             });
 
             const data = await res.json();
@@ -177,7 +181,7 @@ const IdeaGenerator = ({
         setStep('input');
         setKeyword('');
         setIdeas([]);
-        setSelectedIdea('');
+        setSelectedIdea(null);
         setStory([]);
         setScript('');
         setHasGenerated(false);
@@ -245,8 +249,8 @@ const IdeaGenerator = ({
                         step === 'ideas'
                             ? 'Generating ideas...'
                             : step === 'story'
-                              ? 'Crafting your story...'
-                              : 'Writing your script...'
+                                ? 'Crafting your story...'
+                                : 'Writing your script...'
                     }
                 />
             )}
@@ -298,7 +302,7 @@ const IdeaGenerator = ({
             {/* STORY */}
             {step === 'story' && !isLoading && (
                 <StoryView
-                    selectedIdea={selectedIdea}
+                    selectedIdea={selectedIdea?.Title || ''}
                     story={story}
                     onGenerateScript={handleGenerateScript}
                     onBack={() => setStep('ideas')}
@@ -312,7 +316,7 @@ const IdeaGenerator = ({
             {/* SCRIPT */}
             {step === 'script' && !isLoading && (
                 <ScriptView
-                    selectedIdea={selectedIdea}
+                    selectedIdea={selectedIdea?.Title || ''}
                     script={script}
                     tone={tone}
                     onBack={() => setStep('story')}

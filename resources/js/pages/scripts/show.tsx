@@ -26,7 +26,7 @@ interface Props {
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Youtube Video Idea Generator',
+        title: 'Video Script Generator',
         href: scriptsIndex().url,
     },
 ];
@@ -40,7 +40,7 @@ const IdeaCardContainer = ({ script }: { script: any }) => {
                     key={index}
                     index={index}
                     idea={idea}
-                    // onSelect={() => handleSelectIdea(idea)}
+                // onSelect={() => handleSelectIdea(idea)}
                 />
             ))}
         </>

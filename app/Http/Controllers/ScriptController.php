@@ -27,7 +27,8 @@ class ScriptController extends Controller
         $isAuthenticated = Auth::check();
         $fingerprint = $request->header('X-Browser-Fingerprint'); // Use FingerprintJS ID
 
-        $scriptsQuery = Script::latest();
+        $type = $request->query('type') ?? $request->route('type') ?? 'youtube_idea';
+        $scriptsQuery = Script::where('type', $type)->latest();
 
         if ($isAuthenticated) {
             $user = Auth::user(); // Ensure $user is defined when authenticated
@@ -57,6 +58,7 @@ class ScriptController extends Controller
             'isAuthenticated' => $isAuthenticated,
             'initialGuestCredits' => $isAuthenticated ? null : $guestCredits,
             'userCredits' => $isAuthenticated ? $userCredits : null,
+            'type' => $type,
         ]);
     }
 
@@ -86,6 +88,7 @@ class ScriptController extends Controller
         return Inertia::render('scripts/show', [
             'script' => $script,
             'isAuthenticated' => $isAuthenticated,
+            'type' => $script->type,
         ]);
     }
 
@@ -169,10 +172,13 @@ class ScriptController extends Controller
 
         $validated = $request->validate([
             'keyword' => 'required|string|min:2|max:255',
+            'type' => 'nullable|string|in:youtube_idea,video_script',
         ]);
 
+        $type = $validated['type'] ?? 'youtube_idea';
+
         try {
-            $rawIdeas = $this->aiService->generateIdeas($validated['keyword']);
+            $rawIdeas = $this->aiService->generateIdeas($validated['keyword'], $type);
 
             // Trim whitespace
             $trimmed = trim($rawIdeas);
@@ -193,6 +199,7 @@ class ScriptController extends Controller
 
             $script = Script::create([
                 'user_id' => $isAuthenticated ? $user->id : null,
+                'type' => $type,
                 'fingerprint' => $fingerprint, // Always store fingerprint, regardless of authentication
                 'keyword' => $validated['keyword'],
                 'idea' => $decodedIdeas,
@@ -278,7 +285,7 @@ class ScriptController extends Controller
 
             $script = $scriptQuery->firstOrFail();
 
-            $rawStory = $this->aiService->generateStory($validated['title']);
+            $rawStory = $this->aiService->generateStory($validated['title'], $script->type);
             $decodedStory = json_decode($rawStory, true);
 
             $script->update([
@@ -373,6 +380,78 @@ class ScriptController extends Controller
         } catch (Exception $e) {
             Log::error('Script generation failed: ' . $e->getMessage());
             return response()->json(['success' => false, 'message' => 'Failed to generate script.'], 500);
+        }
+    }
+
+    /**
+     * STEP 5 – Generate detailed scene-by-scene video script
+     */
+    public function generateDetailedScript(Request $request): JsonResponse
+    {
+        $isAuthenticated = Auth::check();
+        $user = Auth::user();
+        $fingerprint = $request->header('X-Browser-Fingerprint');
+
+        // Credit check
+        if ($isAuthenticated) {
+            if ($user->credits <= 0) {
+                return response()->json(['success' => false, 'message' => 'You have no credits left.'], 403);
+            }
+        } else {
+            $guestCredits = session('guest_credits', 5);
+            if ($guestCredits <= 0) {
+                return response()->json(['success' => false, 'message' => 'You have no guest credits left. Please sign up to get more.'], 403);
+            }
+        }
+
+        $validated = $request->validate([
+            'script_id' => 'required|exists:scripts,id',
+            'title' => 'required|string',
+        ]);
+
+        try {
+            $scriptQuery = Script::where('id', $validated['script_id']);
+
+            if ($isAuthenticated) {
+                $scriptQuery->where('user_id', $user->id);
+            } else {
+                $scriptQuery->where('fingerprint', $fingerprint);
+            }
+
+            $script = $scriptQuery->firstOrFail();
+
+            if (empty($script->story)) {
+                return response()->json(['success' => false, 'message' => 'Story context missing.'], 422);
+            }
+
+            // Passing previous data to AI for context using the NEW method
+            $rawScript = $this->aiService->generateDetailedVideoScript($script->title, json_encode($script->story));
+            $decodedScript = json_decode($rawScript, true);
+
+            if (!$decodedScript) {
+                Log::error('AI Service (Detailed) returned invalid JSON: ' . $rawScript);
+                return response()->json(['success' => false, 'message' => 'Invalid AI response.'], 500);
+            }
+
+            $script->update([
+                'script' => $decodedScript,
+            ]);
+
+            // Credit deduction
+            if ($isAuthenticated) {
+                $user->decrement('credits');
+            } else {
+                session(['guest_credits' => $guestCredits - 1]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'scenes' => $decodedScript['scenes'] ?? [],
+                'tone' => $decodedScript['tone'] ?? 'Neutral',
+            ]);
+        } catch (Exception $e) {
+            Log::error('Detailed script generation failed: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Failed to generate detailed script.'], 500);
         }
     }
 }

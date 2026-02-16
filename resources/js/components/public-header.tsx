@@ -24,11 +24,10 @@ export default function PublicHeader() {
                 <nav className="hidden items-center gap-6 text-sm md:flex">
                     <Link
                         href="/"
-                        className={`transition-colors hover:text-foreground ${
-                            isHome
-                                ? 'font-medium text-foreground'
-                                : 'text-muted-foreground'
-                        }`}
+                        className={`transition-colors hover:text-foreground ${isHome
+                            ? 'font-medium text-foreground'
+                            : 'text-muted-foreground'
+                            }`}
                     >
                         Home
                     </Link>
@@ -46,11 +45,10 @@ export default function PublicHeader() {
                     </Link>
                     <Link
                         href="/blog"
-                        className={`transition-colors hover:text-foreground ${
-                            isBlogs
-                                ? 'font-medium text-foreground'
-                                : 'text-muted-foreground'
-                        }`}
+                        className={`transition-colors hover:text-foreground ${isBlogs
+                            ? 'font-medium text-foreground'
+                            : 'text-muted-foreground'
+                            }`}
                     >
                         Blogs
                     </Link>
@@ -68,6 +66,14 @@ export default function PublicHeader() {
                                     className="w-full cursor-pointer"
                                 >
                                     YouTube Video Idea Generator
+                                </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                                <Link
+                                    href="/scripts"
+                                    className="w-full cursor-pointer"
+                                >
+                                    Video Script Generator
                                 </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>

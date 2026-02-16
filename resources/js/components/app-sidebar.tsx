@@ -53,19 +53,31 @@ export function AppSidebar() {
 
     const menu_data = props.menu_data || {};
     const prompts = menu_data.prompts || [];
-    const scripts = menu_data.scripts || [];
+    const youtubeIdeas = menu_data.youtube_ideas || [];
+    const videoScripts = menu_data.video_scripts || [];
     const captions = menu_data.captions || [];
 
     const dynamicGroups = [
         {
-            title: 'Youtube Video Idea',
+            title: 'YouTube Video Idea',
             icon: Video,
             baseHref: '/youtube',
             href: '/youtube',
-            items: scripts,
+            items: youtubeIdeas,
             action: {
                 icon: Plus,
                 href: '/youtube',
+            },
+        },
+        {
+            title: 'Video Script Generator',
+            icon: BookOpen,
+            baseHref: '/scripts',
+            href: '/scripts',
+            items: videoScripts,
+            action: {
+                icon: Plus,
+                href: '/scripts',
             },
         },
         {
@@ -96,9 +108,9 @@ export function AppSidebar() {
             icon: BookOpen,
             action: isPostAdmin
                 ? {
-                      icon: Plus,
-                      href: postsRoutes.index().url,
-                  }
+                    icon: Plus,
+                    href: postsRoutes.index().url,
+                }
                 : null,
         },
     ].filter((group) => {
