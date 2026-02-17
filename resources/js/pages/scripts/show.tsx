@@ -1,8 +1,7 @@
-import { index as scriptsIndex } from '@/actions/App/Http/Controllers/ScriptController';
 import IdeaCard from '@/components/IdeaCard';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 
 interface Idea {
     idea: {
@@ -22,14 +21,8 @@ interface Props {
         script: any;
         idea: any;
     };
+    type: 'youtube_idea' | 'video_script';
 }
-
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Video Script Generator',
-        href: scriptsIndex().url,
-    },
-];
 
 const IdeaCardContainer = ({ script }: { script: any }) => {
     const ideas = script.idea ?? [];
@@ -47,7 +40,18 @@ const IdeaCardContainer = ({ script }: { script: any }) => {
     );
 };
 
-export default function Show({ script }: Props) {
+export default function Show({ script, type }: Props) {
+    const isIdeaGenerator = type === 'youtube_idea';
+    const toolTitle = isIdeaGenerator ? 'YouTube Video Idea Generator' : 'Video Script Generator';
+    const toolHref = isIdeaGenerator ? '/youtube' : '/scripts';
+
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: toolTitle,
+            href: toolHref,
+        },
+    ];
+
     const scriptContent = script.script?.script || 'No script content found.';
     const tone = script.script?.tone || 'Professional';
 
@@ -75,7 +79,7 @@ export default function Show({ script }: Props) {
                         onRegenerate={() => {
                             console.log("Regenerate requested");
                         }}
-                        onStartOver={() => router.get(scriptsIndex().url)}
+                        onStartOver={() => router.get(isIdeaGenerator ? '/youtube' : '/scripts')}
                         isLoading={false}
                     /> */}
                 </div>

@@ -639,7 +639,7 @@
     "/build/assets/file-text-Bu_JS1dP.js"
   ],
   "node_modules/.pnpm/lucide-react@0.475.0_react@19.2.4/node_modules/lucide-react/dist/esm/icons/film.js": [
-    "/build/assets/index-Dt3uIB4p.js"
+    "/build/assets/index-69LKx8kH.js"
   ],
   "node_modules/.pnpm/lucide-react@0.475.0_react@19.2.4/node_modules/lucide-react/dist/esm/icons/globe.js": [
     "/build/assets/terms-C2jdkcaI.js"
@@ -657,7 +657,7 @@
     "/build/assets/show-public-34qF4yHD.js"
   ],
   "node_modules/.pnpm/lucide-react@0.475.0_react@19.2.4/node_modules/lucide-react/dist/esm/icons/list-checks.js": [
-    "/build/assets/index-Dt3uIB4p.js"
+    "/build/assets/index-69LKx8kH.js"
   ],
   "node_modules/.pnpm/lucide-react@0.475.0_react@19.2.4/node_modules/lucide-react/dist/esm/icons/loader-circle.js": [
     "/build/assets/loader-circle-DIBqLg7O.js"
@@ -922,9 +922,6 @@
     "/build/assets/dropdown-menu-mwAGrZTw.js",
     "/build/assets/logo-BS0aM2X_.png"
   ],
-  "resources/js/actions/App/Http/Controllers/ScriptController.ts": [
-    "/build/assets/ScriptController-Ds090Xt_.js"
-  ],
   "resources/js/actions/App/Http/Controllers/Settings/PasswordController.ts": [
     "/build/assets/password-9Jfqr1f6.js"
   ],
@@ -941,7 +938,7 @@
     "/build/assets/IdeaCard-C0HsjeKp.js"
   ],
   "resources/js/components/IdeaGenerator.tsx": [
-    "/build/assets/index-Dt3uIB4p.js"
+    "/build/assets/index-69LKx8kH.js"
   ],
   "resources/js/components/LoadingState.tsx": [
     "/build/assets/LoadingState-BGV4693g.js"
@@ -950,7 +947,7 @@
     "/build/assets/index-QwWfMtt4.js"
   ],
   "resources/js/components/SceneView.tsx": [
-    "/build/assets/index-Dt3uIB4p.js"
+    "/build/assets/index-69LKx8kH.js"
   ],
   "resources/js/components/ScriptView.tsx": [
     "/build/assets/StoryView-DR_l_nrh.js"
@@ -965,7 +962,7 @@
     "/build/assets/home-rRwM9n9V.js"
   ],
   "resources/js/components/VideoScriptGenerator.tsx": [
-    "/build/assets/index-Dt3uIB4p.js"
+    "/build/assets/index-69LKx8kH.js"
   ],
   "resources/js/components/alert-error.tsx": [
     "/build/assets/two-factor-DEaK8Svu.js"
@@ -1083,7 +1080,7 @@
     "/build/assets/spinner-C8O4hgbI.js"
   ],
   "resources/js/components/ui/table.tsx": [
-    "/build/assets/index-Dt3uIB4p.js"
+    "/build/assets/index-69LKx8kH.js"
   ],
   "resources/js/components/ui/textarea.tsx": [
     "/build/assets/Editor-C-8F1BMI.js"
@@ -1197,13 +1194,13 @@
     "/build/assets/show-BNwj4Csj.js"
   ],
   "resources/js/pages/scripts/index.tsx": [
-    "/build/assets/index-Dt3uIB4p.js"
+    "/build/assets/index-69LKx8kH.js"
   ],
   "resources/js/pages/scripts/script-form.tsx": [
     "/build/assets/script-form-BONquBLc.js"
   ],
   "resources/js/pages/scripts/show.tsx": [
-    "/build/assets/show-C_185EMO.js"
+    "/build/assets/show-DnpdgCCe.js"
   ],
   "resources/js/pages/settings/appearance.tsx": [
     "/build/assets/appearance-BE1wUKLE.js"

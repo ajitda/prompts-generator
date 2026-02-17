@@ -1,9 +1,3 @@
-import {
-    // generatePrompt as promptsCreate,
-    // destroy as productsDestroy,
-    // edit as productsEdit,
-    index as scriptsIndex,
-} from '@/actions/App/Http/Controllers/ScriptController';
 import IdeaGenerator from '@/components/IdeaGenerator';
 import VideoScriptGenerator from '@/components/VideoScriptGenerator';
 import AppLayout from '@/layouts/app-layout';
@@ -80,13 +74,13 @@ export default function VideoScripts() {
                 }
             });
 
-            router.get(scriptsIndex().url, {
+            router.get(isIdeaGenerator ? '/youtube' : '/scripts', {
                 preserveScroll: true,
                 preserveState: true,
                 replace: true,
             });
         },
-        [sortConfig],
+        [sortConfig, isIdeaGenerator],
     );
 
     // const [importErrors, setImportErrors] = useState<any[]>([]);
