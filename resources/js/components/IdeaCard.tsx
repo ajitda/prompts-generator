@@ -4,8 +4,10 @@ import { Button } from './ui/button';
 interface IdeaCardProps {
     idea: {
         Title: string;
-        Thumbnail_Concept: string;
-        Hook_Script: string;
+        Thumbnail_Concept?: string;
+        Hook_Script?: string;
+        Visual_Concept?: string;
+        Concept_Brief?: string;
         Difficulty: string;
     };
     index: number;
@@ -21,24 +23,23 @@ const difficultyColors: Record<string, string> = {
 const IdeaCard = ({ idea, index, onSelect }: IdeaCardProps) => {
     const [copiedField, setCopiedField] = useState<string | null>(null);
 
+    const isScript = !!idea.Visual_Concept || !!idea.Concept_Brief;
+    const visualLabel = isScript ? 'Visual Style' : 'Thumbnail Concept';
+    const briefLabel = isScript ? 'Concept Brief' : 'Hook Script';
+
+    const visualContent = idea.Visual_Concept || idea.Thumbnail_Concept || '';
+    const briefContent = idea.Concept_Brief || idea.Hook_Script || '';
+
     const copyToClipboard = async (text: string, field: string) => {
         await navigator.clipboard.writeText(text);
         setCopiedField(field);
-        // toast({
-        //   title: "Copied!",
-        //   description: `${field} copied to clipboard`,
-        // });
         setTimeout(() => setCopiedField(null), 2000);
     };
 
     const copyAll = async () => {
-        const fullText = `Title: ${idea.Title}\n\nThumbnail Concept: ${idea.Thumbnail_Concept}\n\nHook Script: ${idea.Hook_Script}\n\nDifficulty: ${idea.Difficulty}`;
+        const fullText = `Title: ${idea.Title}\n\n${visualLabel}: ${visualContent}\n\n${briefLabel}: ${briefContent}\n\nDifficulty: ${idea.Difficulty}`;
         await navigator.clipboard.writeText(fullText);
         setCopiedField('all');
-        // toast({
-        //   title: "Copied!",
-        //   description: "Full idea copied to clipboard",
-        // });
         setTimeout(() => setCopiedField(null), 2000);
     };
 
@@ -62,7 +63,10 @@ const IdeaCard = ({ idea, index, onSelect }: IdeaCardProps) => {
                 <Button
                     variant="ghost"
                     size="sm"
-                    onClick={copyAll}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        copyAll();
+                    }}
                     className="text-muted-foreground hover:text-foreground"
                 >
                     {copiedField === 'all' ? (
@@ -83,7 +87,10 @@ const IdeaCard = ({ idea, index, onSelect }: IdeaCardProps) => {
                             Title
                         </span>
                         <button
-                            onClick={() => copyToClipboard(idea.Title, 'Title')}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                copyToClipboard(idea.Title, 'Title');
+                            }}
                             className="ml-auto opacity-0 transition-opacity group-hover:opacity-100"
                         >
                             {copiedField === 'Title' ? (
@@ -98,23 +105,21 @@ const IdeaCard = ({ idea, index, onSelect }: IdeaCardProps) => {
                     </p>
                 </div>
 
-                {/* Thumbnail Concept */}
+                {/* Visual Concept */}
                 <div className="group">
                     <div className="mb-1 flex items-center gap-2">
                         <Image className="h-4 w-4 text-accent" />
                         <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-                            Thumbnail Concept
+                            {visualLabel}
                         </span>
                         <button
-                            onClick={() =>
-                                copyToClipboard(
-                                    idea.Thumbnail_Concept,
-                                    'Thumbnail',
-                                )
-                            }
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                copyToClipboard(visualContent, 'Visual');
+                            }}
                             className="ml-auto opacity-0 transition-opacity group-hover:opacity-100"
                         >
-                            {copiedField === 'Thumbnail' ? (
+                            {copiedField === 'Visual' ? (
                                 <Check className="h-3.5 w-3.5 text-green-600" />
                             ) : (
                                 <Copy className="h-3.5 w-3.5 text-muted-foreground hover:text-foreground" />
@@ -122,24 +127,25 @@ const IdeaCard = ({ idea, index, onSelect }: IdeaCardProps) => {
                         </button>
                     </div>
                     <p className="leading-relaxed text-muted-foreground">
-                        {idea.Thumbnail_Concept}
+                        {visualContent}
                     </p>
                 </div>
 
-                {/* Hook Script */}
+                {/* Concept Brief / Hook Script */}
                 <div className="group">
                     <div className="mb-1 flex items-center gap-2">
                         <MessageSquare className="text-primary h-4 w-4" />
                         <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-                            Hook Script
+                            {briefLabel}
                         </span>
                         <button
-                            onClick={() =>
-                                copyToClipboard(idea.Hook_Script, 'Hook')
-                            }
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                copyToClipboard(briefContent, 'Brief');
+                            }}
                             className="ml-auto opacity-0 transition-opacity group-hover:opacity-100"
                         >
-                            {copiedField === 'Hook' ? (
+                            {copiedField === 'Brief' ? (
                                 <Check className="h-3.5 w-3.5 text-green-600" />
                             ) : (
                                 <Copy className="h-3.5 w-3.5 text-muted-foreground hover:text-foreground" />
@@ -147,7 +153,7 @@ const IdeaCard = ({ idea, index, onSelect }: IdeaCardProps) => {
                         </button>
                     </div>
                     <p className="rounded-lg bg-secondary/50 p-3 leading-relaxed text-foreground italic">
-                        "{idea.Hook_Script}"
+                        "{briefContent}"
                     </p>
                 </div>
             </div>

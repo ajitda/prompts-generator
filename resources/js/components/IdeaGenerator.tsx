@@ -14,8 +14,10 @@ import { Input } from './ui/input';
 type AppStep = 'input' | 'ideas' | 'story' | 'script';
 interface Idea {
     Title: string;
-    Thumbnail_Concept: string;
-    Hook_Script: string;
+    Thumbnail_Concept?: string;
+    Hook_Script?: string;
+    Visual_Concept?: string;
+    Concept_Brief?: string;
     Difficulty: string;
 }
 

@@ -15,8 +15,10 @@ type AppStep = 'input' | 'concepts' | 'outline' | 'script';
 
 interface Concept {
     Title: string;
-    Thumbnail_Concept: string;
-    Hook_Script: string;
+    Thumbnail_Concept?: string;
+    Hook_Script?: string;
+    Visual_Concept?: string;
+    Concept_Brief?: string;
     Difficulty: string;
 }
 
