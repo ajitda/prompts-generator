@@ -12,6 +12,7 @@ interface IdeaCardProps {
     };
     index: number;
     onSelect: () => void;
+    isHistory?: boolean;
 }
 
 const difficultyColors: Record<string, string> = {
@@ -20,7 +21,7 @@ const difficultyColors: Record<string, string> = {
     Hard: 'bg-red-100 text-red-700',
 };
 
-const IdeaCard = ({ idea, index, onSelect }: IdeaCardProps) => {
+const IdeaCard = ({ idea, index, onSelect, isHistory = false }: IdeaCardProps) => {
     const [copiedField, setCopiedField] = useState<string | null>(null);
 
     const isScript = !!idea.Visual_Concept || !!idea.Concept_Brief;
@@ -37,7 +38,9 @@ const IdeaCard = ({ idea, index, onSelect }: IdeaCardProps) => {
     };
 
     const copyAll = async () => {
-        const fullText = `Title: ${idea.Title}\n\n${visualLabel}: ${visualContent}\n\n${briefLabel}: ${briefContent}\n\nDifficulty: ${idea.Difficulty}`;
+        const fullText = isHistory 
+            ? idea.Title 
+            : `Title: ${idea.Title}\n\n${visualLabel}: ${visualContent}\n\n${briefLabel}: ${briefContent}\n\nDifficulty: ${idea.Difficulty}`;
         await navigator.clipboard.writeText(fullText);
         setCopiedField('all');
         setTimeout(() => setCopiedField(null), 2000);
@@ -46,8 +49,8 @@ const IdeaCard = ({ idea, index, onSelect }: IdeaCardProps) => {
     return (
         <div
             style={{ animationDelay: `${index * 100}ms` }}
-            onClick={onSelect}
-            className="hover:shadow-card-hover group cursor-pointer rounded-xl border border-border/50 bg-card p-6 shadow-card transition-all duration-300 hover:-translate-y-1"
+            onClick={isHistory ? undefined : onSelect}
+            className={`rounded-xl border border-border/50 bg-card p-6 shadow-card transition-all duration-300 ${isHistory ? '' : 'hover:shadow-card-hover group cursor-pointer hover:-translate-y-1'}`}
         >
             <div className="mb-4 flex items-start justify-between gap-4">
                 <div className="flex items-center gap-3">
@@ -75,11 +78,13 @@ const IdeaCard = ({ idea, index, onSelect }: IdeaCardProps) => {
                         ) : (
                             <Copy className="h-4 w-4" />
                         )}
-                        <span className="ml-1 text-xs">Copy All</span>
+                        <span className="ml-1 text-xs">{isHistory ? 'Copy Title' : 'Copy All'}</span>
                     </Button>
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary transition-transform group-hover:translate-x-1">
-                        <ChevronRight className="h-5 w-5" />
-                    </div>
+                    {!isHistory && (
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary transition-transform group-hover:translate-x-1">
+                            <ChevronRight className="h-5 w-5" />
+                        </div>
+                    )}
                 </div>
             </div>
 

@@ -78,6 +78,7 @@ export default function Show({ script, type }: Props) {
                                     index={0}
                                     idea={selectedConcept}
                                     onSelect={() => { }}
+                                    isHistory={true}
                                 />
                             ) : (
                                 <div className="grid gap-6">
@@ -87,6 +88,7 @@ export default function Show({ script, type }: Props) {
                                             index={index}
                                             idea={idea}
                                             onSelect={() => { }}
+                                            isHistory={true}
                                         />
                                     ))}
                                 </div>

@@ -199,9 +199,7 @@ PROMPT;
     return $this->cleanAndRun('generate', $prompt);
   }
 
-  /**
-   * The Logic: Clean the AI response before returning it to the Controller
-   */
+
   protected function cleanAndRun(string $method, string $payload): string
   {
     $rawResponse = $this->runProviders($method, $payload);
@@ -215,17 +213,13 @@ PROMPT;
     return $cleanResponse;
   }
 
-  /**
-   * Robustly sanitize and repair AI-generated JSON
-   */
+
   protected function sanitizeJson(string $json): string
   {
-    // 1. Remove Markdown code blocks
     $json = preg_replace('/^```(?:json)?\s+/i', '', trim($json));
     $json = preg_replace('/\s+```$/', '', $json);
     $json = trim($json);
 
-    // 2. Extract JSON part if there is preamble/postscript
     $firstBracket = strpos($json, '{');
     $firstSquare = strpos($json, '[');
     $startPos = false;
@@ -246,20 +240,14 @@ PROMPT;
       }
     }
 
-    // 3. Handle multiple top-level objects not in an array (common with some AI models)
     if (str_starts_with($json, '{') && !str_contains(substr($json, 0, 10), '[')) {
-      // Check if there are multiple objects (e.g., } { or } \n {)
       if (preg_match('/\}\s*\{/', $json)) {
         $json = '[' . preg_replace('/\}\s*\{/', '},{', $json) . ']';
       }
     }
 
-    // 4. Sanitize control characters (0-31) that break json_decode
-    // We target literal newlines, tabs, and other control chars inside JSON string values.
-    // This regex matches a JSON string value and we process its content.
     $json = preg_replace_callback('/"([^"\\\\]*(?:\\\\.[^"\\\\]*)*)"/s', function ($matches) {
       $content = $matches[1];
-      // Replace literal control characters with their escaped versions
       $search = ["\n", "\r", "\t", "\x08", "\x0c"];
       $replace = ["\\n", "\\r", "\\t", "\\b", "\\f"];
       return '"' . str_replace($search, $replace, $content) . '"';
@@ -271,9 +259,6 @@ PROMPT;
 
 
 
-  /**
-   * Shared provider fallback logic
-   */
   protected function runProviders(string $method, string $payload): string
   {
     foreach ($this->providers as $providerClass) {
@@ -297,10 +282,7 @@ PROMPT;
     throw new Exception('All AI providers failed to generate the script.');
   }
 
-  /**
-   * A separate, more detailed video script generator.
-   * This now uses the new prompt format requested by the user.
-   */
+
   public function generateDetailedVideoScript(string $title, string $storyContext): string
   {
     $prompt = <<<PROMPT
