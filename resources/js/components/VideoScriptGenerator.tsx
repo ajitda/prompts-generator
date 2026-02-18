@@ -286,8 +286,8 @@ const VideoScriptGenerator = ({
                     story={story}
                     onGenerateScript={handleGenerateDetailedScript}
                     onBack={() => setStep('concepts')}
-                    onRegenerate={() => { }}
-                    isLoading={false}
+                    onRegenerate={() => handleSelectConcept(selectedConcept!)}
+                    isLoading={isLoading}
                 />
             )}
 

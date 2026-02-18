@@ -124,7 +124,7 @@ Guidelines:
 - Include [TIMESTAMPS] to mark sections (e.g., [HOOK - 0:00-0:15])
 - Write naturally as if speaking to a friend
 - Include brief stage directions in [brackets] where helpful
-- Aim for 5-7 minutes of content (roughly 800-1000 words)
+- Aim for 2-4 minutes of content (roughly 400-600 words)
 - Make the opening hook compelling
 - End with a soft, natural call-to-action
 
@@ -296,7 +296,7 @@ Guidelines:
 - Include [TIMESTAMPS] to mark sections (e.g., [HOOK - 0:00-0:15])
 - Write naturally as if speaking to a friend
 - Include brief stage directions in [brackets] where helpful
-- Aim for 5-7 minutes of content (roughly 800-1000 words)
+- Aim for 2-4 minutes of content (roughly 400-600 words)
 - Make the opening hook compelling
 - End with a soft, natural call-to-action
 

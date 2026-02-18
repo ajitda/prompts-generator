@@ -52,67 +52,28 @@ const IdeaCard = ({ idea, index, onSelect, isHistory = false }: IdeaCardProps) =
             onClick={isHistory ? undefined : onSelect}
             className={`rounded-xl border border-border/50 bg-card p-6 shadow-card transition-all duration-300 ${isHistory ? '' : 'hover:shadow-card-hover group cursor-pointer hover:-translate-y-1'}`}
         >
-            <div className="mb-4 flex items-start justify-between gap-4">
-                <div className="flex items-center gap-3">
-                    <span className="bg-primary/10 text-primary flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold">
-                        {index + 1}
-                    </span>
-                    <span
-                        className={`rounded-full px-3 py-1 text-xs font-medium ${difficultyColors[idea.Difficulty] || difficultyColors.Medium}`}
-                    >
-                        {idea.Difficulty}
-                    </span>
-                </div>
-                <div className="flex items-center gap-2">
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            copyAll();
-                        }}
-                        className="text-muted-foreground hover:text-foreground"
-                    >
-                        {copiedField === 'all' ? (
-                            <Check className="h-4 w-4 text-green-600" />
-                        ) : (
-                            <Copy className="h-4 w-4" />
-                        )}
-                        <span className="ml-1 text-xs">{isHistory ? 'Copy Title' : 'Copy All'}</span>
-                    </Button>
-                    {!isHistory && (
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary transition-transform group-hover:translate-x-1">
-                            <ChevronRight className="h-5 w-5" />
-                        </div>
-                    )}
-                </div>
-            </div>
+          
 
             <div className="space-y-4">
                 {/* Title */}
-                <div className="group">
+                <div>
                     <div className="mb-1 flex items-center gap-2">
-                        <BarChart3 className="text-primary h-4 w-4" />
-                        <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                        <BarChart3 className="h-4 w-4 text-primary" />
+                        <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                             Title
                         </span>
-                        <button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                copyToClipboard(idea.Title, 'Title');
-                            }}
-                            className="ml-auto opacity-0 transition-opacity group-hover:opacity-100"
-                        >
-                            {copiedField === 'Title' ? (
-                                <Check className="h-3.5 w-3.5 text-green-600" />
-                            ) : (
-                                <Copy className="h-3.5 w-3.5 text-muted-foreground hover:text-foreground" />
-                            )}
-                        </button>
                     </div>
-                    <p className="text-lg leading-snug font-semibold text-foreground">
-                        {idea.Title}
-                    </p>
+
+                    <div className="flex items-center justify-between gap-2">
+                        <p className="text-lg font-semibold leading-snug text-foreground">
+                            {idea.Title}
+                        </p>
+                        {!isHistory && (
+                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:opacity-100">
+                                <ChevronRight className="h-5 w-5" />
+                            </div>
+                        )}
+                    </div>
                 </div>
 
                 {/* Visual Concept */}
