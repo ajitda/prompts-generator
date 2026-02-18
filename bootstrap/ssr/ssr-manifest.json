@@ -86,7 +86,7 @@
     "/build/assets/logo-BS0aM2X_.png"
   ],
   "node_modules/@radix-ui/react-avatar/dist/index.mjs": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "node_modules/@radix-ui/react-checkbox/dist/index.mjs": [
     "/build/assets/login-CjUljgLO.js"
@@ -101,16 +101,16 @@
     "/build/assets/login-CjUljgLO.js"
   ],
   "node_modules/@radix-ui/react-collapsible/dist/index.mjs": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "node_modules/@radix-ui/react-collapsible/node_modules/@radix-ui/react-context/dist/index.mjs": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "node_modules/@radix-ui/react-collapsible/node_modules/@radix-ui/react-primitive/dist/index.mjs": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "node_modules/@radix-ui/react-collapsible/node_modules/@radix-ui/react-slot/dist/index.mjs": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "node_modules/@radix-ui/react-collection/dist/index.mjs": [
     "/build/assets/dropdown-menu-C5jyS0V-.js",
@@ -128,19 +128,19 @@
     "/build/assets/createLucideIcon-DxBA2hfx.js"
   ],
   "node_modules/@radix-ui/react-context/dist/index.mjs": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "node_modules/@radix-ui/react-dialog/dist/index.mjs": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "node_modules/@radix-ui/react-dialog/node_modules/@radix-ui/react-context/dist/index.mjs": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "node_modules/@radix-ui/react-dialog/node_modules/@radix-ui/react-primitive/dist/index.mjs": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "node_modules/@radix-ui/react-dialog/node_modules/@radix-ui/react-slot/dist/index.mjs": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "node_modules/@radix-ui/react-direction/dist/index.mjs": [
     "/build/assets/dropdown-menu-C5jyS0V-.js",
@@ -265,34 +265,34 @@
     "/build/assets/logo-BS0aM2X_.png"
   ],
   "node_modules/@radix-ui/react-select/dist/index.mjs": [
-    "/build/assets/Editor-D0dmSngT.js"
+    "/build/assets/Editor-BrhLpcMC.js"
   ],
   "node_modules/@radix-ui/react-select/node_modules/@radix-ui/react-context/dist/index.mjs": [
-    "/build/assets/Editor-D0dmSngT.js"
+    "/build/assets/Editor-BrhLpcMC.js"
   ],
   "node_modules/@radix-ui/react-select/node_modules/@radix-ui/react-primitive/dist/index.mjs": [
-    "/build/assets/Editor-D0dmSngT.js"
+    "/build/assets/Editor-BrhLpcMC.js"
   ],
   "node_modules/@radix-ui/react-select/node_modules/@radix-ui/react-slot/dist/index.mjs": [
-    "/build/assets/Editor-D0dmSngT.js"
+    "/build/assets/Editor-BrhLpcMC.js"
   ],
   "node_modules/@radix-ui/react-separator/dist/index.mjs": [
-    "/build/assets/layout-CMNDxzOY.js"
+    "/build/assets/layout-DUSTUjnp.js"
   ],
   "node_modules/@radix-ui/react-slot/dist/index.mjs": [
     "/build/assets/createLucideIcon-DxBA2hfx.js"
   ],
   "node_modules/@radix-ui/react-tooltip/dist/index.mjs": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "node_modules/@radix-ui/react-tooltip/node_modules/@radix-ui/react-context/dist/index.mjs": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "node_modules/@radix-ui/react-tooltip/node_modules/@radix-ui/react-primitive/dist/index.mjs": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "node_modules/@radix-ui/react-tooltip/node_modules/@radix-ui/react-slot/dist/index.mjs": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "node_modules/@radix-ui/react-use-callback-ref/dist/index.mjs": [
     "/build/assets/dropdown-menu-C5jyS0V-.js",
@@ -307,7 +307,7 @@
     "/build/assets/logo-BS0aM2X_.png"
   ],
   "node_modules/@radix-ui/react-use-is-hydrated/dist/index.mjs": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "node_modules/@radix-ui/react-use-layout-effect/dist/index.mjs": [
     "/build/assets/dropdown-menu-C5jyS0V-.js",
@@ -321,28 +321,28 @@
     "/build/assets/logo-BS0aM2X_.png"
   ],
   "node_modules/@radix-ui/react-visually-hidden/dist/index.mjs": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "node_modules/@radix-ui/react-visually-hidden/node_modules/@radix-ui/react-primitive/dist/index.mjs": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "node_modules/@radix-ui/react-visually-hidden/node_modules/@radix-ui/react-slot/dist/index.mjs": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "node_modules/@tinymce/tinymce-react/lib/es2015/main/ts/ScriptLoader2.js": [
-    "/build/assets/Editor-D0dmSngT.js"
+    "/build/assets/Editor-BrhLpcMC.js"
   ],
   "node_modules/@tinymce/tinymce-react/lib/es2015/main/ts/TinyMCE.js": [
-    "/build/assets/Editor-D0dmSngT.js"
+    "/build/assets/Editor-BrhLpcMC.js"
   ],
   "node_modules/@tinymce/tinymce-react/lib/es2015/main/ts/Utils.js": [
-    "/build/assets/Editor-D0dmSngT.js"
+    "/build/assets/Editor-BrhLpcMC.js"
   ],
   "node_modules/@tinymce/tinymce-react/lib/es2015/main/ts/components/Editor.js": [
-    "/build/assets/Editor-D0dmSngT.js"
+    "/build/assets/Editor-BrhLpcMC.js"
   ],
   "node_modules/@tinymce/tinymce-react/lib/es2015/main/ts/components/EditorPropTypes.js": [
-    "/build/assets/Editor-D0dmSngT.js"
+    "/build/assets/Editor-BrhLpcMC.js"
   ],
   "node_modules/class-variance-authority/dist/index.mjs": [
     "/build/assets/createLucideIcon-DxBA2hfx.js"
@@ -506,7 +506,7 @@
     "/build/assets/calendar-Cq-NUcVG.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/chart-column.js": [
-    "/build/assets/StoryView-GvGmD4kP.js"
+    "/build/assets/StoryView-CCGi7AWd.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/check.js": [
     "/build/assets/check-2g5mg3H-.js"
@@ -515,16 +515,16 @@
     "/build/assets/chevron-down-D42UBSfq.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/chevron-right.js": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/chevron-right-Ce1b_jbN.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/chevron-up.js": [
-    "/build/assets/Editor-D0dmSngT.js"
+    "/build/assets/Editor-BrhLpcMC.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/chevrons-up-down.js": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/circle-alert.js": [
-    "/build/assets/two-factor-CRArLmX2.js"
+    "/build/assets/two-factor-Cy4qk3mk.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/clock.js": [
     "/build/assets/clock-lrMVSSaL.js"
@@ -542,10 +542,10 @@
     "/build/assets/terms-DCM1L6la.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/eye-off.js": [
-    "/build/assets/two-factor-CRArLmX2.js"
+    "/build/assets/two-factor-Cy4qk3mk.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/eye.js": [
-    "/build/assets/two-factor-CRArLmX2.js"
+    "/build/assets/two-factor-Cy4qk3mk.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/facebook.js": [
     "/build/assets/show-public-Dcvf_g9C.js"
@@ -554,13 +554,13 @@
     "/build/assets/file-text-CVdbGrR6.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/film.js": [
-    "/build/assets/index-CZxHhYo4.js"
+    "/build/assets/index-3np2Sp9H.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/globe.js": [
     "/build/assets/terms-DCM1L6la.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/image.js": [
-    "/build/assets/StoryView-GvGmD4kP.js"
+    "/build/assets/StoryView-CCGi7AWd.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/instagram.js": [
     "/build/assets/home-DkAdEsLl.js"
@@ -572,19 +572,19 @@
     "/build/assets/show-public-Dcvf_g9C.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/list-checks.js": [
-    "/build/assets/index-CZxHhYo4.js"
+    "/build/assets/index-3np2Sp9H.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/loader-circle.js": [
     "/build/assets/loader-circle-COMdnHZp.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/lock-keyhole.js": [
-    "/build/assets/two-factor-CRArLmX2.js"
+    "/build/assets/two-factor-Cy4qk3mk.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/lock.js": [
     "/build/assets/privacy-H2rgbF0c.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/log-out.js": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/mail.js": [
     "/build/assets/privacy-H2rgbF0c.js"
@@ -599,16 +599,16 @@
     "/build/assets/monitor-CfbrvXgx.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/moon.js": [
-    "/build/assets/appearance-a81lSuec.js"
+    "/build/assets/appearance-nQ8hTEjz.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/panel-left.js": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/pen.js": [
-    "/build/assets/index-Dn0x1sb_.js"
+    "/build/assets/index-C5zXoEDe.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/plus.js": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/refresh-cw.js": [
     "/build/assets/refresh-cw-DueGN9ey.js"
@@ -623,16 +623,16 @@
     "/build/assets/terms-DCM1L6la.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/scan-line.js": [
-    "/build/assets/two-factor-CRArLmX2.js"
+    "/build/assets/two-factor-Cy4qk3mk.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/settings.js": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/share-2.js": [
     "/build/assets/show-public-Dcvf_g9C.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/shield-ban.js": [
-    "/build/assets/two-factor-CRArLmX2.js"
+    "/build/assets/two-factor-Cy4qk3mk.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/shield-check.js": [
     "/build/assets/shield-check-DN9mUU3e.js"
@@ -641,13 +641,13 @@
     "/build/assets/sparkles-BFjwokJ6.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/sun.js": [
-    "/build/assets/appearance-a81lSuec.js"
+    "/build/assets/appearance-nQ8hTEjz.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/target.js": [
     "/build/assets/home-DkAdEsLl.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/trash-2.js": [
-    "/build/assets/index-Dn0x1sb_.js"
+    "/build/assets/index-C5zXoEDe.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/trending-up.js": [
     "/build/assets/home-DkAdEsLl.js"
@@ -665,7 +665,7 @@
     "/build/assets/video-stECLQZx.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/x.js": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "node_modules/lucide-react/dist/esm/icons/zap.js": [
     "/build/assets/zap-5YGQ18vS.js"
@@ -703,37 +703,37 @@
     "/build/assets/logo-BS0aM2X_.png"
   ],
   "resources/js/actions/App/Http/Controllers/Settings/PasswordController.ts": [
-    "/build/assets/password-D8XnxNY1.js"
+    "/build/assets/password-BLmNWIM8.js"
   ],
   "resources/js/actions/App/Http/Controllers/Settings/ProfileController.ts": [
-    "/build/assets/profile-O_vWSNA3.js"
+    "/build/assets/profile-CLjyRx4R.js"
   ],
   "resources/js/components/CaptionGenerator.tsx": [
-    "/build/assets/index-BxMyqwhb.js"
+    "/build/assets/index-CHhPCJSV.js"
   ],
   "resources/js/components/Hero.tsx": [
     "/build/assets/home-DkAdEsLl.js"
   ],
   "resources/js/components/IdeaCard.tsx": [
-    "/build/assets/StoryView-GvGmD4kP.js"
+    "/build/assets/StoryView-CCGi7AWd.js"
   ],
   "resources/js/components/IdeaGenerator.tsx": [
-    "/build/assets/index-CZxHhYo4.js"
+    "/build/assets/index-3np2Sp9H.js"
   ],
   "resources/js/components/LoadingState.tsx": [
     "/build/assets/LoadingState-BmFRMusO.js"
   ],
   "resources/js/components/PromptGenerator.tsx": [
-    "/build/assets/index-DMv7qDTO.js"
+    "/build/assets/index-DHrxNava.js"
   ],
   "resources/js/components/SceneView.tsx": [
-    "/build/assets/SceneView-cAVGwz5w.js"
+    "/build/assets/SceneView-DkR_iCdk.js"
   ],
   "resources/js/components/ScriptView.tsx": [
-    "/build/assets/StoryView-GvGmD4kP.js"
+    "/build/assets/StoryView-CCGi7AWd.js"
   ],
   "resources/js/components/StoryView.tsx": [
-    "/build/assets/StoryView-GvGmD4kP.js"
+    "/build/assets/StoryView-CCGi7AWd.js"
   ],
   "resources/js/components/ToolCard.tsx": [
     "/build/assets/home-DkAdEsLl.js"
@@ -742,40 +742,40 @@
     "/build/assets/home-DkAdEsLl.js"
   ],
   "resources/js/components/VideoScriptGenerator.tsx": [
-    "/build/assets/index-CZxHhYo4.js"
+    "/build/assets/index-3np2Sp9H.js"
   ],
   "resources/js/components/alert-error.tsx": [
-    "/build/assets/two-factor-CRArLmX2.js"
+    "/build/assets/two-factor-Cy4qk3mk.js"
   ],
   "resources/js/components/app-content.tsx": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "resources/js/components/app-logo.tsx": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "resources/js/components/app-shell.tsx": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "resources/js/components/app-sidebar-header.tsx": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "resources/js/components/app-sidebar.tsx": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "resources/js/components/appearance-tabs.tsx": [
-    "/build/assets/appearance-a81lSuec.js"
+    "/build/assets/appearance-nQ8hTEjz.js"
   ],
   "resources/js/components/breadcrumbs.tsx": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "resources/js/components/delete-user.tsx": [
-    "/build/assets/profile-O_vWSNA3.js"
+    "/build/assets/profile-CLjyRx4R.js"
   ],
   "resources/js/components/heading-small.tsx": [
-    "/build/assets/layout-CMNDxzOY.js"
+    "/build/assets/layout-DUSTUjnp.js"
   ],
   "resources/js/components/heading.tsx": [
-    "/build/assets/layout-CMNDxzOY.js"
+    "/build/assets/layout-DUSTUjnp.js"
   ],
   "resources/js/components/input-error.tsx": [
     "/build/assets/input-error-DKbyWYwW.js"
@@ -784,7 +784,7 @@
     "/build/assets/public-layout-xj8NCo68.js"
   ],
   "resources/js/components/nav-user.tsx": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "resources/js/components/public-footer.tsx": [
     "/build/assets/public-header-DXP46-i_.js"
@@ -796,22 +796,22 @@
     "/build/assets/text-link-CKSSXPZF.js"
   ],
   "resources/js/components/two-factor-recovery-codes.tsx": [
-    "/build/assets/two-factor-CRArLmX2.js"
+    "/build/assets/two-factor-Cy4qk3mk.js"
   ],
   "resources/js/components/two-factor-setup-modal.tsx": [
-    "/build/assets/two-factor-CRArLmX2.js"
+    "/build/assets/two-factor-Cy4qk3mk.js"
   ],
   "resources/js/components/ui/alert.tsx": [
-    "/build/assets/two-factor-CRArLmX2.js"
+    "/build/assets/two-factor-Cy4qk3mk.js"
   ],
   "resources/js/components/ui/avatar.tsx": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "resources/js/components/ui/badge.tsx": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "resources/js/components/ui/breadcrumb.tsx": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "resources/js/components/ui/button.tsx": [
     "/build/assets/createLucideIcon-DxBA2hfx.js"
@@ -823,10 +823,10 @@
     "/build/assets/login-CjUljgLO.js"
   ],
   "resources/js/components/ui/collapsible.tsx": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "resources/js/components/ui/dialog.tsx": [
-    "/build/assets/dialog-ZvroYfdU.js"
+    "/build/assets/dialog-CXSQh3Ki.js"
   ],
   "resources/js/components/ui/dropdown-menu.tsx": [
     "/build/assets/dropdown-menu-C5jyS0V-.js",
@@ -842,61 +842,61 @@
     "/build/assets/label-ZPBNkTjD.js"
   ],
   "resources/js/components/ui/placeholder-pattern.tsx": [
-    "/build/assets/dashboard-ZemcjKTI.js"
+    "/build/assets/dashboard-6jL6agpo.js"
   ],
   "resources/js/components/ui/select.tsx": [
-    "/build/assets/Editor-D0dmSngT.js"
+    "/build/assets/Editor-BrhLpcMC.js"
   ],
   "resources/js/components/ui/separator.tsx": [
-    "/build/assets/layout-CMNDxzOY.js"
+    "/build/assets/layout-DUSTUjnp.js"
   ],
   "resources/js/components/ui/sheet.tsx": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "resources/js/components/ui/sidebar.tsx": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "resources/js/components/ui/spinner.tsx": [
     "/build/assets/spinner-DCw4ktgA.js"
   ],
   "resources/js/components/ui/table.tsx": [
-    "/build/assets/SceneView-cAVGwz5w.js"
+    "/build/assets/SceneView-DkR_iCdk.js"
   ],
   "resources/js/components/ui/textarea.tsx": [
-    "/build/assets/Editor-D0dmSngT.js"
+    "/build/assets/Editor-BrhLpcMC.js"
   ],
   "resources/js/components/ui/tooltip.tsx": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "resources/js/components/user-info.tsx": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "resources/js/components/user-menu-content.tsx": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "resources/js/hooks/use-appearance.tsx": [
-    "/build/assets/appearance-a81lSuec.js"
+    "/build/assets/appearance-nQ8hTEjz.js"
   ],
   "resources/js/hooks/use-clipboard.ts": [
-    "/build/assets/two-factor-CRArLmX2.js"
+    "/build/assets/two-factor-Cy4qk3mk.js"
   ],
   "resources/js/hooks/use-initials.tsx": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "resources/js/hooks/use-mobile-navigation.ts": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "resources/js/hooks/use-mobile.tsx": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "resources/js/hooks/use-two-factor-auth.ts": [
     "/build/assets/use-two-factor-auth-CJNp0PXi.js"
   ],
   "resources/js/layouts/app-layout.tsx": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "resources/js/layouts/app/app-sidebar-layout.tsx": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "resources/js/layouts/auth-layout.tsx": [
     "/build/assets/auth-layout-DiMFsbDD.js"
@@ -908,7 +908,7 @@
     "/build/assets/public-layout-xj8NCo68.js"
   ],
   "resources/js/layouts/settings/layout.tsx": [
-    "/build/assets/layout-CMNDxzOY.js"
+    "/build/assets/layout-DUSTUjnp.js"
   ],
   "resources/js/lib/utils.ts": [
     "/build/assets/createLucideIcon-DxBA2hfx.js"
@@ -935,28 +935,28 @@
     "/build/assets/verify-email-BE7mmmfn.js"
   ],
   "resources/js/pages/captions/index.tsx": [
-    "/build/assets/index-BxMyqwhb.js"
+    "/build/assets/index-CHhPCJSV.js"
   ],
   "resources/js/pages/captions/show.tsx": [
-    "/build/assets/show-DUMbIxKm.js"
+    "/build/assets/show-D9qh9Eg1.js"
   ],
   "resources/js/pages/dashboard.tsx": [
-    "/build/assets/dashboard-ZemcjKTI.js"
+    "/build/assets/dashboard-6jL6agpo.js"
   ],
   "resources/js/pages/home.tsx": [
     "/build/assets/home-DkAdEsLl.js"
   ],
   "resources/js/pages/posts/create.tsx": [
-    "/build/assets/create-BzGiQQz8.js"
+    "/build/assets/create-C_I0EyMO.js"
   ],
   "resources/js/pages/posts/edit.tsx": [
-    "/build/assets/edit-iLIoIDUl.js"
+    "/build/assets/edit-PfcDfbG7.js"
   ],
   "resources/js/pages/posts/index-public.tsx": [
     "/build/assets/index-public-CC0xo2R_.js"
   ],
   "resources/js/pages/posts/index.tsx": [
-    "/build/assets/index-Dn0x1sb_.js"
+    "/build/assets/index-C5zXoEDe.js"
   ],
   "resources/js/pages/posts/show-public.tsx": [
     "/build/assets/show-public-Dcvf_g9C.js"
@@ -965,43 +965,43 @@
     "/build/assets/privacy-H2rgbF0c.js"
   ],
   "resources/js/pages/prompts/index.tsx": [
-    "/build/assets/index-DMv7qDTO.js"
+    "/build/assets/index-DHrxNava.js"
   ],
   "resources/js/pages/prompts/prompt-form.tsx": [
     "/build/assets/prompt-form-Cu73fx0T.js"
   ],
   "resources/js/pages/prompts/show.tsx": [
-    "/build/assets/show-Cusikk5l.js"
+    "/build/assets/show-01ptX5eV.js"
   ],
   "resources/js/pages/scripts/index.tsx": [
-    "/build/assets/index-CZxHhYo4.js"
+    "/build/assets/index-3np2Sp9H.js"
   ],
   "resources/js/pages/scripts/script-form.tsx": [
-    "/build/assets/script-form-fBxbYMOF.js"
+    "/build/assets/script-form-DGA2nkAH.js"
   ],
   "resources/js/pages/scripts/show.tsx": [
-    "/build/assets/show-DU6idGoN.js"
+    "/build/assets/show-DNM9aUCP.js"
   ],
   "resources/js/pages/settings/appearance.tsx": [
-    "/build/assets/appearance-a81lSuec.js"
+    "/build/assets/appearance-nQ8hTEjz.js"
   ],
   "resources/js/pages/settings/password.tsx": [
-    "/build/assets/password-D8XnxNY1.js"
+    "/build/assets/password-BLmNWIM8.js"
   ],
   "resources/js/pages/settings/profile.tsx": [
-    "/build/assets/profile-O_vWSNA3.js"
+    "/build/assets/profile-CLjyRx4R.js"
   ],
   "resources/js/pages/settings/two-factor.tsx": [
-    "/build/assets/two-factor-CRArLmX2.js"
+    "/build/assets/two-factor-Cy4qk3mk.js"
   ],
   "resources/js/pages/terms.tsx": [
     "/build/assets/terms-DCM1L6la.js"
   ],
   "resources/js/pages/welcome.tsx": [
-    "/build/assets/welcome--Wmy5K0b.js"
+    "/build/assets/welcome-D_39LFA8.js"
   ],
   "resources/js/routes/appearance/index.ts": [
-    "/build/assets/layout-CMNDxzOY.js"
+    "/build/assets/layout-DUSTUjnp.js"
   ],
   "resources/js/routes/index.ts": [
     "/build/assets/index-Dye-FuDj.js"
@@ -1019,7 +1019,7 @@
     "/build/assets/index-8HAZ9HbM.js"
   ],
   "resources/js/routes/profile/index.ts": [
-    "/build/assets/app-layout-BhbfzW2M.js"
+    "/build/assets/app-layout-B766uKWo.js"
   ],
   "resources/js/routes/register/index.ts": [
     "/build/assets/register-C-0k4Ph0.js"
@@ -1031,7 +1031,7 @@
     "/build/assets/index-BKq0lOP8.js"
   ],
   "resources/js/routes/user-password/index.ts": [
-    "/build/assets/layout-CMNDxzOY.js"
+    "/build/assets/layout-DUSTUjnp.js"
   ],
   "resources/js/routes/verification/index.ts": [
     "/build/assets/index-BVZoIs4X.js"
