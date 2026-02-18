@@ -94,7 +94,15 @@ const IdeaGenerator = ({
 
             if (!data.success) throw new Error(data.message);
 
-            setIdeas(data.ideas);
+            // Transform if it's an array of strings (new prompt format)
+            const formattedIdeas = Array.isArray(data.ideas) && typeof data.ideas[0] === 'string'
+                ? data.ideas.map((title: string) => ({
+                    Title: title,
+                    Difficulty: 'Medium'
+                }))
+                : data.ideas;
+
+            setIdeas(formattedIdeas);
             setScriptId(data.script_id);
             setStep('ideas');
 
@@ -308,10 +316,8 @@ const IdeaGenerator = ({
                     story={story}
                     onGenerateScript={handleGenerateScript}
                     onBack={() => setStep('ideas')}
-                    onRegenerate={function (): void {
-                        throw new Error('Function not implemented.');
-                    }}
-                    isLoading={false}
+                    onRegenerate={() => handleSelectIdea(selectedIdea!)}
+                    isLoading={isLoading}
                 />
             )}
 
@@ -323,10 +329,8 @@ const IdeaGenerator = ({
                     tone={tone}
                     onBack={() => setStep('story')}
                     onStartOver={handleStartOver}
-                    onRegenerate={function (): void {
-                        throw new Error('Function not implemented.');
-                    }}
-                    isLoading={false}
+                    onRegenerate={handleGenerateScript}
+                    isLoading={isLoading}
                 />
             )}
         </div>

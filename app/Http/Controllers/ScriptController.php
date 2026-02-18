@@ -279,13 +279,6 @@ class ScriptController extends Controller
                 'story' => $decodedStory,
             ]);
 
-            // Credit deduction
-            if ($isAuthenticated) {
-                $user->decrement('credits');
-            } else {
-                session(['guest_credits' => $guestCredits - 1]);
-            }
-
             return response()->json([
                 'success' => true,
                 'story' => $decodedStory['sections'] ?? [],
@@ -344,13 +337,6 @@ class ScriptController extends Controller
             $script->update([
                 'script' => $decodedScript,
             ]);
-
-            // Credit deduction
-            if ($isAuthenticated) {
-                $user->decrement('credits');
-            } else {
-                session(['guest_credits' => $guestCredits - 1]);
-            }
 
             return response()->json([
                 'success' => true,
@@ -413,16 +399,10 @@ class ScriptController extends Controller
                 'script' => $decodedScript,
             ]);
 
-            // Credit deduction
-            if ($isAuthenticated) {
-                $user->decrement('credits');
-            } else {
-                session(['guest_credits' => $guestCredits - 1]);
-            }
-
             return response()->json([
                 'success' => true,
                 'scenes' => $decodedScript['scenes'] ?? [],
+                'script' => $decodedScript['script'] ?? '',
                 'tone' => $decodedScript['tone'] ?? 'Neutral',
             ]);
         } catch (Exception $e) {
