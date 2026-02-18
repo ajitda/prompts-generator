@@ -14,88 +14,67 @@ class AIService
     \App\Services\AI\HuggingFaceProvider::class,
   ];
 
+  /* ---------------- IDEAS GENERATOR ---------------- */
 
   public function generateIdeas(string $keyword, string $type = 'youtube_idea'): string
   {
-    $isScriptFlow = $type === 'video_script';
-
-    if ($isScriptFlow) {
+    if ($type === 'video_script') {
+      // Prompt optimized for high-engagement, authentic YouTube titles
       $prompt = <<<PROMPT
-You are a creative YouTube content strategist. Generate exactly 5 unique, engaging video ideas based on the user's keyword or topic. Each idea should:
-- Be specific and actionable
-- Have potential for good viewer engagement
-- Be suitable for creators of all experience levels
-- Feel fresh and not overly generic
+You are a viral YouTube Creator known for titles that people can't help but click. Generate 5 authentic, high-performing YouTube titles for: "{$keyword}".
 
-Topic: "{$keyword}"
+### CREATOR TITLE SECRETS:
+- **The "Story" Hook**: Start a story that the viewer needs to finish (e.g., "I tried [X] for 30 days...", "Why I finally left [X]").
+- **Extreme Authenticity**: Use conversational, slightly hyperbolic, or highly personal language (e.g., "The truth about...", "I'm shocked by [X]").
+- **High Stakes**: Make it feel like something important is at risk (e.g., "Stop doing this before you [X]", "The mistake that cost me [Amount]").
+- **Pattern Interrupt**: Use words like "Finally", "Actually", "Shocking", or "Secret".
+- **MrBeast Style**: Keep it simple, punchy, and high-intensity.
 
-Return ONLY a JSON array with 5 strings, each being a video title idea. No explanations, just the JSON array.
-Example format: ["Idea 1", "Idea 2", "Idea 3", "Idea 4", "Idea 5"]
+### REAL-WORLD EXAMPLES:
+- "I'm quitting [X]. (not clickbait)"
+- "This $[Price] [X] is actually perfect."
+- "The only way to [X] in 2024 (it's not what you think)."
+- "7 things I wish I knew before starting [X]."
+- "I used [X] for a week and my life changed."
+
+Return ONLY a JSON array of 5 strings (titles).
 PROMPT;
     } else {
-      $persona = "You are a world-class YouTube Strategist and Scriptwriter expert in high-CTR (Click Through Rate) and high-retention content.";
-      $task = "Generate 5 unique, viral-worthy YouTube video ideas for the Topic/Niche: '{$keyword}'.";
-      $formatGuidance = "- Focus on How-to, Lists, Challenges, or Mistakes formats\n- Titles must be curiosity-driven and under 60 characters";
-      $constraints = "- Hook scripts must be EXACTLY 2 compelling spoken sentences\n- Mix difficulty levels across ideas";
-      $jsonStructure = <<<JSON
+    // Prompt for the general Video Idea Generator tool
+    $prompt = <<<PROMPT
+You are a world-class YouTube Strategist and Creative Director. Generate 5 viral-worthy video concepts that sound like they came from a top-tier creator for: "{$keyword}".
+
+### VIRAL PHILOSOPHY:
+- **Curiosity Gap**: Raise a question that can only be answered by watching.
+- **Visual-First**: Titles that imply a great thumbnail visual.
+- **Natural Language**: Write how people actually talk, not how an AI writes.
+- **The "Must-Watch" Factor**: Every title should feel like an event.
+
+Return ONLY a JSON array of 5 objects in this exact format:
 [
   {
-    "Title": "string",
-    "Thumbnail_Concept": "string (1 vivid sentence describing the visual focus)",
-    "Hook_Script": "string (exactly 2 spoken sentences)",
+    "Title": "A high-stakes, viral-style YouTube title",
+    "Thumbnail_Concept": "A vivid, story-driven thumbnail visual description",
+    "Hook_Script": "2 high-energy, pattern-interrupt sentences that stop the scroll",
     "Difficulty": "Easy | Medium | Hard"
   }
 ]
-JSON;
-
-      $prompt = <<<PROMPT
-{$persona}
-
-Task:
-{$task}
-
-Topic/Niche:
-"{$keyword}"
-
-Constraints:
-- Avoid generic titles
-{$formatGuidance}
-- Tone must be appropriate for the format
-{$constraints}
-- Mix difficulty levels across ideas (Easy | Medium | Hard)
-
-Output Format:
-You must output STRICT JSON ONLY.
-No explanations. No markdown. No extra text.
-
-JSON Structure:
-{$jsonStructure}
 PROMPT;
     }
 
     return $this->cleanAndRun('generate', $prompt);
   }
 
+  /* ---------------- STORY OUTLINE ---------------- */
 
   public function generateStory(string $selectedIdea, string $type = 'youtube_idea'): string
   {
-    $isScriptFlow = $type === 'video_script';
+    $prompt = <<<PROMPT
+You are a YouTube Storytelling Expert. Create a narrative structure for: "{$selectedIdea}".
 
-    if ($isScriptFlow) {
-      $prompt = <<<PROMPT
-You are a YouTube content strategist and storytelling expert. Create a narrative outline for a YouTube video based on the given idea. 
+Structure: Hook (🎣), Journey (📖), Takeaway (🎯).
 
-Idea: "{$selectedIdea}"
-
-Structure it in exactly 3 parts:
-
-1. THE HOOK (🎣) - An attention-grabbing opening that makes viewers want to keep watching. Include a specific suggestion for what to say or show in the first 10-15 seconds.
-
-2. THE JOURNEY (📖) - The main content flow. Break down 3-4 key points to cover, with suggested pacing and transitions.
-
-3. THE TAKEAWAY (🎯) - A memorable conclusion with a clear call-to-action that feels natural, not pushy.
-
-Return ONLY valid JSON in this exact format:
+Return ONLY valid JSON:
 {
   "sections": [
     {"title": "The Hook", "content": "...", "icon": "🎣"},
@@ -104,22 +83,35 @@ Return ONLY valid JSON in this exact format:
   ]
 }
 PROMPT;
-    } else {
-      $prompt = "Create a narrative outline for: '{$selectedIdea}'. Structure: Hook (🎣), Journey (📖), Takeaway (🎯). Return ONLY valid JSON: {\"sections\": [{\"title\": \"...\", \"content\": \"...\", \"icon\": \"...\"}]}";
-    }
 
     return $this->cleanAndRun('generate', $prompt);
   }
 
+  /* ---------------- SCRIPT GENERATION ---------------- */
+
   public function generateScript(string $selectedIdea, string $storyContext): string
   {
+    return $this->generateUniversalScript($selectedIdea, $storyContext);
+  }
+
+  public function generateDetailedVideoScript(string $title, string $storyContext): string
+  {
+    return $this->generateUniversalScript($title, $storyContext);
+  }
+
+  protected function generateUniversalScript(string $title, string $storyContext): string
+  {
     $prompt = <<<PROMPT
-You are an expert YouTube scriptwriter known for creating engaging, conversational content. Based on the video idea and story outline provided, write a complete, ready-to-record script.
+You are a professional YouTube Creator. Write a record-ready script.
 
-Video Idea: "{$selectedIdea}"
-Story Outline Context: {$storyContext}
+Video Title: "{$title}"
+Context: {$storyContext}
 
-Guidelines:
+### FORMAT:
+- No headings (no "SCENE 1", "HOOK", etc.).
+- Continuous flow of dialogue.
+- Use [brackets] for visual cues inside the text.
+- Double line breaks between paragraphs.
 - Use a conversational, friendly tone
 - Include [TIMESTAMPS] to mark sections (e.g., [HOOK - 0:00-0:15])
 - Write naturally as if speaking to a friend
@@ -128,186 +120,86 @@ Guidelines:
 - Make the opening hook compelling
 - End with a soft, natural call-to-action
 
-Return ONLY valid JSON in this exact format:
+Return ONLY valid JSON:
 {
-  "script": "The full script text here...",
-  "tone": "Brief description of the tone (e.g., 'Conversational & Educational')"
+  "script": "[Visual: ...] \"Dialogue here...\"",
+  "tone": "Brief description"
 }
 PROMPT;
 
     return $this->cleanAndRun('generate', $prompt);
   }
 
+  /* ---------------- OTHER UTILITIES ---------------- */
+
   public function generatePrompt(string $keyword): string
   {
     $prompt = <<<PROMPT
-You are a world-class Prompt Engineer expert in Midjourney, DALL-E, and ChatGPT prompts.
-
-Task:
-Generate 3 unique, high-quality AI prompts for: "{$keyword}".
-
-Constraints:
-- Include different categories (e.g., Photorealistic, Artistic, Minimalist, Detailed, Abstract).
-- Prompts should be detailed and optimized for the best AI output.
-- Tone should be clear and professional.
-
-Output Format:
-You must output STRICT JSON ONLY.
-No explanations. No markdown. No extra text.
-
-JSON Structure (Array of 3 objects):
-[
-  {
-    "Style": "Photorealistic | Artistic | Minimalist | Detailed | Abstract",
-    "Content": "string (the full AI prompt)",
-    "Engine": "Midjourney | DALL-E | Stable Diffusion | ChatGPT"
-  }
-]
+Create a high-quality AI prompt for: "{$keyword}".
+Format: JSON with "prompt" and "target_ai".
 PROMPT;
-
     return $this->cleanAndRun('generate', $prompt);
   }
 
   public function generateCaptions(string $topic): string
   {
     $prompt = <<<PROMPT
-You are a world-class Social Media Manager expert in TikTok and Instagram engagement.
-
-Task:
-Generate 3 unique, high-engagement captions for a TikTok or Instagram post about: "{$topic}".
-
-Constraints:
-- Include relevant emojis.
-- Include a mix of styles (e.g., Short & Punchy, Storytelling, Call to Action, Question-based, Humorous).
-- Include 3-5 trending and relevant hashtags for each.
-- Tone must be trendy and platform-appropriate.
-
-Output Format:
-You must output STRICT JSON ONLY.
-No explanations. No markdown. No extra text.
-
-JSON Structure (Array of 3 objects):
-[
-  {
-    "Style": "Short & Punchy | Storytelling | CTA | Question | Humorous",
-    "Content": "string (the caption body with emojis)",
-    "Hashtags": "string (space-separated hashtags)"
-  }
-]
+Generate 3 social media captions for: "{$topic}".
+Format: JSON array of objects with "Style", "Content", "Hashtags".
 PROMPT;
-
     return $this->cleanAndRun('generate', $prompt);
   }
-
 
   protected function cleanAndRun(string $method, string $payload): string
   {
     $rawResponse = $this->runProviders($method, $payload);
-
-    if (empty($rawResponse)) {
-      throw new Exception('AI response is empty');
-    }
-
-    $cleanResponse = $this->sanitizeJson($rawResponse);
-
-    return $cleanResponse;
+    if (empty($rawResponse)) throw new Exception('AI response is empty');
+    return $this->sanitizeJson($rawResponse);
   }
-
 
   protected function sanitizeJson(string $json): string
   {
     $json = preg_replace('/^```(?:json)?\s+/i', '', trim($json));
     $json = preg_replace('/\s+```$/', '', $json);
     $json = trim($json);
-
     $firstBracket = strpos($json, '{');
     $firstSquare = strpos($json, '[');
-    $startPos = false;
-
-    if ($firstBracket !== false && $firstSquare !== false) {
-      $startPos = min($firstBracket, $firstSquare);
-    } else {
-      $startPos = ($firstBracket !== false) ? $firstBracket : $firstSquare;
-    }
+    $startPos = ($firstBracket !== false && $firstSquare !== false) ? min($firstBracket, $firstSquare) : (($firstBracket !== false) ? $firstBracket : $firstSquare);
 
     if ($startPos !== false) {
       $lastBracket = strrpos($json, '}');
       $lastSquare = strrpos($json, ']');
       $endPos = ($lastBracket !== false && $lastSquare !== false) ? max($lastBracket, $lastSquare) : (($lastBracket !== false) ? $lastBracket : $lastSquare);
-
       if ($endPos !== false && $endPos > $startPos) {
         $json = substr($json, $startPos, $endPos - $startPos + 1);
       }
     }
-
-    if (str_starts_with($json, '{') && !str_contains(substr($json, 0, 10), '[')) {
-      if (preg_match('/\}\s*\{/', $json)) {
-        $json = '[' . preg_replace('/\}\s*\{/', '},{', $json) . ']';
-      }
-    }
-
+    
+    // Fix for broken escape characters in JSON
     $json = preg_replace_callback('/"([^"\\\\]*(?:\\\\.[^"\\\\]*)*)"/s', function ($matches) {
-      $content = $matches[1];
-      $search = ["\n", "\r", "\t", "\x08", "\x0c"];
-      $replace = ["\\n", "\\r", "\\t", "\\b", "\\f"];
-      return '"' . str_replace($search, $replace, $content) . '"';
+        $content = $matches[1];
+        // Ensure newlines/tabs are properly escaped for valid JSON
+        $search = ["\n", "\r", "\t"];
+        $replace = ["\\n", "\\r", "\\t"];
+        return '"' . str_replace($search, $replace, $content) . '"';
     }, $json);
 
     return $json;
   }
 
-
-
-
   protected function runProviders(string $method, string $payload): string
   {
     foreach ($this->providers as $providerClass) {
-      $providerName = class_basename($providerClass);
-
       try {
         $provider = app($providerClass);
-
         $result = $provider->$method($payload);
-
-        Log::info("AI_FALLBACK: Success using {$providerName} ({$method}).");
-
+        Log::info("AI_FALLBACK: Success using " . class_basename($providerClass));
         return $result;
-
       } catch (Exception $e) {
-        Log::warning("AI_FALLBACK: {$providerName} failed ({$method}). Error: " . $e->getMessage());
+        Log::warning("AI_FALLBACK: " . class_basename($providerClass) . " failed. Error: " . $e->getMessage());
         continue;
       }
     }
-
-    throw new Exception('All AI providers failed to generate the script.');
+    throw new Exception('All AI providers failed.');
   }
-
-
-  public function generateDetailedVideoScript(string $title, string $storyContext): string
-  {
-    $prompt = <<<PROMPT
-You are an expert YouTube scriptwriter known for creating engaging, conversational content. Based on the video idea and story outline provided, write a complete, ready-to-record script.
-
-Video Idea: "{$title}"
-Story Outline Context: {$storyContext}
-
-Guidelines:
-- Use a conversational, friendly tone
-- Include [TIMESTAMPS] to mark sections (e.g., [HOOK - 0:00-0:15])
-- Write naturally as if speaking to a friend
-- Include brief stage directions in [brackets] where helpful
-- Aim for 2-4 minutes of content (roughly 400-600 words)
-- Make the opening hook compelling
-- End with a soft, natural call-to-action
-
-Return ONLY valid JSON in this exact format:
-{
-  "script": "The full script text here...",
-  "tone": "Brief description of the tone (e.g., 'Conversational & Educational')"
-}
-PROMPT;
-
-    return $this->cleanAndRun('generate', $prompt);
-  }
-
 }
