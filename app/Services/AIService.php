@@ -175,49 +175,66 @@ PROMPT;
   {
     $rawResponse = $this->runProviders($method, $payload);
 
-    // Trim whitespace
-    $rawResponse = trim($rawResponse);
-
-    // If it starts with '{' and has '},{', wrap in array
-    if (str_starts_with($rawResponse, '{') && str_contains($rawResponse, '},{')) {
-      $rawResponse = '[' . $rawResponse . ']';
-    }
-
-    // Ensure it starts with { or [
     if (empty($rawResponse)) {
       throw new Exception('AI response is empty');
     }
 
-    $firstChar = $rawResponse[0] ?? '';
-    if (!in_array($firstChar, ['{', '['])) {
-      // Try to extract JSON from first { to last }
-      $firstBracket = strpos($rawResponse, '{');
-      $firstSquare = strpos($rawResponse, '[');
-      $startPos = false;
+    $cleanResponse = $this->sanitizeJson($rawResponse);
 
-      if ($firstBracket !== false && $firstSquare !== false) {
-        $startPos = min($firstBracket, $firstSquare);
-      } else {
-        $startPos = $firstBracket !== false ? $firstBracket : $firstSquare;
-      }
+    return $cleanResponse;
+  }
 
-      $lastBracket = strrpos($rawResponse, '}');
-      $lastSquare = strrpos($rawResponse, ']');
-      $endPos = false;
+  /**
+   * Robustly sanitize and repair AI-generated JSON
+   */
+  protected function sanitizeJson(string $json): string
+  {
+    // 1. Remove Markdown code blocks
+    $json = preg_replace('/^```(?:json)?\s+/i', '', trim($json));
+    $json = preg_replace('/\s+```$/', '', $json);
+    $json = trim($json);
 
-      if ($lastBracket !== false && $lastSquare !== false) {
-        $endPos = max($lastBracket, $lastSquare);
-      } else {
-        $endPos = $lastBracket !== false ? $lastBracket : $lastSquare;
-      }
+    // 2. Extract JSON part if there is preamble/postscript
+    $firstBracket = strpos($json, '{');
+    $firstSquare = strpos($json, '[');
+    $startPos = false;
 
-      if ($startPos === false || $endPos === false) {
-        throw new Exception('AI response format invalid');
-      }
-      $rawResponse = substr($rawResponse, $startPos, $endPos - $startPos + 1);
+    if ($firstBracket !== false && $firstSquare !== false) {
+      $startPos = min($firstBracket, $firstSquare);
+    } else {
+      $startPos = ($firstBracket !== false) ? $firstBracket : $firstSquare;
     }
 
-    return $rawResponse;
+    if ($startPos !== false) {
+      $lastBracket = strrpos($json, '}');
+      $lastSquare = strrpos($json, ']');
+      $endPos = ($lastBracket !== false && $lastSquare !== false) ? max($lastBracket, $lastSquare) : (($lastBracket !== false) ? $lastBracket : $lastSquare);
+
+      if ($endPos !== false && $endPos > $startPos) {
+        $json = substr($json, $startPos, $endPos - $startPos + 1);
+      }
+    }
+
+    // 3. Handle multiple top-level objects not in an array (common with some AI models)
+    if (str_starts_with($json, '{') && !str_contains(substr($json, 0, 10), '[')) {
+      // Check if there are multiple objects (e.g., } { or } \n {)
+      if (preg_match('/\}\s*\{/', $json)) {
+        $json = '[' . preg_replace('/\}\s*\{/', '},{', $json) . ']';
+      }
+    }
+
+    // 4. Sanitize control characters (0-31) that break json_decode
+    // We target literal newlines, tabs, and other control chars inside JSON string values.
+    // This regex matches a JSON string value and we process its content.
+    $json = preg_replace_callback('/"([^"\\\\]*(?:\\\\.[^"\\\\]*)*)"/s', function ($matches) {
+      $content = $matches[1];
+      // Replace literal control characters with their escaped versions
+      $search = ["\n", "\r", "\t", "\x08", "\x0c"];
+      $replace = ["\\n", "\\r", "\\t", "\\b", "\\f"];
+      return '"' . str_replace($search, $replace, $content) . '"';
+    }, $json);
+
+    return $json;
   }
 
 

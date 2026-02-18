@@ -180,21 +180,7 @@ class ScriptController extends Controller
         try {
             $rawIdeas = $this->aiService->generateIdeas($validated['keyword'], $type);
 
-            // Trim whitespace
-            $trimmed = trim($rawIdeas);
-
-            // Check if it's multiple top-level objects not inside an array
-            if (str_starts_with($trimmed, '{')) {
-                // Match all objects individually
-                preg_match_all('/\{.*?\}(?=\s*,\s*|$)/s', $trimmed, $matches);
-
-                if (!empty($matches[0])) {
-                    // Wrap them in an array
-                    $rawIdeas = '[' . implode(',', $matches[0]) . ']';
-                }
-            }
-
-            // Decode JSON safely
+            // Decode JSON safely - heavy cleaning is now handled in AIService@cleanAndRun
             $decodedIdeas = json_decode($rawIdeas, true, 512, JSON_THROW_ON_ERROR);
 
             $script = Script::create([
@@ -286,7 +272,7 @@ class ScriptController extends Controller
             $script = $scriptQuery->firstOrFail();
 
             $rawStory = $this->aiService->generateStory($validated['title'], $script->type);
-            $decodedStory = json_decode($rawStory, true);
+            $decodedStory = json_decode($rawStory, true, 512, JSON_THROW_ON_ERROR);
 
             $script->update([
                 'title' => $validated['title'],
@@ -353,7 +339,7 @@ class ScriptController extends Controller
 
             // Passing previous data to AI for context
             $rawScript = $this->aiService->generateScript($script->title, json_encode($script->story));
-            $decodedScript = json_decode($rawScript, true);
+            $decodedScript = json_decode($rawScript, true, 512, JSON_THROW_ON_ERROR);
 
             $script->update([
                 'script' => $decodedScript,
@@ -364,12 +350,6 @@ class ScriptController extends Controller
                 $user->decrement('credits');
             } else {
                 session(['guest_credits' => $guestCredits - 1]);
-            }
-
-
-            if (!$decodedScript) {
-                Log::error('AI Service returned invalid JSON: ' . $rawScript);
-                return response()->json(['success' => false, 'message' => 'Invalid AI response.'], 500);
             }
 
             return response()->json([
@@ -426,13 +406,9 @@ class ScriptController extends Controller
 
             // Passing previous data to AI for context using the NEW method
             $rawScript = $this->aiService->generateDetailedVideoScript($script->title, json_encode($script->story));
-            $decodedScript = json_decode($rawScript, true);
+            $decodedScript = json_decode($rawScript, true, 512, JSON_THROW_ON_ERROR);
 
-            if (!$decodedScript) {
-                Log::error('AI Service (Detailed) returned invalid JSON: ' . $rawScript);
-                return response()->json(['success' => false, 'message' => 'Invalid AI response.'], 500);
-            }
-
+            // If we are here, JSON is valid
             $script->update([
                 'script' => $decodedScript,
             ]);

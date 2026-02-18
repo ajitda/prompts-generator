@@ -21,10 +21,10 @@ class HuggingFaceProvider implements AIProviderInterface
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . $apiKey,
             'Content-Type' => 'application/json',
-        ])->timeout(15)->post($url, [
-                    'inputs' => "<s>[INST] Generate a creative prompt for: $keyword [/INST]",
+        ])->timeout(30)->post($url, [
+                    'inputs' => "<s>[INST] $keyword [/INST]",
                     'parameters' => [
-                        'max_new_tokens' => 500,
+                        'max_new_tokens' => 2048,
                         'return_full_text' => false,
                     ],
                 ]);
