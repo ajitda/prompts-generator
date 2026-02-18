@@ -100,62 +100,66 @@ const IdeaCard = ({ idea, index, onSelect }: IdeaCardProps) => {
                             )}
                         </button>
                     </div>
-                    <p className="text-lg leading-snug font-semibold">
+                    <p className="text-lg leading-snug font-semibold text-foreground">
                         {idea.Title}
                     </p>
                 </div>
 
                 {/* Visual Concept */}
-                <div className="group">
-                    <div className="mb-1 flex items-center gap-2">
-                        <Image className="h-4 w-4 text-accent" />
-                        <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-                            {visualLabel}
-                        </span>
-                        <button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                copyToClipboard(visualContent, 'Visual');
-                            }}
-                            className="ml-auto opacity-0 transition-opacity group-hover:opacity-100"
-                        >
-                            {copiedField === 'Visual' ? (
-                                <Check className="h-3.5 w-3.5 text-green-600" />
-                            ) : (
-                                <Copy className="h-3.5 w-3.5 text-muted-foreground hover:text-foreground" />
-                            )}
-                        </button>
+                {visualContent && (
+                    <div className="group">
+                        <div className="mb-1 flex items-center gap-2">
+                            <Image className="h-4 w-4 text-accent" />
+                            <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                                {visualLabel}
+                            </span>
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    copyToClipboard(visualContent, 'Visual');
+                                }}
+                                className="ml-auto opacity-0 transition-opacity group-hover:opacity-100"
+                            >
+                                {copiedField === 'Visual' ? (
+                                    <Check className="h-3.5 w-3.5 text-green-600" />
+                                ) : (
+                                    <Copy className="h-3.5 w-3.5 text-muted-foreground hover:text-foreground" />
+                                )}
+                            </button>
+                        </div>
+                        <p className="leading-relaxed text-muted-foreground">
+                            {visualContent}
+                        </p>
                     </div>
-                    <p className="leading-relaxed text-muted-foreground">
-                        {visualContent}
-                    </p>
-                </div>
+                )}
 
                 {/* Concept Brief / Hook Script */}
-                <div className="group">
-                    <div className="mb-1 flex items-center gap-2">
-                        <MessageSquare className="text-primary h-4 w-4" />
-                        <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-                            {briefLabel}
-                        </span>
-                        <button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                copyToClipboard(briefContent, 'Brief');
-                            }}
-                            className="ml-auto opacity-0 transition-opacity group-hover:opacity-100"
-                        >
-                            {copiedField === 'Brief' ? (
-                                <Check className="h-3.5 w-3.5 text-green-600" />
-                            ) : (
-                                <Copy className="h-3.5 w-3.5 text-muted-foreground hover:text-foreground" />
-                            )}
-                        </button>
+                {briefContent && (
+                    <div className="group">
+                        <div className="mb-1 flex items-center gap-2">
+                            <MessageSquare className="text-primary h-4 w-4" />
+                            <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                                {briefLabel}
+                            </span>
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    copyToClipboard(briefContent, 'Brief');
+                                }}
+                                className="ml-auto opacity-0 transition-opacity group-hover:opacity-100"
+                            >
+                                {copiedField === 'Brief' ? (
+                                    <Check className="h-3.5 w-3.5 text-green-600" />
+                                ) : (
+                                    <Copy className="h-3.5 w-3.5 text-muted-foreground hover:text-foreground" />
+                                )}
+                            </button>
+                        </div>
+                        <p className="rounded-lg bg-secondary/50 p-3 leading-relaxed text-foreground italic">
+                            "{briefContent}"
+                        </p>
                     </div>
-                    <p className="rounded-lg bg-secondary/50 p-3 leading-relaxed text-foreground italic">
-                        "{briefContent}"
-                    </p>
-                </div>
+                )}
             </div>
         </div>
     );

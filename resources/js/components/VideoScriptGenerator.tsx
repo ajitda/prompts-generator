@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 import IdeaCard from './IdeaCard';
 import LoadingState from './LoadingState';
 import SceneView from './SceneView';
+import ScriptView from './ScriptView';
 import StoryView from './StoryView';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -65,6 +66,7 @@ const VideoScriptGenerator = ({
     const [selectedConcept, setSelectedConcept] = useState<Concept | null>(null);
     const [story, setStory] = useState<StorySection[]>([]);
     const [scenes, setScenes] = useState<Scene[]>([]);
+    const [plainScript, setPlainScript] = useState<string>('');
     const [tone, setTone] = useState('Professional & Engaging');
     const [scriptId, setScriptId] = useState<number | null>(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -93,7 +95,15 @@ const VideoScriptGenerator = ({
             const data = await res.json();
             if (!data.success) throw new Error(data.message);
 
-            setConcepts(data.ideas);
+            // Transform if it's an array of strings (new prompt format)
+            const formattedIdeas = Array.isArray(data.ideas) && typeof data.ideas[0] === 'string'
+                ? data.ideas.map((title: string) => ({
+                    Title: title,
+                    Difficulty: 'Medium'
+                }))
+                : data.ideas;
+
+            setConcepts(formattedIdeas);
             setScriptId(data.script_id);
             setStep('concepts');
 
@@ -153,12 +163,14 @@ const VideoScriptGenerator = ({
             const data = await res.json();
             if (!data.success) throw new Error();
 
-            setScenes(data.scenes);
+            // Handle both scene-based and plain-text script formats
+            setScenes(data.scenes || []);
+            setPlainScript(data.script || '');
             setTone(data.tone);
 
             router.reload({ only: ['initialGuestCredits', 'userCredits'] });
         } catch {
-            toast.error('Failed to generate detailed script');
+            toast.error('Failed to generate script');
             setStep('outline');
         } finally {
             setIsLoading(false);
@@ -172,6 +184,7 @@ const VideoScriptGenerator = ({
         setSelectedConcept(null);
         setStory([]);
         setScenes([]);
+        setPlainScript('');
     };
 
     return (
@@ -279,15 +292,29 @@ const VideoScriptGenerator = ({
             )}
 
             {step === 'script' && !isLoading && (
-                <SceneView
-                    selectedIdea={selectedConcept?.Title || ''}
-                    scenes={scenes}
-                    tone={tone}
-                    onBack={() => setStep('outline')}
-                    onStartOver={handleStartOver}
-                    onRegenerate={handleGenerateDetailedScript}
-                    isLoading={isLoading}
-                />
+                scenes.length > 0 ? (
+                    <SceneView
+                        selectedIdea={selectedConcept?.Title || ''}
+                        scenes={scenes}
+                        tone={tone}
+                        onBack={() => setStep('outline')}
+                        onStartOver={handleStartOver}
+                        onRegenerate={handleGenerateDetailedScript}
+                        isLoading={isLoading}
+                        readOnly={false}
+                    />
+                ) : (
+                    <ScriptView
+                        selectedIdea={selectedConcept?.Title || ''}
+                        script={plainScript}
+                        tone={tone}
+                        onBack={() => setStep('outline')}
+                        onStartOver={handleStartOver}
+                        onRegenerate={handleGenerateDetailedScript}
+                        isLoading={isLoading}
+                        showExisting={false}
+                    />
+                )
             )}
         </div>
     );

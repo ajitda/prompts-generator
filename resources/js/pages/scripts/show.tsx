@@ -19,22 +19,6 @@ interface Props {
     type: 'youtube_idea' | 'video_script';
 }
 
-const IdeaCardContainer = ({ script }: { script: any }) => {
-    const ideas = script.idea ?? [];
-    return (
-        <div className="grid gap-6">
-            {ideas.map((idea: any, index: number) => (
-                <IdeaCard
-                    key={index}
-                    index={index}
-                    idea={idea}
-                    onSelect={() => { }}
-                />
-            ))}
-        </div>
-    );
-};
-
 export default function Show({ script, type }: Props) {
     const isIdeaGenerator = type === 'youtube_idea';
     const toolTitle = isIdeaGenerator ? 'YouTube Video Idea Generator' : 'Video Script Generator';
@@ -51,7 +35,15 @@ export default function Show({ script, type }: Props) {
         }
     ];
 
-    const selectedConcept = script.idea?.find((i: any) => i.Title === script.title);
+    // Transform if it's an array of strings (new prompt format)
+    const formattedIdeas = Array.isArray(script.idea) && typeof script.idea[0] === 'string'
+        ? script.idea.map((title: string) => ({
+            Title: title,
+            Difficulty: 'Medium'
+        }))
+        : (script.idea ?? []);
+
+    const selectedConcept = formattedIdeas.find((i: any) => i.Title === script.title);
     const storySections = script.story?.sections || [];
     const scenes = script.script?.scenes || [];
     const plainScript = script.script?.script || '';
@@ -88,7 +80,16 @@ export default function Show({ script, type }: Props) {
                                     onSelect={() => { }}
                                 />
                             ) : (
-                                <IdeaCardContainer script={script} />
+                                <div className="grid gap-6">
+                                    {formattedIdeas.map((idea: any, index: number) => (
+                                        <IdeaCard
+                                            key={index}
+                                            index={index}
+                                            idea={idea}
+                                            onSelect={() => { }}
+                                        />
+                                    ))}
+                                </div>
                             )}
                         </div>
 

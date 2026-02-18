@@ -94,7 +94,15 @@ const IdeaGenerator = ({
 
             if (!data.success) throw new Error(data.message);
 
-            setIdeas(data.ideas);
+            // Transform if it's an array of strings (new prompt format)
+            const formattedIdeas = Array.isArray(data.ideas) && typeof data.ideas[0] === 'string'
+                ? data.ideas.map((title: string) => ({
+                    Title: title,
+                    Difficulty: 'Medium'
+                }))
+                : data.ideas;
+
+            setIdeas(formattedIdeas);
             setScriptId(data.script_id);
             setStep('ideas');
 
