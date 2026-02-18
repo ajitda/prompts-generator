@@ -15,6 +15,7 @@ interface StoryViewProps {
   onGenerateScript: () => void;
   onBack: () => void;
   isLoading: boolean;
+  readOnly?: boolean;
 }
 
 const StoryView = ({
@@ -23,7 +24,8 @@ const StoryView = ({
   onRegenerate,
   onGenerateScript,
   onBack,
-  isLoading
+  isLoading,
+  readOnly = false
 }: StoryViewProps) => {
   const sectionIcons: Record<string, React.ReactNode> = {
     "🎣": <span className="text-2xl">🎣</span>,
@@ -34,23 +36,25 @@ const StoryView = ({
   return (
     <div className="animate-fade-in space-y-8">
       <div className="space-y-4">
-        <button
-          onClick={onBack}
-          className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-250 text-sm font-medium"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to ideas
-        </button>
+        {!readOnly && (
+          <button
+            onClick={onBack}
+            className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-250 text-sm font-medium"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to ideas
+          </button>
+        )}
 
         <div className="space-y-2">
-          <p className="text-sm text-muted-foreground">Building story for:</p>
+          <p className="text-sm text-muted-foreground">{readOnly ? 'Outline for:' : 'Building story for:'}</p>
           <h2 className="text-2xl font-semibold text-foreground">{selectedIdea}</h2>
         </div>
       </div>
 
       <div className="space-y-4">
         {story.map((section, index) => (
-          <Card key={index} className="fade-in-delayed overflow-hidden">
+          <Card key={index} className="fade-in-delayed overflow-hidden text-foreground">
             <CardHeader className="pb-3">
               <div className="flex items-center gap-3">
                 {sectionIcons[section.icon] || <Sparkles className="w-5 h-5 text-primary" />}
@@ -64,29 +68,33 @@ const StoryView = ({
         ))}
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-3 pt-4">
-        <Button
-          variant="secondary"
-          onClick={onRegenerate}
-          disabled={isLoading}
-          className="gap-2"
-        >
-          <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
-          Try a different version
-        </Button>
-        <Button
-          onClick={onGenerateScript}
-          disabled={isLoading}
-          className="gap-2"
-        >
-          <FileText className="w-4 h-4" />
-          Generate full script
-        </Button>
-      </div>
+      {!readOnly && (
+        <>
+          <div className="flex flex-col sm:flex-row gap-3 pt-4">
+            <Button
+              variant="secondary"
+              onClick={onRegenerate}
+              disabled={isLoading}
+              className="gap-2"
+            >
+              <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+              Try a different version
+            </Button>
+            <Button
+              onClick={onGenerateScript}
+              disabled={isLoading}
+              className="gap-2"
+            >
+              <FileText className="w-4 h-4" />
+              Generate full script
+            </Button>
+          </div>
 
-      <p className="text-sm text-muted-foreground text-center pt-2">
-        No rush — creativity takes shape at its own pace
-      </p>
+          <p className="text-sm text-muted-foreground text-center pt-2">
+            No rush — creativity takes shape at its own pace
+          </p>
+        </>
+      )}
     </div>
   );
 };

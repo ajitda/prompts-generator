@@ -26,6 +26,7 @@ interface SceneViewProps {
     onRegenerate: () => void;
     onStartOver: () => void;
     isLoading: boolean;
+    readOnly?: boolean;
 }
 
 const SceneView = ({
@@ -36,6 +37,7 @@ const SceneView = ({
     onRegenerate,
     onStartOver,
     isLoading,
+    readOnly = false,
 }: SceneViewProps) => {
     const [copied, setCopied] = useState(false);
 
@@ -56,13 +58,15 @@ const SceneView = ({
     return (
         <div className="space-y-8 animate-fade-in">
             <div className="space-y-4">
-                <button
-                    onClick={onBack}
-                    className="inline-flex items-center gap-2 font-medium text-muted-foreground hover:text-foreground text-sm transition-colors duration-250"
-                >
-                    <ArrowLeft className="w-4 h-4" />
-                    Back to outline
-                </button>
+                {!readOnly && (
+                    <button
+                        onClick={onBack}
+                        className="inline-flex items-center gap-2 font-medium text-muted-foreground hover:text-foreground text-sm transition-colors duration-250"
+                    >
+                        <ArrowLeft className="w-4 h-4" />
+                        Back to outline
+                    </button>
+                )}
 
                 <div className="flex flex-wrap justify-between items-start gap-4">
                     <div className="space-y-2">
@@ -152,25 +156,27 @@ const SceneView = ({
                 </CardContent>
             </Card>
 
-            <div className="flex sm:flex-row flex-col gap-3 pt-4">
-                <Button
-                    variant="outline"
-                    onClick={onRegenerate}
-                    disabled={isLoading}
-                    className="gap-2 h-12"
-                >
-                    <RefreshCw
-                        className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`}
-                    />
-                    Regenerate script
-                </Button>
-                <Button
-                    onClick={onStartOver}
-                    className="gap-2 h-12 px-8"
-                >
-                    Start new video
-                </Button>
-            </div>
+            {!readOnly && (
+                <div className="flex sm:flex-row flex-col gap-3 pt-4">
+                    <Button
+                        variant="outline"
+                        onClick={onRegenerate}
+                        disabled={isLoading}
+                        className="gap-2 h-12"
+                    >
+                        <RefreshCw
+                            className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`}
+                        />
+                        Regenerate script
+                    </Button>
+                    <Button
+                        onClick={onStartOver}
+                        className="gap-2 h-12 px-8"
+                    >
+                        Start new video
+                    </Button>
+                </div>
+            )}
         </div>
     );
 };
