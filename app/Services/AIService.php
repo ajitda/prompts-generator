@@ -19,27 +19,44 @@ class AIService
   public function generateIdeas(string $keyword, string $type = 'youtube_idea'): string
   {
     if ($type === 'video_script') {
-      // Prompt specifically for the Script Generation workflow
+      // Prompt optimized for high-engagement, authentic YouTube titles
       $prompt = <<<PROMPT
-You are a YouTube Content Strategist. Generate 5 unique, high-potential video titles for a scriptwriting workflow.
-Topic: "{$keyword}"
+You are a viral YouTube Creator known for titles that people can't help but click. Generate 5 authentic, high-performing YouTube titles for: "{$keyword}".
 
-Constraints:
-- Focus on actionable, structured concepts.
-- Return ONLY a JSON array of 5 strings (titles).
+### CREATOR TITLE SECRETS:
+- **The "Story" Hook**: Start a story that the viewer needs to finish (e.g., "I tried [X] for 30 days...", "Why I finally left [X]").
+- **Extreme Authenticity**: Use conversational, slightly hyperbolic, or highly personal language (e.g., "The truth about...", "I'm shocked by [X]").
+- **High Stakes**: Make it feel like something important is at risk (e.g., "Stop doing this before you [X]", "The mistake that cost me [Amount]").
+- **Pattern Interrupt**: Use words like "Finally", "Actually", "Shocking", or "Secret".
+- **MrBeast Style**: Keep it simple, punchy, and high-intensity.
+
+### REAL-WORLD EXAMPLES:
+- "I'm quitting [X]. (not clickbait)"
+- "This $[Price] [X] is actually perfect."
+- "The only way to [X] in 2024 (it's not what you think)."
+- "7 things I wish I knew before starting [X]."
+- "I used [X] for a week and my life changed."
+
+Return ONLY a JSON array of 5 strings (titles).
 PROMPT;
     } else {
     // Prompt for the general Video Idea Generator tool
     $prompt = <<<PROMPT
-You are a world-class YouTube Strategist. Generate 5 viral-worthy video concepts for the Topic: "{$keyword}".
+You are a world-class YouTube Strategist and Creative Director. Generate 5 viral-worthy video concepts that sound like they came from a top-tier creator for: "{$keyword}".
 
-Return ONLY a JSON array of 5 objects in this format:
+### VIRAL PHILOSOPHY:
+- **Curiosity Gap**: Raise a question that can only be answered by watching.
+- **Visual-First**: Titles that imply a great thumbnail visual.
+- **Natural Language**: Write how people actually talk, not how an AI writes.
+- **The "Must-Watch" Factor**: Every title should feel like an event.
+
+Return ONLY a JSON array of 5 objects in this exact format:
 [
   {
-    "Title": "High CTR Title",
-    "Thumbnail_Concept": "Visual description",
-    "Hook_Script": "2 magnetic sentences",
-    "Difficulty": "Easy|Medium|Hard"
+    "Title": "A high-stakes, viral-style YouTube title",
+    "Thumbnail_Concept": "A vivid, story-driven thumbnail visual description",
+    "Hook_Script": "2 high-energy, pattern-interrupt sentences that stop the scroll",
+    "Difficulty": "Easy | Medium | Hard"
   }
 ]
 PROMPT;
