@@ -1,4 +1,4 @@
-import { BarChart3, Check, Copy, Image, MessageSquare } from 'lucide-react';
+import { BarChart3, Check, ChevronRight, Copy, Image, MessageSquare } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from './ui/button';
 interface IdeaCardProps {
@@ -47,7 +47,7 @@ const IdeaCard = ({ idea, index, onSelect }: IdeaCardProps) => {
         <div
             style={{ animationDelay: `${index * 100}ms` }}
             onClick={onSelect}
-            className="hover:shadow-card-hover cursor-pointer rounded-xl border border-border/50 bg-card p-6 shadow-card transition-all duration-300 hover:-translate-y-1"
+            className="hover:shadow-card-hover group cursor-pointer rounded-xl border border-border/50 bg-card p-6 shadow-card transition-all duration-300 hover:-translate-y-1"
         >
             <div className="mb-4 flex items-start justify-between gap-4">
                 <div className="flex items-center gap-3">
@@ -60,22 +60,27 @@ const IdeaCard = ({ idea, index, onSelect }: IdeaCardProps) => {
                         {idea.Difficulty}
                     </span>
                 </div>
-                <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        copyAll();
-                    }}
-                    className="text-muted-foreground hover:text-foreground"
-                >
-                    {copiedField === 'all' ? (
-                        <Check className="h-4 w-4 text-green-600" />
-                    ) : (
-                        <Copy className="h-4 w-4" />
-                    )}
-                    <span className="ml-1 text-xs">Copy All</span>
-                </Button>
+                <div className="flex items-center gap-2">
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            copyAll();
+                        }}
+                        className="text-muted-foreground hover:text-foreground"
+                    >
+                        {copiedField === 'all' ? (
+                            <Check className="h-4 w-4 text-green-600" />
+                        ) : (
+                            <Copy className="h-4 w-4" />
+                        )}
+                        <span className="ml-1 text-xs">Copy All</span>
+                    </Button>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary transition-transform group-hover:translate-x-1">
+                        <ChevronRight className="h-5 w-5" />
+                    </div>
+                </div>
             </div>
 
             <div className="space-y-4">
