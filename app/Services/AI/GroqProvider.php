@@ -18,14 +18,14 @@ class GroqProvider implements AIProviderInterface
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . $apiKey,
             'Content-Type' => 'application/json',
-        ])->timeout(10)->post('https://api.groq.com/openai/v1/chat/completions', [
+        ])->timeout(30)->post('https://api.groq.com/openai/v1/chat/completions', [
                     'model' => 'llama-3.3-70b-versatile',
                     'messages' => [
-                        ['role' => 'system', 'content' => 'You are a creative prompt engineer.'],
-                        ['role' => 'user', 'content' => "Create a detailed prompt for: $keyword"]
+                        ['role' => 'system', 'content' => 'You are an expert scriptwriter. Output STRICT JSON ONLY.'],
+                        ['role' => 'user', 'content' => $keyword]
                     ],
                     'temperature' => 0.7,
-                    'max_tokens' => 500,
+                    'max_tokens' => 2048,
                 ]);
 
         if (!$response->successful()) {

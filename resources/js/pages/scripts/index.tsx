@@ -1,34 +1,31 @@
-import {
-    // generatePrompt as promptsCreate,
-    // destroy as productsDestroy,
-    // edit as productsEdit,
-    index as scriptsIndex,
-} from '@/actions/App/Http/Controllers/ScriptController';
 import IdeaGenerator from '@/components/IdeaGenerator';
+import VideoScriptGenerator from '@/components/VideoScriptGenerator';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem, SortField, SortProps } from '@/types';
 import { Head, router, usePage } from '@inertiajs/react';
 import { Sparkles, Zap } from 'lucide-react';
 import { useCallback, useState } from 'react';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Youtube Video Idea Generator',
-        href: scriptsIndex().url,
-    },
-];
-
 export default function VideoScripts() {
     const { props } = usePage<any>();
-
     const {
+        type = 'youtube_idea',
         scripts,
         filters = {},
-        perPageOptions,
         initialGuestCredits,
         isAuthenticated,
         userCredits,
     } = props;
+
+    const isIdeaGenerator = type === 'youtube_idea';
+    const toolTitle = isIdeaGenerator ? 'YouTube Video Idea Generator' : 'Video Script Generator';
+
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: toolTitle,
+            href: isIdeaGenerator ? '/youtube' : '/scripts',
+        },
+    ];
 
     // const currentPerPage = prompts?.per_page || 2;
 
@@ -77,13 +74,13 @@ export default function VideoScripts() {
                 }
             });
 
-            router.get(scriptsIndex().url, {
+            router.get(isIdeaGenerator ? '/youtube' : '/scripts', {
                 preserveScroll: true,
                 preserveState: true,
                 replace: true,
             });
         },
-        [sortConfig],
+        [sortConfig, isIdeaGenerator],
     );
 
     // const [importErrors, setImportErrors] = useState<any[]>([]);
@@ -136,22 +133,36 @@ export default function VideoScripts() {
                         </div>
 
                         <h1 className="text-4xl leading-tight font-extrabold md:text-5xl lg:text-6xl">
-                            Turn Any Niche Into{' '}
-                            <span className="text-gradient">
-                                Viral YouTube Ideas
-                            </span>
+                            {isIdeaGenerator ? (
+                                <>
+                                    Turn Any Niche Into{' '}
+                                    <span className="text-gradient">Viral YouTube Ideas</span>
+                                </>
+                            ) : (
+                                <>
+                                    Generate Professional{' '}
+                                    <span className="text-gradient">Video Scripts</span> In Seconds
+                                </>
+                            )}
                         </h1>
 
                         <p className="mx-auto max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl">
-                            Beat creator's block in seconds. Get strategic,
-                            high-CTR video ideas tailored to your niche—complete
-                            with titles, thumbnail concepts, and hook scripts.
+                            {isIdeaGenerator
+                                ? "Beat creator's block in seconds. Get strategic, high-CTR video ideas tailored to your niche—complete with titles, thumbnail concepts, and hook scripts."
+                                : "Go from keyword to a scene-by-scene professional video script. Perfect for YouTube, TikTok, or corporate videos."
+                            }
                         </p>
 
                         <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
                             <div className="flex items-center gap-2">
                                 <Zap className="h-4 w-4 text-primary" />
-                                <span>5 Ideas per Generation</span>
+                                <span>
+                                    {isIdeaGenerator ? (
+                                        '5 Ideas per Generation'
+                                    ) : (
+                                        '5 Scripts per Generation'
+                                    )}
+                                </span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <Zap className="h-4 w-4 text-primary" />
@@ -163,11 +174,19 @@ export default function VideoScripts() {
                             </div>
                         </div>
                     </div>
-                    <IdeaGenerator
-                        initialGuestCredits={initialGuestCredits}
-                        isAuthenticated={isAuthenticated}
-                        userCredits={userCredits}
-                    />
+                    {isIdeaGenerator ? (
+                        <IdeaGenerator
+                            initialGuestCredits={initialGuestCredits}
+                            isAuthenticated={isAuthenticated}
+                            userCredits={userCredits}
+                        />
+                    ) : (
+                        <VideoScriptGenerator
+                            initialGuestCredits={initialGuestCredits}
+                            isAuthenticated={isAuthenticated}
+                            userCredits={userCredits}
+                        />
+                    )}
                 </main>
             </div>
         </AppLayout>

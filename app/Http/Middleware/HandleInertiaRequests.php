@@ -47,7 +47,8 @@ class HandleInertiaRequests extends Middleware
 
         $menuData = [
             'prompts' => [],
-            'scripts' => [],
+            'youtube_ideas' => [],
+            'video_scripts' => [],
             'captions' => []
         ];
 
@@ -57,7 +58,8 @@ class HandleInertiaRequests extends Middleware
             $cached = Cache::remember($cacheKey, now()->addDay(), function () use ($user) {
                 return [
                     'prompts' => $user->prompts()->latest()->limit(10)->get(['id', 'keyword']),
-                    'scripts' => $user->scripts()->latest()->limit(10)->get(['id', 'keyword']),
+                    'youtube_ideas' => Script::where('user_id', $user->id)->where('type', 'youtube_idea')->latest()->limit(10)->get(['id', 'keyword']),
+                    'video_scripts' => Script::where('user_id', $user->id)->where('type', 'video_script')->latest()->limit(10)->get(['id', 'keyword']),
                     'captions' => Caption::where('user_id', $user->id)->latest()->limit(10)->get(['id', 'topic as keyword']),
                 ];
             });
@@ -72,7 +74,8 @@ class HandleInertiaRequests extends Middleware
                 $cached = Cache::remember($cacheKey, now()->addMinutes(10), function () use ($fingerprint) {
                     return [
                         'prompts' => Prompt::where('fingerprint', $fingerprint)->latest()->limit(10)->get(['id', 'keyword']),
-                        'scripts' => Script::where('fingerprint', $fingerprint)->latest()->limit(10)->get(['id', 'keyword']),
+                        'youtube_ideas' => Script::where('fingerprint', $fingerprint)->where('type', 'youtube_idea')->latest()->limit(10)->get(['id', 'keyword']),
+                        'video_scripts' => Script::where('fingerprint', $fingerprint)->where('type', 'video_script')->latest()->limit(10)->get(['id', 'keyword']),
                         'captions' => Caption::where('fingerprint', $fingerprint)->latest()->limit(10)->get(['id', 'topic as keyword']),
                     ];
                 });

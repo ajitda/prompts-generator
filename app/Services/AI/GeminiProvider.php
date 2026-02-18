@@ -18,7 +18,7 @@ class GeminiProvider implements AIProviderInterface
         if (!$apiKey) {
             throw new Exception('Gemini API key not found.');
         }
-        $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={$apiKey}";
+        $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={$apiKey}";
 
         /**
          * RETRY STRATEGY: 
@@ -28,9 +28,13 @@ class GeminiProvider implements AIProviderInterface
         $response = Http::retry(3, 100, function (Exception $exception, $request) {
             return $exception instanceof RequestException &&
                 in_array($exception->response->status(), [429, 500, 503]);
-        })->timeout(15)->post($url, [
-                    'system_instruction' => ['parts' => [['text' => 'You are an expert.']]],
-                    'contents' => [['role' => 'user', 'parts' => [['text' => "Prompt for: $keyword"]]]],
+        })->timeout(30)->post($url, [
+                    'system_instruction' => ['parts' => [['text' => 'You are an expert scriptwriter. Output STRICT JSON ONLY.']]],
+                    'contents' => [['role' => 'user', 'parts' => [['text' => $keyword]]]],
+                    'generationConfig' => [
+                        'maxOutputTokens' => 2048,
+                        'temperature' => 0.7,
+                    ]
                 ]);
 
         if ($response->failed()) {

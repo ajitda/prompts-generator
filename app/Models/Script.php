@@ -9,6 +9,7 @@ class Script extends Model
 {
     protected $fillable = [
         'user_id',
+        'type',
         'fingerprint',
         'keyword',
         'title',
@@ -18,9 +19,9 @@ class Script extends Model
     ];
 
     protected $casts = [
-        'idea' => 'array',  
-        'story' => 'array', 
-        'script' => 'array', 
+        'idea' => 'array',
+        'story' => 'array',
+        'script' => 'array',
     ];
 
     public function user(): BelongsTo
