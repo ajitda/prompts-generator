@@ -1,7 +1,7 @@
-import Meta from '@/components/meta';
+import Seo from '@/components/seo';
 import { Button } from '@/components/ui/button';
 import PublicLayout from '@/layouts/public-layout';
-import { Head, Link } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import {
     Calendar,
     Check,
@@ -26,11 +26,6 @@ interface PublicPost {
 export default function ShowPublic({ post }: { post: PublicPost }) {
     const [copied, setCopied] = useState(false);
 
-    const description = post.content
-        .replace(/<[^>]*>?/gm, '')
-        .substring(0, 160)
-        .trim();
-
     const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
     const shareTitle = post.title;
 
@@ -40,23 +35,33 @@ export default function ShowPublic({ post }: { post: PublicPost }) {
         setTimeout(() => setCopied(false), 2000);
     };
 
+    const description =
+        post.meta_description ||
+        post.content
+            .replace(/<[^>]*>?/gm, '')
+            .substring(0, 160)
+            .trim();
+
+    const blogPostSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        headline: post.meta_title || post.title,
+        description: description,
+        image: post.image_url || undefined,
+        datePublished: post.created_at,
+        author: {
+            '@type': 'Person',
+            name: 'Prompts Generator', // Replace with author name if available
+        },
+    };
+
     return (
         <PublicLayout>
-            <Head>
-                <title>{post.meta_title || post.title}</title>
-                <meta
-                    name="description"
-                    content={post.meta_description || description}
-                />
-                {post.image_url && (
-                    <meta name="image" content={post.image_url} />
-                )}
-                <meta name="type" content="article" />
-            </Head>
-            <Meta
+            <Seo
                 title={post.meta_title || post.title}
-                description={post.meta_description || description.slice(0, 160)}
-                image={post.image_url || ''}
+                description={description}
+                image_url={post.image_url ?? undefined}
+                schema={blogPostSchema}
             />
             <main className="container mx-auto max-w-4xl px-4 py-16">
                 <article>
@@ -65,7 +70,7 @@ export default function ShowPublic({ post }: { post: PublicPost }) {
                             <Calendar className="h-4 w-4" />
                             Published on {post.created_at}
                         </div>
-                        <h1 className="mb-8 text-2xl leading-relaxed font-extrabold tracking-wide md:text-3xl lg:text-4xl">
+                        <h1 className="mb-8 text-2xl font-extrabold leading-relaxed tracking-wide md:text-3xl lg:text-4xl">
                             {post.title}
                         </h1>
                         {post.image_url && (
